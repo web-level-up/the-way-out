@@ -1,0 +1,102 @@
+openapi: 3.0.0
+info:
+  title: Way out API
+  version: 1.0.0
+
+paths:
+  /auth/login:
+    get:
+      summary: User login
+      responses:
+        '200':
+          description: Get login url
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token: { type: string }
+  /auth/callback:
+    get:
+      summary: Return Jwt
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token: { type: string }
+  /mazes:
+    get:
+      summary: List all mazes
+      responses:
+        '200':
+          description: Array of mazes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Maze'
+
+  /mazes/{id}:
+    get:
+      summary: Get maze by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Maze details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Maze'
+
+  /mazes/{id}/completion:
+    post:
+      summary: Submit a maze solution, update scores etc
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                mazeId: { type: integer }
+                timeTaken: { type: integer, description: "Time in seconds" }
+                moves: { type: integer }
+                path:
+                  type: array
+                  items:
+                    type: array
+                    items: { type: integer }
+      responses:
+        '200':
+          description: Score submitted
+
+  /mazes/{mazeId}leaderboard/:
+    get:
+      summary: Get leaderboard for a specific maze
+      parameters:
+        - name: mazeId
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: List of top scores for a maze
+
+components:
+  schemas:
+    Maze:
+      type: object
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        layout: { type: string }
+        difficulty: { type: string }
