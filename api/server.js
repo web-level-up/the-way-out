@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import express from "express";
 import healthRoute from "./routes/health.routes.js";
-import mazeRoutes from "./routes/maze.route.js";
+import mazeRoutes from "./routes/maze.routes.js";
 
 const app = express();
 app.use(express.json());
