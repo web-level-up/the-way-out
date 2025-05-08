@@ -1,4 +1,6 @@
 import express from "express";
+import * as userService from "../services/user.service.js";
+import { decodeJwt } from "jose";
 
 const router = express.Router();
 
@@ -33,10 +35,12 @@ router.post("/login", async (req, res) => {
     }
 
     const { id_token } = await tokenResponse.json();
-    res.status(200).json({ id_token });
+    const decoded = decodeJwt(id_token);
+    const existingUser = await userService.getUserByGoogleId(decoded.sub);
+
+    res.status(200).json({ id_token, existing_user: existingUser ? true : false });
   } catch (err) {
     console.error("Login handler error:", err);
-    next(err);
   }
 });
 export default router;
