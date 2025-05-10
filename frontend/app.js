@@ -3,6 +3,7 @@ import { handleOAuthCallback } from "./scripts/auth.js";
 import { renderLoginPage } from "./scripts/rendering/login.js";
 import { renderMazeSelectionPage } from "./scripts/rendering/mazeSelection.js";
 import { renderUsernamePage } from "./scripts/rendering/username.js";
+import { renderErrorPage } from "./scripts/rendering/error.js";
 import {renderGamePage} from "./scripts/rendering/render-game-page.js";
 
 await loadConfig();
@@ -15,7 +16,7 @@ switch (loginState) {
     renderUsernamePage();
     break;
   case "failed":
-    renderLoginPage();
+    renderErrorPage("Login failed", renderLoginPage, "return to login");
     break;
   default:
     renderLoginPage();
