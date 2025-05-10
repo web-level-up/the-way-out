@@ -1,4 +1,4 @@
-import {difficultyLevels} from "../../js/dummy-data.js";
+import {difficultyLevels} from "../dummy-data.js";
 
 function getMazeSize(mazeLayout) {
     const layoutLength = mazeLayout.length;

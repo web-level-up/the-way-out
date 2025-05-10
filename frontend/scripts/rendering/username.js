@@ -1,9 +1,9 @@
 import { loadPage } from "./renderer.js";
 import { getConfig } from "../configLoader.js";
-import { renderMazeSelectionPage } from "./mazeSelection.js";
 import { HttpError } from "../customErrors.js";
 import { renderErrorPage } from "./error.js";
 import { renderLoginPage } from "./login.js";
+import {renderMainPage} from "./render-main-page.js";
 
 export function renderUsernamePage() {
   loadPage("/views/username.html").then(() => {
@@ -36,7 +36,7 @@ export function renderUsernamePage() {
           return response.json();
         })
         .then(() => {
-          renderMazeSelectionPage();
+          renderMainPage();
         })
         .catch((error) => {
           if (error instanceof HttpError) {

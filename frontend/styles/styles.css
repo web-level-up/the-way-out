@@ -10,13 +10,22 @@ body {
   background-color: #c3ecbb;
 }
 
-/*#root {*/
-/*  display: flex;*/
-/*  width: 100%;*/
-/*  min-height: 100%;*/
-/*  align-items: center;*/
-/*  justify-content: center;*/
-/*}*/
+body {
+  font-family: sans-serif;
+  background-image: url('../assets/maze-background-2.jpg');
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+  color: white;
+}
+
+#root {
+  display: flex;
+  width: 100%;
+  min-height: 100%;
+  align-items: center;
+  justify-content: center;
+}
 
 #google-login-button {
   height: 2rem;

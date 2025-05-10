@@ -1,4 +1,4 @@
-#root {
+#base-game-page {
     transition: 0.5s, grid-template-columns 0.5s,
     grid-template-areas 0.5s;
     background-color: rgba(255,255,255, 0.5);
@@ -36,7 +36,7 @@
 #sidebar-welcome-message {
     grid-area: sidebar-welcome-message;
     margin-top: 5vh;
-    font-size: 3rem;
+    font-size: 1.5rem;
     text-align: center;
 }
 
@@ -51,10 +51,9 @@
 }
 
 #nav-menu a {
-    padding: 1rem 1rem 1rem 2rem;
-    /*margin: 1rem;*/
+    padding: 0.5rem 0.5rem 0.5rem 1rem;
     text-decoration: none;
-    font-size: 2rem;
+    font-size: 1rem;
     color: #818181;
     display: block;
     transition: 0.3s;
@@ -76,14 +75,14 @@
     grid-area: nav-button;
     height: 10vh;
     width: 3vw;
-    border-top-right-radius: 2.5rem;
-    border-bottom-right-radius:2.5rem;
+    border-top-right-radius: 1rem;
+    border-bottom-right-radius: 1rem;
     background-color: white;
     margin-top: 3vh;
     border-left: none;
-    border-right: 0.5rem solid #3b3b3b;
-    border-top: 0.5rem solid #3b3b3b;
-    border-bottom: 0.5rem solid #3b3b3b;
+    border-right: 0.25rem solid #3b3b3b;
+    border-top: 0.25rem solid #3b3b3b;
+    border-bottom: 0.25rem solid #3b3b3b;
     cursor: pointer;
     display: flex;
     justify-content: center;
@@ -113,15 +112,15 @@
     border: none;
     border-radius: 50%;
     cursor: pointer;
-    width: 5rem;
-    height: 5rem;
+    width: 2.5rem;
+    height: 2.5rem;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
 .icon-button img {
-    width: 3rem;
-    height: 3rem;
+    width: 1.5rem;
+    height: 1.5rem;
     vertical-align: middle;
 }
