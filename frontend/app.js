@@ -1,7 +1,21 @@
 import { loadConfig } from "./scripts/configLoader.js";
 import { handleOAuthCallback } from "./scripts/auth.js";
-import { renderLoginPage, renderMenuPage } from "./scripts/renderer.js"
+import { renderLoginPage } from "./scripts/rendering/login.js";
+import { renderMazeSelectionPage } from "./scripts/rendering/mazeSelection.js";
+import { renderUsernamePage } from "./scripts/rendering/username.js";
 
 await loadConfig();
-const loggedIn = await handleOAuthCallback();
-loggedIn ? renderMenuPage() : renderLoginPage();
+const loginState = await handleOAuthCallback();
+switch (loginState) {
+  case "existing":
+    renderMazeSelectionPage();
+    break;
+  case "new":
+    renderUsernamePage();
+    break;
+  case "failed":
+    renderLoginPage();
+    break;
+  default:
+    renderLoginPage();
+}
