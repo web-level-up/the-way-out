@@ -19,15 +19,20 @@ export async function handleOAuthCallback() {
         localStorage.setItem("jwt", data.id_token);
         const url = new URL(window.location.href);
         window.history.replaceState({}, document.title, url.pathname);
-        return true;
+        if (data.existing_user) {
+          return "existing";
+        } else {
+          return "new";
+        }
       })
       .catch((error) => {
         console.error("Error:", error);
+        return "failed";
       });
   } else if (error) {
     console.error("Authentication failed", error);
   }
-  return false;
+  return "failed";
 }
 
 export function initiateGoogleOAuth() {
