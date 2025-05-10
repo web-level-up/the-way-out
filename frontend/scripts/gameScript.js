@@ -1,3 +1,5 @@
+//import { renderMazeGame } from "./rendering/render-maze-game.js";
+console.log("Maze Game script loaded");
 function rand(max) {
   return Math.floor(Math.random() * max);
 }
@@ -651,3 +653,10 @@ function makeMaze() {
     document.getElementById("mazeContainer").style.opacity = "100";
   }
 }
+
+// document.body.addEventListener("click", (event) => {
+//   if (event.target && event.target.id === "startBtn") {
+//     console.log("Start button clicked!");
+//     renderMazeGame();
+//   }
+// });
