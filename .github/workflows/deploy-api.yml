@@ -37,4 +37,5 @@ jobs:
           GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}
           EOL
             npm install
+            sudo pm2 restart server || sudo pm2 start server.js
           EOF
