@@ -1,0 +1,11 @@
+html { font-size: 2px; }
+
+body {
+    margin: 0;
+    font-family: sans-serif;
+    background-image: url('../css/images/maze-background-2.jpg'); /* Adjust path if needed */
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    color: white;
+}
