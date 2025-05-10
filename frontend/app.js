@@ -1,16 +1,15 @@
 import { loadConfig } from "./scripts/configLoader.js";
 import { handleOAuthCallback } from "./scripts/auth.js";
 import { renderLoginPage } from "./scripts/rendering/login.js";
-import { renderMazeSelectionPage } from "./scripts/rendering/mazeSelection.js";
 import { renderUsernamePage } from "./scripts/rendering/username.js";
 import { renderErrorPage } from "./scripts/rendering/error.js";
-import {renderGamePage} from "./scripts/rendering/render-game-page.js";
+import { renderMainPage } from "./scripts/rendering/render-main-page.js";
 
 await loadConfig();
 const loginState = await handleOAuthCallback();
 switch (loginState) {
   case "existing":
-    renderGamePage('main-menu');
+    renderMainPage();
     break;
   case "new":
     renderUsernamePage();

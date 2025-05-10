@@ -2,7 +2,7 @@ import { loadPage } from "./renderer.js";
 import {renderMazeDetailsPage } from "./mazeDetails.js"
 
 export function renderMazeSelectionPage() {
-    loadPage("/views/mazeSelection.html").then(() => {
+    loadPage("/views/maze-selection.html").then(() => {
       // const config = getConfig();
       // fetch(config.apiBaseUrl + "/api/mazes", {
       //   method: "GET",
