@@ -1,3 +1,5 @@
+html { font-size: 12px; }
+
 html,
 body {
   width: 100%;
@@ -8,13 +10,13 @@ body {
   background-color: #c3ecbb;
 }
 
-#root {
-  display: flex;
-  width: 100%;
-  min-height: 100%;
-  align-items: center;
-  justify-content: center;
-}
+/*#root {*/
+/*  display: flex;*/
+/*  width: 100%;*/
+/*  min-height: 100%;*/
+/*  align-items: center;*/
+/*  justify-content: center;*/
+/*}*/
 
 #google-login-button {
   height: 2rem;
