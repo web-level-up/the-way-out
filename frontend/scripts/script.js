@@ -387,6 +387,48 @@ function Player(maze, c, _cellsize, onComplete, sprite = null) {
   var cellSize = _cellsize;
   var halfCellSize = cellSize / 2;
 
+  // Touch swipe variables
+  let touchStartX = null;
+  let touchStartY = null;
+  let view = document.getElementById("view");
+
+  function handleTouchStart(e) {
+    if (e.touches.length === 1) {
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+    }
+  }
+
+  function handleTouchEnd(e) {
+    if (touchStartX === null || touchStartY === null) return;
+    let touchEndX = e.changedTouches[0].clientX;
+    let touchEndY = e.changedTouches[0].clientY;
+    let dx = touchEndX - touchStartX;
+    let dy = touchEndY - touchStartY;
+    let absDx = Math.abs(dx);
+    let absDy = Math.abs(dy);
+    if (Math.max(absDx, absDy) > 30) {
+      // threshold
+      if (absDx > absDy) {
+        // left or right
+        if (dx > 0) {
+          check({ keyCode: 39 }); // right
+        } else {
+          check({ keyCode: 37 }); // left
+        }
+      } else {
+        // up or down
+        if (dy > 0) {
+          check({ keyCode: 40 }); // down
+        } else {
+          check({ keyCode: 38 }); // up
+        }
+      }
+    }
+    touchStartX = null;
+    touchStartY = null;
+  }
+
   this.redrawPlayer = function (_cellsize) {
     cellSize = _cellsize;
     drawSpriteImg(cellCoords);
@@ -497,47 +539,16 @@ function Player(maze, c, _cellsize, onComplete, sprite = null) {
 
   this.bindKeyDown = function () {
     window.addEventListener("keydown", check, false);
-
-    $("#view").swipe({
-      swipe: function (
-        event,
-        direction,
-        distance,
-        duration,
-        fingerCount,
-        fingerData
-      ) {
-        console.log(direction);
-        switch (direction) {
-          case "up":
-            check({
-              keyCode: 38,
-            });
-            break;
-          case "down":
-            check({
-              keyCode: 40,
-            });
-            break;
-          case "left":
-            check({
-              keyCode: 37,
-            });
-            break;
-          case "right":
-            check({
-              keyCode: 39,
-            });
-            break;
-        }
-      },
-      threshold: 0,
-    });
+    // Add vanilla touch events for swipe
+    view.addEventListener("touchstart", handleTouchStart, false);
+    view.addEventListener("touchend", handleTouchEnd, false);
   };
 
   this.unbindKeyDown = function () {
     window.removeEventListener("keydown", check, false);
-    $("#view").swipe("destroy");
+    // Remove vanilla touch events
+    view.removeEventListener("touchstart", handleTouchStart, false);
+    view.removeEventListener("touchend", handleTouchEnd, false);
   };
 
   drawSprite(maze.startCoord());
@@ -555,8 +566,9 @@ var difficulty;
 // sprite.src = 'media/sprite.png';
 
 window.onload = function () {
-  let viewWidth = $("#view").width();
-  let viewHeight = $("#view").height();
+  let view = document.getElementById("view");
+  let viewWidth = view.offsetWidth;
+  let viewHeight = view.offsetHeight;
   if (viewHeight < viewWidth) {
     ctx.canvas.width = viewHeight - viewHeight / 100;
     ctx.canvas.height = viewHeight - viewHeight / 100;
@@ -577,7 +589,7 @@ window.onload = function () {
     }
   };
   sprite = new Image();
-  sprite.src = "./g.webp" + "?" + new Date().getTime();
+  sprite.src = "../assets/g.webp" + "?" + new Date().getTime();
   sprite.setAttribute("crossOrigin", " ");
   sprite.onload = function () {
     sprite = changeBrightness(1.2, sprite);
@@ -587,7 +599,7 @@ window.onload = function () {
   };
 
   finishSprite = new Image();
-  finishSprite.src = "./home.png" + "?" + new Date().getTime();
+  finishSprite.src = "../assets/home.png" + "?" + new Date().getTime();
   finishSprite.setAttribute("crossOrigin", " ");
   finishSprite.onload = function () {
     finishSprite = changeBrightness(1.1, finishSprite);
@@ -598,8 +610,9 @@ window.onload = function () {
 };
 
 window.onresize = function () {
-  let viewWidth = $("#view").width();
-  let viewHeight = $("#view").height();
+  let view = document.getElementById("view");
+  let viewWidth = view.offsetWidth;
+  let viewHeight = view.offsetHeight;
   if (viewHeight < viewWidth) {
     ctx.canvas.width = viewHeight - viewHeight / 100;
     ctx.canvas.height = viewHeight - viewHeight / 100;
