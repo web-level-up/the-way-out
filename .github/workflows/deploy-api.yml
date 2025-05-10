@@ -21,19 +21,19 @@ jobs:
 
       - name: Deploy API to EC2
         run: |
-          ssh -o StrictHostKeyChecking=no -i key.pem ${{ env.EC2_HOST }} << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i key.pem ${{ vars.EC2_HOST }} << 'EOF'
             mkdir -p api
             rm -rf api/*
           EOF
 
-          scp -i key.pem -r ./api/* ${{ env.EC2_HOST }}:/home/ubuntu/api/
+          scp -i key.pem -r ./api/* ${{ vars.EC2_HOST }}:/home/ubuntu/api/
 
-          ssh -o StrictHostKeyChecking=no -i key.pem ${{ env.EC2_HOST }} << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i key.pem ${{ vars.EC2_HOST }} << 'EOF'
             cd api
             cat > .env <<EOL
-            PORT=${{ env.PORT }}
+            PORT=${{ vars.PORT }}
             DATABASE_URL=${{ secrets.DATABASE_URL }}
-            GOOGLE_CLIENT_ID=${{ env.GOOGLE_CLIENT_ID }}
+            GOOGLE_CLIENT_ID=${{ vars.GOOGLE_CLIENT_ID }}
             GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}
             EOL
             npm install
