@@ -35,6 +35,6 @@ jobs:
                 DATABASE_URL=${{ secrets.DATABASE_URL }}
                 GOOGLE_CLIENT_ID=${{ vars.GOOGLE_CLIENT_ID }}
                 GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}
-            EOL
+          EOL
             npm install
           EOF
