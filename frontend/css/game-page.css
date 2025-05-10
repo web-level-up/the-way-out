@@ -1,0 +1,127 @@
+#root {
+    transition: 0.5s, grid-template-columns 0.5s,
+    grid-template-areas 0.5s;
+    background-color: rgba(255,255,255, 0.5);
+    display: grid;
+    grid-template-areas:
+    "sidebar nav-button content";
+    grid-template-columns: 0 3vw 97vw;
+    gap: 0;
+    padding: 0;
+    margin: 0;
+    height: 100vh;
+}
+
+#sidebar {
+    grid-area: sidebar;
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #3b3b3b;
+    overflow-x: hidden;
+    transition: 0.5s;
+
+    display: grid;
+    grid-template-areas:
+    "sidebar-welcome-message"
+    "nav-menu"
+    "sidebar-footer";
+    grid-template-rows: 20vh 65vh 15vh;
+    gap: 0;
+}
+
+#sidebar-welcome-message {
+    grid-area: sidebar-welcome-message;
+    margin-top: 5vh;
+    font-size: 3rem;
+    text-align: center;
+}
+
+#nav-menu {
+    grid-area: nav-menu;
+    margin: 2vh;
+}
+
+#sidebar-footer {
+    grid-area: sidebar-footer;
+    margin: 2vh;
+}
+
+#nav-menu a {
+    padding: 1rem 1rem 1rem 2rem;
+    /*margin: 1rem;*/
+    text-decoration: none;
+    font-size: 2rem;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+}
+
+#nav-menu a:hover {
+    color: #f1f1f1;
+}
+
+#side-nav {
+    display: grid;
+    grid-template-columns: auto auto;
+    width: auto;
+    height: 100vh;
+
+}
+
+#nav-button {
+    grid-area: nav-button;
+    height: 10vh;
+    width: 3vw;
+    border-top-right-radius: 2.5rem;
+    border-bottom-right-radius:2.5rem;
+    background-color: white;
+    margin-top: 3vh;
+    border-left: none;
+    border-right: 0.5rem solid #3b3b3b;
+    border-top: 0.5rem solid #3b3b3b;
+    border-bottom: 0.5rem solid #3b3b3b;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+
+}
+
+#nav-button img {
+    height: 8vh;
+    width: 2vw;
+    /*padding: 0;*/
+    /*margin: 0;*/
+}
+
+#content {
+    grid-area: content;
+}
+
+#sidebar-footer {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.icon-button {
+    background-color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    width: 5rem;
+    height: 5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.icon-button img {
+    width: 3rem;
+    height: 3rem;
+    vertical-align: middle;
+}
