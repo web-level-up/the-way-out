@@ -30,7 +30,7 @@ jobs:
 
           ssh -o StrictHostKeyChecking=no -i key.pem ${{ vars.EC2_HOST }} << 'EOF'
             cd api
-            cat > .env <<EOL
+            cat > .env << EOL
             PORT=${{ vars.PORT }}
             DATABASE_URL=${{ secrets.DATABASE_URL }}
             GOOGLE_CLIENT_ID=${{ vars.GOOGLE_CLIENT_ID }}
