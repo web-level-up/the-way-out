@@ -3,7 +3,8 @@ provider "aws" {
 }
 
 resource "aws_s3_bucket" "terraform_state" {
-  bucket = "way-out-terraform-state"
+  bucket        = "way-out-terraform-state"
+  force_destroy = true
 }
 
 resource "aws_dynamodb_table" "terraform_locks" {
