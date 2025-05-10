@@ -1,0 +1,41 @@
+name: Deploy Node API
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup SSH key
+        run: |
+          echo "$EC2_KEY" > key.pem
+          chmod 400 key.pem
+        env:
+          EC2_KEY: ${{ secrets.EC2_KEY }}
+
+      - name: Deploy API to EC2
+        run: |
+          ssh -o StrictHostKeyChecking=no -i key.pem ${{ vars.EC2_HOST }} << 'EOF'
+            mkdir -p api
+            rm -rf api/*
+          EOF
+
+          scp -i key.pem -r ./api/* ${{ vars.EC2_HOST }}:/home/ubuntu/api/
+
+          ssh -o StrictHostKeyChecking=no -i key.pem ${{ vars.EC2_HOST }} << 'EOF'
+            cd api
+            cat > .env << EOL
+          PORT=${{ vars.PORT }}
+          DATABASE_URL=${{ secrets.DATABASE_URL }}
+          GOOGLE_CLIENT_ID=${{ vars.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}
+          EOL
+            npm install
+            sudo pm2 restart server || sudo pm2 start server.js
+          EOF
