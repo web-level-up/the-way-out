@@ -1,4 +1,5 @@
 import { getConfig } from "./configLoader.js";
+import { clearQueryParams } from "./util.js";
 
 export async function handleOAuthCallback() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -13,26 +14,31 @@ export async function handleOAuthCallback() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ code }),
+      signal: AbortSignal.timeout(5000)
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok)
+          throw new Error("Login failed");
+        return response.json();
+      })
       .then((data) => {
         localStorage.setItem("jwt", data.id_token);
-        const url = new URL(window.location.href);
-        window.history.replaceState({}, document.title, url.pathname);
+        clearQueryParams()
         if (data.existing_user) {
           return "existing";
         } else {
           return "new";
         }
       })
-      .catch((error) => {
-        console.error("Error:", error);
+      .catch(() => {
+        clearQueryParams()
         return "failed";
       });
   } else if (error) {
-    console.error("Authentication failed", error);
+    clearQueryParams()
+    return "failed"
   }
-  return "failed";
+  return "";
 }
 
 export function initiateGoogleOAuth() {
