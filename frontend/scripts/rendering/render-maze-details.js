@@ -1,5 +1,6 @@
 import { loadPage } from "./renderer.js";
 import { renderMainPage } from "./render-main-page.js";
+import { renderMazeGame } from "./render-maze-game.js";
 
 export function renderMazeDetailsPage(mazeId) {
   loadPage("/views/maze-details.html").then(() => {
@@ -8,11 +9,17 @@ export function renderMazeDetailsPage(mazeId) {
     heading.textContent = "This is the page for maze " + mazeId;
     mazeDetails.appendChild(heading);
 
-    // Add event listener to back button
     const backBtn = document.getElementById("backBtn");
     if (backBtn) {
       backBtn.addEventListener("click", () => {
         renderMainPage();
+      });
+    }
+
+    const startBtn = document.getElementById("startBtn");
+    if (startBtn) {
+      startBtn.addEventListener("click", (event) => {
+        renderMazeGame();
       });
     }
   });
