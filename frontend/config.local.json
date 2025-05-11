@@ -3,5 +3,5 @@
   "frontendBaseUrl": "http://localhost:5500/",
   "apiBaseUrl": "http://localhost:3000",
   "googleClientId": "259114541157-i5dptisbvb40pfav9sgto7p6ug5vit96.apps.googleusercontent.com",
-  "googleCallbackUrl": "http://localhost:5500"
+  "googleCallbackUrl": "http://localhost:5500/index.html"
 }
