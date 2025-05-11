@@ -1,0 +1,38 @@
+#username-label {
+  font-size: 1.25rem;
+  text-align: left;
+}
+
+#username-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  align-items: left;
+  gap: 1rem;
+  max-width: 20rem;
+}
+
+#set-username {
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1rem;
+  padding: 1.5rem 3rem;
+  background-color: white;
+  cursor: pointer;
+}
+
+#username-input {
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1rem;
+  padding: 0.5rem 3rem;
+  background-color: white;
+}
+
+#message {
+    font-size: 1.25rem;
+}

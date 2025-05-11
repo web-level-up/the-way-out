@@ -1,9 +1,16 @@
-import {fetchContentPagePromise, getRenderBaseGamePagePromise} from "./helpers/helper-functions.js";
+import { logout } from "../util.js";
+import { renderMazeSelectionPage } from "./render-maze-selection-page.js";
+import { loadPage } from "./renderer.js";
 
 export function renderMainPage() {
-  getRenderBaseGamePagePromise().then(() => {
-    const contentContainer = document.getElementById('content');
-
-    fetchContentPagePromise('main-page', contentContainer).then();
+  return loadPage("views/main-page.html").then(() => {
+    document
+      .getElementById("maze-selection")
+      .addEventListener("click", renderMazeSelectionPage);
+    document
+      .getElementById("logout")
+      .addEventListener("click", logout);
+    document.getElementById("welcome").textContent = `Welcome ${localStorage.getItem("username")}! Do You Remember the Way Out?`
   });
+  
 }

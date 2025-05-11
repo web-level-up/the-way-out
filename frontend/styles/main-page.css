@@ -1,14 +1,11 @@
-#google-login-button {
+.menu-button {
+  width: 15rem;
   height: 2rem;
   display: flex;
   align-items: center;
-  gap: 1rem;
+  justify-content: center;
   border-radius: 1rem;
   padding: 1.5rem 3rem;
   background-color: white;
   cursor: pointer;
-}
-
-#google-logo {
-  height: 1.5rem;
 }

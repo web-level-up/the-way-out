@@ -38,7 +38,7 @@ router.post("/login", async (req, res) => {
     const decoded = decodeJwt(id_token);
     const existingUser = await userService.getUserByGoogleId(decoded.sub);
 
-    res.status(200).json({ id_token, existing_user: existingUser ? true : false });
+    res.status(200).json({ id_token, existing_user: existingUser ? true : false, username: existingUser.username ?? "" });
   } catch (err) {
     console.error("Login handler error:", err);
   }

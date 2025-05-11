@@ -14,29 +14,29 @@ export async function handleOAuthCallback() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ code }),
-      signal: AbortSignal.timeout(5000)
+      signal: AbortSignal.timeout(5000),
     })
       .then((response) => {
-        if (!response.ok)
-          throw new Error("Login failed");
+        if (!response.ok) throw new Error("Login failed");
         return response.json();
       })
       .then((data) => {
         localStorage.setItem("jwt", data.id_token);
-        clearQueryParams()
+        clearQueryParams();
         if (data.existing_user) {
+          localStorage.setItem("username", data.username);
           return "existing";
         } else {
           return "new";
         }
       })
       .catch(() => {
-        clearQueryParams()
+        clearQueryParams();
         return "failed";
       });
   } else if (error) {
-    clearQueryParams()
-    return "failed"
+    clearQueryParams();
+    return "failed";
   }
   return "";
 }
