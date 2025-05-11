@@ -2,7 +2,7 @@ import { loadPage } from "./renderer.js";
 import { renderMainPage } from "./render-main-page.js";
 
 export function renderMazeDetailsPage(mazeId) {
-  loadPage("/views/mazeDetails.html").then(() => {
+  loadPage("/views/maze-details.html").then(() => {
     const mazeDetails = document.getElementById("maze-details");
     const heading = document.createElement("h1");
     heading.textContent = "This is the page for maze " + mazeId;

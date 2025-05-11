@@ -1,6 +1,6 @@
 import { difficultyLevels } from "../dummy-data.js";
 import { renderMazeGame } from "./render-maze-game.js";
-import { renderMazeDetailsPage } from "./mazeDetails.js";
+import { renderMazeDetailsPage } from "./render-maze-details.js";
 
 function getMazeSize(mazeLayout) {
   const layoutLength = mazeLayout.length;
