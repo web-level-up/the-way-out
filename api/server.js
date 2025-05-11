@@ -11,7 +11,7 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: process.env.GOOGLE_REDIRECT_URI,
+    origin: process.env.CORS_ALLOW,
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
