@@ -1,4 +1,6 @@
-import {difficultyLevels} from "../dummy-data.js";
+import { difficultyLevels } from "../dummy-data.js";
+import { renderMazeGame } from "./render-maze-game.js";
+import { renderMazeDetailsPage } from "./mazeDetails.js";
 
 function getMazeSize(mazeLayout) {
   const layoutLength = mazeLayout.length;
@@ -25,6 +27,22 @@ export function renderMazeCard(maze) {
       cardContainer.querySelector("#maze-difficulty").textContent = '⭐'.repeat(maze.difficulty_level_id);
       cardContainer.querySelector("#maze-time-record").textContent = `Best Time: ${"N/A"}`;
       cardContainer.querySelector("#maze-step-record").textContent = `Best Steps Taken: ${"N/A"}`;
+    
+    // Add event listener to Play button
+      const playBtn = cardContainer.querySelector("#play-btn-maze-card");
+      if (playBtn) {
+        playBtn.addEventListener("click", () => {
+          renderMazeGame();
+        });
+      }
+
+      // Add event listener to Leaderboard button
+      const leaderboardBtn = cardContainer.querySelector("#leaderboard-btn");
+      if (leaderboardBtn) {
+        leaderboardBtn.addEventListener("click", () => {
+          renderMazeDetailsPage(maze.id);
+        });
+      }
 
       return cardContainer;
     })
