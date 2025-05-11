@@ -35,5 +35,14 @@ resource "aws_s3_bucket_policy" "way_out_frontend_policy" {
       }
     ]
   })
+}
 
+resource "aws_s3_bucket_website_configuration" "way_out_frontend_website" {
+  bucket = aws_s3_bucket.way_out_frontend.id
+  index_document {
+    suffix = "index.html"
+  }
+  error_document {
+    key = "error.html"
+  }
 }
