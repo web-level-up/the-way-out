@@ -3,6 +3,9 @@ name: Deploy Node API
 on:
   push:
     branches: [main]
+    paths:
+      - "api/**"
+      - ".github/workflows/deploy-api.yml"
 
 jobs:
   deploy:
