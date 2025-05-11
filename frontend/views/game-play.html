@@ -1,7 +1,7 @@
 <body>
-  <div id="page">
-    <div id="Message-Container">
-      <div id="message">
+  <main id="page">
+    <section id="Message-Container">
+      <article id="message">
         <h1>Congratulations!</h1>
         <p>You are done.</p>
         <p id="moves"></p>
@@ -11,11 +11,12 @@
           onclick="toggleVisablity('Message-Container')"
           value="Cool!"
         />
-      </div>
-    </div>
+      </article>
+    </section>
 
     <br />
-    <div id="menu">
+
+    <nav id="menu">
       <div class="custom-select">
         <select id="diffSelect">
           <option value="10">Easy</option>
@@ -31,19 +32,21 @@
         value="Start"
       />
       <input id="giveUpBtn" type="button" value="Give Up" />
-    </div>
+    </nav>
 
-    <div id="view">
-      <div id="mazeContainer">
+    <section id="view">
+      <figure id="mazeContainer">
         <canvas
           id="mazeCanvas"
           class="border"
           height="1100"
           width="1100"
         ></canvas>
-      </div>
-    </div>
+      </figure>
+    </section>
 
-    <p id="instructions">Use arrow keys to move the key to the house!</p>
-  </div>
+    <footer>
+      <p id="instructions">Use arrow keys to move the key to the house!</p>
+    </footer>
+  </main>
 </body>
