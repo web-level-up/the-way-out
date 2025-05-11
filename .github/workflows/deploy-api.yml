@@ -47,6 +47,7 @@ jobs:
           GOOGLE_CLIENT_ID=${{ vars.GOOGLE_CLIENT_ID }}
           GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}
           GOOGLE_REDIRECT_URI=${{ vars.GOOGLE_REDIRECT_URI }}
+          CORS_ALLOW = ${{ vars.CORS_ALLOW }}
           EOL
             npm install
             sudo pm2 restart server || sudo pm2 start server.js
