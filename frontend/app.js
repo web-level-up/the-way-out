@@ -4,7 +4,8 @@ import { renderLoginPage } from "./scripts/rendering/login.js";
 import { renderUsernamePage } from "./scripts/rendering/username.js";
 import { renderErrorPage } from "./scripts/rendering/error.js";
 import { renderMainPage } from "./scripts/rendering/render-main-page.js";
-
+import { renderMazeGame } from "./scripts/rendering/render-maze-game.js";
+import { renderMazeDetailsPage } from "./scripts/rendering/mazeDetails.js";
 await loadConfig();
 const loginState = await handleOAuthCallback();
 switch (loginState) {
@@ -20,3 +21,4 @@ switch (loginState) {
   default:
     renderLoginPage();
 }
+// renderMainPage();
