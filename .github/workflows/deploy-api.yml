@@ -40,6 +40,8 @@ jobs:
           scp -i key.pem -r ./api/* ${{ vars.EC2_HOST }}:/home/ubuntu/api/
 
           ssh -o StrictHostKeyChecking=no -i key.pem ${{ vars.EC2_HOST }} << 'EOF'
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
             cd api
             cat > .env << EOL
           PORT=${{ vars.PORT }}
