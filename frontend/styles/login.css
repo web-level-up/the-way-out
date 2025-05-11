@@ -1,0 +1,36 @@
+#google-login-button {
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border-radius: 1rem;
+  padding: 1rem;
+  background-color: white;
+  cursor: pointer;
+}
+
+#google-logo {
+  height: 1.5rem;
+}
+
+.maze-button {
+  background-color: yellow;
+}
+
+.main-heading {
+  font-family: Inter;
+  font-weight: 700;
+  font-size: 2rem;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: white;
+  text-align: center;
+}
+
+.vertical-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
