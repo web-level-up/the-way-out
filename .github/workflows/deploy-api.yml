@@ -32,6 +32,7 @@ jobs:
             nvm install 20.18.2
             nvm use 20.18.2
             sudo ln -sf "$NVM_DIR/versions/node/v20.18.2/bin/node" /usr/local/bin/node
+            sudo ln -sf "$NVM_DIR/versions/node/v20.18.2/bin/npm" /usr/local/bin/npm
             npm install -g pm2
             mkdir -p api
             rm -rf api/*
