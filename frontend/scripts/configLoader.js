@@ -1,8 +1,7 @@
 let CONFIG = null;
 
 export async function loadConfig() {
-  if (CONFIG)
-    return CONFIG;
+  if (CONFIG) return CONFIG;
 
   const isLocalEnv =
     location.hostname === "localhost" || location.hostname === "127.0.0.1";
@@ -11,7 +10,7 @@ export async function loadConfig() {
     .then((response) => response.json())
     .then((data) => {
       CONFIG = data;
-      return CONFIG
+      return CONFIG;
     })
     .catch((error) => {
       console.error("Error Loading Config:", error);
