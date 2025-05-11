@@ -29,9 +29,9 @@ jobs:
             curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
             export NVM_DIR="$HOME/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-            [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
             nvm install 20.18.2
             nvm use 20.18.2
+            sudo ln -sf "$NVM_DIR/versions/node/v20.18.2/bin/node" /usr/local/bin/node
             npm install -g pm2
             mkdir -p api
             rm -rf api/*
@@ -40,8 +40,6 @@ jobs:
           scp -i key.pem -r ./api/* ${{ vars.EC2_HOST }}:/home/ubuntu/api/
 
           ssh -o StrictHostKeyChecking=no -i key.pem ${{ vars.EC2_HOST }} << 'EOF'
-            export NVM_DIR="$HOME/.nvm"
-            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
             cd api
             cat > .env << EOL
           PORT=${{ vars.PORT }}
@@ -50,7 +48,6 @@ jobs:
           GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}
           GOOGLE_REDIRECT_URI=${{ vars.GOOGLE_REDIRECT_URI }}
           EOL
-            nvm use 20.18.2
             npm install
             sudo pm2 restart server || sudo pm2 start server.js
           EOF
