@@ -1,20 +1,125 @@
 #mazes {
     display: grid;
-    grid-template-columns: repeat(4, 17.5vw);
+    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+    align-items: center;
+    justify-items: center;
+    /*max-width: 90%;*/
+    padding: 1rem;
+    margin: 0;
+    gap: 2rem;
+
+}
+
+h1 {
+    text-align: center;
+}
+
+.maze-card-container {
+    padding: 0;
+    margin: 0;
+    width: 100%;
 }
 
 .card {
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    border: 0.5rem solid #5e7143;
+    border-radius: 1rem;
+    box-shadow: 0 1rem 2rem 0 rgba(0,0,0,0.5);
     transition: 0.3s;
-    width: 40%;
+    /*width: 80%;*/
+    /*max-width: 80%;*/
+    overflow-wrap: break-word;
+    padding: 1rem;
+    margin: 1rem;
+    text-align: center;
+    font-size: 0.5rem;
+    background-color: #5e7143;
 }
 
 .card:hover {
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    box-shadow: 0 2rem 4rem 0 rgba(0,0,0,0.75);
 }
 
-.card button {
-    width: 5vw;
-    height:5vh;
-    font-size: 0.5rem;
+#maze-card-title {
+    margin: 0;
+    margin-bottom: 1rem;
+    padding: 0;
+    text-align: center;
+    font-size: 1.5rem;
+}
+
+figcaption {
+    margin: 0;
+    padding: 0.25rem;
+    color: #5e7143;
+}
+
+figcaption #maze-info {
+    display: grid;
+    gap: 0.5rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-areas:
+        "size difficulty"
+        "best-time best-time"
+        "best-steps best-steps";
+}
+
+figcaption #maze-info p {
+    font-size: 0.75rem;
+    background-color: white;
+    padding: 0.5rem;
+    border-radius: 1rem;
+}
+
+#maze-size {
+    grid-area: size;
+    padding: 0;
+    margin: 0;
+    align-self: center;
+}
+
+#maze-difficulty {
+    grid-area: difficulty;
+    padding: 0;
+    margin: 0;
+}
+
+#maze-time-record {
+    grid-area: best-time;
+    padding: 0;
+    margin: 0;
+}
+
+#maze-step-record {
+    grid-area: best-steps;
+    padding: 0;
+    margin: 0;
+}
+
+#maze-card-buttons {
+    /*padding: 1rem;*/
+    margin-top: 1rem;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+}
+
+.maze-card-button {
+    border-radius: 1rem;
+    border: 0.05rem solid white;
+    padding: 0.5rem;
+    margin: 0;
+    /*width: 5vw;*/
+    /*height:5vh;*/
+    background-color: #5e7143;
+    color: white;
+    /*font-weight: bold;*/
+    font-size: 1.25rem;
+
+}
+
+.maze-card-button:hover {
+    border: 0.05rem solid #5e7143;
+    background-color: white;
+    color: #5e7143;
+    box-shadow: 0 0.5rem 1rem 0 rgba(0,0,0,0.5);
 }

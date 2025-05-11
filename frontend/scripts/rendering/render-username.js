@@ -1,8 +1,8 @@
 import { loadPage } from "./renderer.js";
-import { getConfig } from "../configLoader.js";
-import { HttpError } from "../customErrors.js";
-import { renderErrorPage } from "./error.js";
-import { renderLoginPage } from "./login.js";
+import { getConfig } from "../config-loader.js";
+import { HttpError } from "../custom-errors.js";
+import { renderErrorPage } from "./render-error.js";
+import { renderLoginPage } from "./render-login.js";
 import {renderMainPage} from "./render-main-page.js";
 
 export function renderUsernamePage() {
