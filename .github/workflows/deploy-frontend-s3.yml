@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+    paths:
+      - "frontend/**"
+      - ".github/workflows/deploy-frontend-s3.yml"
 
 jobs:
   upload-to-s3:
