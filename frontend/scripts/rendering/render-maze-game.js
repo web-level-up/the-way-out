@@ -2,7 +2,7 @@ import { loadPage } from "./renderer.js";
 import { renderMainPage } from "./render-main-page.js";
 
 export function renderMazeGame() {
-  loadPage("/views/game-play.html").then(() => {
+  loadPage("/views/maze-game.html").then(() => {
     console.log("Game page loaded");
     //add dynamic content to the game-play.html page
 

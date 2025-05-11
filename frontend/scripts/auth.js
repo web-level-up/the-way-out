@@ -1,4 +1,4 @@
-import { getConfig } from "./configLoader.js";
+import { getConfig } from "./config-loader.js";
 import { clearQueryParams } from "./util.js";
 
 export async function handleOAuthCallback() {
