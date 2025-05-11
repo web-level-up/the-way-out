@@ -5,6 +5,7 @@ import { renderMazeDetailsPage } from "./render-maze-details.js";
 function getMazeSize(mazeLayout) {
   const layoutLength = mazeLayout.length;
   const size = Math.sqrt(layoutLength);
+  console.log(size)
 
   if (Number.isInteger(size)) {
     return `${size} x ${size}`;
@@ -18,15 +19,14 @@ export function renderMazeCard(maze) {
     .then(response => response.text())
     .then(content => {
       const cardContainer = document.createElement("section");
+      console.log(maze.id)
 
       cardContainer.classList.add("maze-card-container");
       cardContainer.innerHTML = content;
 
       cardContainer.querySelector("#maze-card-title").textContent = `Maze ${maze.id}`;
       cardContainer.querySelector("#maze-size").textContent = `${getMazeSize(maze.maze_layout)}`;
-      cardContainer.querySelector("#maze-difficulty").textContent = '⭐'.repeat(maze.difficulty_level_id);
-      cardContainer.querySelector("#maze-time-record").textContent = `Best Time: ${"N/A"}`;
-      cardContainer.querySelector("#maze-step-record").textContent = `Best Steps Taken: ${"N/A"}`;
+      cardContainer.querySelector("#maze-difficulty").textContent = '⭐'.repeat(maze.difficulty_id);
     
     // Add event listener to Play button
       const playBtn = cardContainer.querySelector("#play-btn-maze-card");
