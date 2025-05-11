@@ -5,7 +5,7 @@ export async function loadConfig() {
 
   const isLocalEnv =
     location.hostname === "localhost" || location.hostname === "127.0.0.1";
-  const file = isLocalEnv ? "../config.local.json" : "../config.release.json";
+  const file = isLocalEnv ? "./config.local.json" : "./config.release.json";
   return fetch(file)
     .then((response) => response.json())
     .then((data) => {
