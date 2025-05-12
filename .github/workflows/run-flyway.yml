@@ -6,7 +6,7 @@ on:
       - main
     paths:
       - flyway/**
-        - ".github/workflows/run-flyway.yml"
+      - ".github/workflows/run-flyway.yml"
 
 jobs:
   migrate:
