@@ -6,9 +6,9 @@ export function renderMazeGame() {
     console.log("Game page loaded");
     //add dynamic content to the game-play.html page
 
+    // Just append the script right away:
     const script = document.createElement("script");
-    //script.type = "module"; // or omit if not a module
-    script.src = "./scripts/gameScript.js";
+    script.src = "./scripts/game-script.js";
     document.body.appendChild(script);
 
     // Add event listener for Give Up button

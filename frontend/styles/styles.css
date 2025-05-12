@@ -11,7 +11,7 @@ body {
 
 body {
   font-family: sans-serif;
-  background-image: url('../assets/maze-background-2.jpg');
+  background-image: url("../assets/maze-background-2.jpg");
   background-size: cover;
   background-position: center;
   height: 100vh;
@@ -43,5 +43,3 @@ body {
   align-items: center;
   gap: 1rem;
 }
-
-

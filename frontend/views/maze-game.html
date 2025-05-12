@@ -1,4 +1,4 @@
-<body>
+<!-- <body>
   <main id="page">
     <section id="Message-Container">
       <article id="message">
@@ -50,3 +50,34 @@
     </footer>
   </main>
 </body>
+  -->
+
+<section>
+  <section style="text-align: center; margin-top: 20px">
+    <label for="maze-size">Maze Size:</label>
+    <select id="maze-size">
+      <option value="16">16 x 16</option>
+      <option value="20">20 x 20</option>
+      <option value="24">24 x 24</option>
+      <option value="28">28 x 28</option>
+      <option value="32" selected>32 x 32</option>
+    </select>
+    <button id="generate-maze">Generate Maze</button>
+    <input id="giveUpBtn" type="button" value="Give Up" />
+    <input id="startMazeBtn" type="button" value="Start" />
+  </section>
+  <main id="maze"></main>
+  <article id="controls-container">
+    <section id="controls" style="display: none">
+      <button class="ctrl-btn" id="up">&#8593;</button>
+      <span>
+        <button class="ctrl-btn" id="left">&#8592;</button>
+        <button class="ctrl-btn" id="right">&#8594;</button>
+      </span>
+      <button class="ctrl-btn" id="down">&#8595;</button>
+    </section>
+    <section id="keyboard-hint" style="display: none">
+      <span>Use keyboard to move ball (arrow keys)</span>
+    </section>
+  </article>
+</section>
