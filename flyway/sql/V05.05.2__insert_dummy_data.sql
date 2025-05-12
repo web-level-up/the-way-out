@@ -17,132 +17,132 @@ VALUES ('oauth_001', 'alice'),
     ('oauth_010', 'judy');
 -- Insert mazes (25 layouts)
 INSERT INTO "mazes" (
-        "maze_layout",
+        "maze_layout_url",
         "difficulty_level_id",
         "starting_position"
     )
 VALUES (
-        '0110010010000101001111011101101010001000011100110111',
+        'https://maze-blob.s3.af-south-1.amazonaws.com/1.txt',
         1,
         '{0,0}'
     ),
     (
-        '0111011111000000001110010110100010101111000111001010',
+        'https://maze-blob.s3.af-south-1.amazonaws.com/2.txt',
         2,
         '{1,1}'
     ),
     (
-        '0000110001001101010101100110111001101101011110010101',
+        'https://maze-blob.s3.af-south-1.amazonaws.com/3.txt',
         3,
         '{2,2}'
     ),
     (
-        '0001001010001011100111000111100011100000010001010000',
+        'https://maze-blob.s3.af-south-1.amazonaws.com/4.txt',
         1,
         '{0,1}'
     ),
     (
-        '0001110100100101011110000100110001001101000101001000',
+        'https://maze-blob.s3.af-south-1.amazonaws.com/5.txt',
         2,
         '{1,0}'
     ),
     (
-        '1010010111001011010100011000010011100100010010100101',
+        'https://maze-blob.s3.af-south-1.amazonaws.com/6.txt',
         3,
         '{0,2}'
     ),
     (
-        '1011011010101110111010001010110000011010101110001010',
+        'https://maze-blob.s3.af-south-1.amazonaws.com/7.txt',
         1,
         '{2,1}'
     ),
     (
-        '0011001110110110011010010100011010101111110001001110',
+        'https://maze-blob.s3.af-south-1.amazonaws.com/8.txt',
         2,
         '{0,3}'
     ),
     (
-        '0101110101000101111110111001110101011010010001010011',
+        'https://maze-blob.s3.af-south-1.amazonaws.com/9.txt',
         3,
         '{3,0}'
     ),
     (
-        '1110000001100101001110101000100010100000001100101111',
+        'https://maze-blob.s3.af-south-1.amazonaws.com/10.txt',
         1,
         '{1,2}'
     ),
     (
-        '0000111100111011011011000000000110001100111011000010',
+        'https://maze-blob.s3.af-south-1.amazonaws.com/11.txt',
         2,
         '{2,0}'
     ),
     (
-        '1010110001100101001010001010111010001011001100110100',
+        'https://maze-blob.s3.af-south-1.amazonaws.com/12.txt',
         3,
         '{3,1}'
     ),
     (
-        '0011011011001111111011011110010001010000100101011000',
+        'https://maze-blob.s3.af-south-1.amazonaws.com/13.txt',
         1,
         '{1,3}'
     ),
     (
-        '1110001000100000010000101110100101110001101000100101',
+        'https://maze-blob.s3.af-south-1.amazonaws.com/14.txt',
         2,
         '{3,2}'
     ),
     (
-        '1100111010010110000000110110010101001011000000011110',
+        'https://maze-blob.s3.af-south-1.amazonaws.com/15.txt',
         3,
         '{0,0}'
     ),
     (
-        '1011110110010010011111010001000000100000111010101001',
+        'https://maze-blob.s3.af-south-1.amazonaws.com/16.txt',
         1,
         '{2,3}'
     ),
     (
-        '1110011001000100111010111110100000111110001110110110',
+        'https://maze-blob.s3.af-south-1.amazonaws.com/17.txt',
         2,
         '{0,2}'
     ),
     (
-        '0000000101001000010010000110011010000000000111011000',
+        'https://maze-blob.s3.af-south-1.amazonaws.com/18.txt',
         3,
         '{1,1}'
     ),
     (
-        '0010101010000101010010101111110000100110000110110010',
+        'https://maze-blob.s3.af-south-1.amazonaws.com/19.txt',
         1,
         '{3,3}'
     ),
     (
-        '0100111001001010110100111001110101111011001111110010',
+        'https://maze-blob.s3.af-south-1.amazonaws.com/20.txt',
         2,
         '{2,2}'
     ),
     (
-        '0101110110110000111001111110101001000011110110000111',
+        'https://maze-blob.s3.af-south-1.amazonaws.com/21.txt',
         3,
         '{1,0}'
     ),
     (
-        '1100000000000100000100101110001100011010010010011011',
+        'https://maze-blob.s3.af-south-1.amazonaws.com/22.txt',
         1,
         '{3,1}'
     ),
     (
-        '1000100100010100000011100000110110001000100111001110',
+        'https://maze-blob.s3.af-south-1.amazonaws.com/23.txt',
         2,
         '{1,2}'
     ),
     (
-        '0111011011011010110001011010000000001110011000110000',
+        'https://maze-blob.s3.af-south-1.amazonaws.com/24.txt',
         3,
         '{2,1}'
     ),
     (
-        '0110111000101001001111000111000100101110000100101011',
+        'https://maze-blob.s3.af-south-1.amazonaws.com/25.txt',
         1,
         '{0,1}'
     );
