@@ -1,3 +1,4 @@
 CREATE TABLE "test" (
     "id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY NOT NULL,
 );
+
