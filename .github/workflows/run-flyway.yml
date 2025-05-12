@@ -1,0 +1,27 @@
+name: Flyway Migration
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - flyway/**
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v34
+
+      - name: Run Flyway migrations using Docker
+        run: |
+          docker run --rm \
+            -v ${{ github.workspace }}/flyway/sql:/flyway/sql \
+            flyway/flyway:10.13.0 \
+            -url=${{ vars.FLYWAY_DB_URL }} \
+            -user=${{ secrets.DB_USERNAME }} \
+            -password=${{ secrets.DB_PASSWORD }} \
+            -cleanDisabled=false \
+            migrate
