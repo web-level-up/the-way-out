@@ -9,7 +9,6 @@ import { renderMazeDetailsPage } from "./scripts/rendering/render-maze-details.j
 // await loadConfig();
 // const loginState = await handleOAuthCallback();
 // switch (loginState) {
-//   case "existing":
 //     renderMainPage();
 //     break;
 //   case "new":
@@ -21,5 +20,6 @@ import { renderMazeDetailsPage } from "./scripts/rendering/render-maze-details.j
 //   default:
 //     renderLoginPage();
 // }
-//renderMazeGame();
-renderMainPage();
+
+//renderMainPage();
+renderMazeGame();

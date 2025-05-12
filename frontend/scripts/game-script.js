@@ -77,6 +77,103 @@ function findFarthestCell(maze, startX, startY) {
 
 let size = 32;
 let mazeArr, start, end, playerPos, binary, maze;
+let timerInterval = null;
+let timeLeft = 15;
+let gameActive = false;
+
+function startTimer() {
+  clearInterval(timerInterval);
+  timeLeft = 15;
+  updateTimerDisplay();
+  gameActive = true;
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    updateTimerDisplay();
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      if (!(playerPos.x === end.x && playerPos.y === end.y)) {
+        gameActive = false;
+
+        playSound("../assets/loss.mp3");
+      }
+    }
+  }, 1000);
+}
+
+function stopTimer() {
+  clearInterval(timerInterval);
+  gameActive = false;
+}
+
+function updateTimerDisplay() {
+  const timerElem = document.getElementById("timer");
+  const timerBar = document.getElementById("timer-bar");
+  if (timerElem) timerElem.textContent = timeLeft;
+  if (timerBar) {
+    timerBar.value = timeLeft;
+    if (timeLeft < 5) {
+      timerBar.classList.add("timer-bar-red");
+      timerBar.classList.remove("timer-bar-green");
+    } else {
+      timerBar.classList.add("timer-bar-green");
+      timerBar.classList.remove("timer-bar-red");
+    }
+  }
+}
+
+function updateOverlay() {
+  const mazeElem = document.getElementById("maze");
+  const overlay = document.getElementById("overlay");
+  const container = document.getElementById("maze-container");
+  if (!mazeElem || !overlay || !container) return;
+
+  // Get maze bounding box relative to container
+  const width = mazeElem.offsetWidth;
+  const height = mazeElem.offsetHeight;
+
+  // Set overlay size and position to match maze
+  overlay.width = width;
+  overlay.height = height;
+  overlay.style.width = width + "px";
+  overlay.style.height = height + "px";
+  overlay.style.position = "absolute";
+  const overlayOffsetX = 0; // No horizontal shift
+  const overlayOffsetY = 8; // Increase this value to move overlay further down
+  overlay.style.left = mazeElem.offsetLeft + overlayOffsetX + "px";
+  overlay.style.top = mazeElem.offsetTop + overlayOffsetY + "px";
+
+  const ctx = overlay.getContext("2d");
+  ctx.clearRect(0, 0, overlay.width, overlay.height);
+
+  // Draw semi-transparent overlay everywhere
+  ctx.globalAlpha = 1.0;
+  ctx.fillStyle = "rgba(0,0,0,1)";
+  ctx.fillRect(0, 0, overlay.width, overlay.height);
+
+  // Calculate cell size
+  const cellSize = width / size;
+
+  // Reveal area around player
+  const revealRadius = 1; // 1 = 3x3, 2 = 5x5, etc.
+  for (let dy = -revealRadius; dy <= revealRadius; dy++) {
+    for (let dx = -revealRadius; dx <= revealRadius; dx++) {
+      const x = playerPos.x + dx;
+      const y = playerPos.y + dy;
+      if (x >= 0 && x < size && y >= 0 && y < size) {
+        ctx.clearRect(x * cellSize, y * cellSize, cellSize, cellSize);
+      }
+    }
+  }
+
+  // Always reveal the end cell (make this area much bigger)
+  const endClearSize = cellSize * 4;
+  ctx.clearRect(
+    end.x * cellSize - (endClearSize - cellSize) / 2,
+    end.y * cellSize - (endClearSize - cellSize) / 2,
+    endClearSize,
+    endClearSize
+  );
+}
 
 function setupMaze(selectedSize) {
   console.log("setupMaze called");
@@ -104,6 +201,8 @@ function setupMaze(selectedSize) {
   else if (size === 32) cellSize = 20;
   mazeDiv.style.setProperty("--cell-size", cellSize + "px");
   renderMaze();
+  startTimer();
+  setTimeout(updateOverlay, 0);
 }
 
 function renderMaze() {
@@ -124,6 +223,7 @@ function renderMaze() {
       mazeDiv.appendChild(cell);
     }
   }
+  setTimeout(updateOverlay, 0);
 }
 
 function playSound(filename) {
@@ -160,17 +260,20 @@ function showSparkles() {
 }
 
 function movePlayer(dx, dy) {
+  if (!gameActive) return;
   const nx = playerPos.x + dx;
   const ny = playerPos.y + dy;
   if (nx >= 0 && nx < size && ny >= 0 && ny < size) {
     if (maze[ny][nx] === "path") {
       playerPos = { x: nx, y: ny };
       renderMaze();
+      updateOverlay();
       playSound("../assets/move.mp3");
       if (playerPos.x === end.x && playerPos.y === end.y) {
         showSparkles();
         setTimeout(() => console.log("game over"), 10);
         playSound("../assets/win.mp3");
+        stopTimer();
       }
     } else {
       playSound("../assets/wall.mp3");
@@ -252,3 +355,6 @@ if (up && down && left && right) {
   left.addEventListener("click", () => movePlayer(-1, 0));
   right.addEventListener("click", () => movePlayer(1, 0));
 }
+
+// Ensure overlay resizes with window and maze
+window.addEventListener("resize", updateOverlay);

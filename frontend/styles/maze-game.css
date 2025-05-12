@@ -129,3 +129,77 @@
     transform: scale(0.8) translate(var(--dx, 0), var(--dy, 0));
   }
 }
+
+#counter {
+  font-size: 2rem;
+  text-align: center;
+  margin: 1em 0;
+}
+main[hidden] {
+  display: none;
+}
+
+/* Timer styles */
+header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1em;
+}
+
+header section {
+  font-size: 1.3em;
+  font-weight: 500;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+time#timer {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #d7263d;
+  margin: 0 0.3em;
+}
+
+progress#timer-bar {
+  width: 200px;
+  height: 1.2em;
+  margin-left: 1em;
+  vertical-align: middle;
+  background: #eee;
+  border-radius: 0.5em;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.timer-bar-green::-webkit-progress-value {
+  background-color: #4caf50;
+}
+.timer-bar-green::-moz-progress-bar {
+  background-color: #4caf50;
+}
+.timer-bar-green {
+  accent-color: #4caf50;
+}
+
+.timer-bar-red::-webkit-progress-value {
+  background-color: #d7263d;
+}
+.timer-bar-red::-moz-progress-bar {
+  background-color: #d7263d;
+}
+.timer-bar-red {
+  accent-color: #d7263d;
+}
+
+#maze-container {
+  position: relative;
+  display: inline-block;
+}
+
+#overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 10;
+}

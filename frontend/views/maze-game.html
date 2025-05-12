@@ -52,21 +52,45 @@
 </body>
   -->
 
+<!-- <header>
+  <h1>Maze Game</h1>
+  <section>
+    <label for="timer">Time left: </label>
+    <time id="timer" datetime="PT30S">30</time> seconds
+    <progress id="timer-bar" value="30" max="30"></progress>
+  </section>
+</header> -->
+
 <section>
-  <section style="text-align: center; margin-top: 20px">
+  <header>
     <label for="maze-size">Maze Size:</label>
     <select id="maze-size">
-      <option value="16">16 x 16</option>
+      <option value="16" selected>16 x 16</option>
       <option value="20">20 x 20</option>
       <option value="24">24 x 24</option>
       <option value="28">28 x 28</option>
-      <option value="32" selected>32 x 32</option>
+      <option value="32">32 x 32</option>
     </select>
     <button id="generate-maze">Generate Maze</button>
-    <input id="giveUpBtn" type="button" value="Give Up" />
-    <input id="startMazeBtn" type="button" value="Start" />
+    <button id="startMazeBtn">Start</button>
+    <button id="giveUpBtn">Give Up</button>
+  </header>
+  <section>
+    <h2
+      id="counter"
+      aria-live="polite"
+      style="font-size: 2rem; text-align: center"
+    ></h2>
   </section>
-  <main id="maze"></main>
+  <section>
+    <label for="timer">Time left: </label>
+    <time id="timer" datetime="PT15S">15</time> seconds
+    <progress id="timer-bar" value="15" max="15"></progress>
+  </section>
+  <section id="maze-container">
+    <canvas id="overlay"></canvas>
+    <main id="maze" hidden></main>
+  </section>
   <article id="controls-container">
     <section id="controls" style="display: none">
       <button class="ctrl-btn" id="up">&#8593;</button>
