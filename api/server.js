@@ -1,22 +1,16 @@
 import dotenv from "dotenv";
 import express from "express";
-import cors from "cors";
 import healthRoute from "./routes/health.routes.js";
 import mazeRoutes from "./routes/maze.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 import userRoutes from "./routes/user.routes.js";
 import { auth } from "./middleware/auth.js";
+import { cors } from "./middleware/cors.js";
 
 const app = express();
 app.use(express.json());
-app.use(
-  cors({
-    origin: process.env.CORS_ALLOW,
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
-  })
-);
 
+app.use(cors);
 app.use(auth);
 
 app.use("/api/health", healthRoute);
