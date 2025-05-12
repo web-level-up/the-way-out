@@ -1,10 +1,10 @@
 import sql from "../config/db.js";
 
 export const getAllMazes = () =>
-  sql`SELECT m.id, m.maze_layout, m.difficulty_level_id as difficulty_id, d.difficulty_level_name as difficulty_name, m.starting_position, m.ending_position FROM mazes m INNER JOIN difficulty_levels d ON m.difficulty_level_id = d.id`;
+  sql`SELECT m.id, m.maze_layout, m.difficulty_level_id as difficulty_id, d.difficulty_level_name as difficulty_name, d.preview_time, d.escape_time, m.starting_position, m.ending_position FROM mazes m INNER JOIN difficulty_levels d ON m.difficulty_level_id = d.id`;
 
 export const getMazeById = (id) =>
-  sql`SELECT m.id, m.maze_layout, m.difficulty_level_id as difficulty_id, d.difficulty_level_name as difficulty_name, m.starting_position, m.ending_position FROM mazes m INNER JOIN difficulty_levels d ON m.difficulty_level_id = d.id WHERE m.id = ${id}`.then(
+  sql`SELECT m.id, m.maze_layout, m.difficulty_level_id as difficulty_id, d.difficulty_level_name as difficulty_name, d.preview_time, d.escape_time, m.starting_position, m.ending_position FROM mazes m INNER JOIN difficulty_levels d ON m.difficulty_level_id = d.id WHERE m.id = ${id}`.then(
     (rows) => rows[0]
   );
 
