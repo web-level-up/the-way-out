@@ -203,3 +203,23 @@ progress#timer-bar {
   pointer-events: none;
   z-index: 10;
 }
+
+/* Mute sound toggle styles */
+#mute-sound-toggle {
+  vertical-align: middle;
+  margin-right: 0.5em;
+  accent-color: #4caf50;
+  width: 1.1em;
+  height: 1.1em;
+}
+label[for="mute-sound-toggle"] {
+  cursor: pointer;
+  user-select: none;
+  font-size: 1.1em;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+}

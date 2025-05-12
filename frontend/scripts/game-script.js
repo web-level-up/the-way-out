@@ -80,6 +80,7 @@ let mazeArr, start, end, playerPos, binary, maze;
 let timerInterval = null;
 let timeLeft = 15;
 let gameActive = false;
+let isMuted = false;
 
 function startTimer() {
   clearInterval(timerInterval);
@@ -119,6 +120,7 @@ function updateTimerDisplay() {
       timerBar.classList.remove("timer-bar-red");
     }
   }
+  updateOverlay();
 }
 
 function updateOverlay() {
@@ -127,25 +129,35 @@ function updateOverlay() {
   const container = document.getElementById("maze-container");
   if (!mazeElem || !overlay || !container) return;
 
+  // Only show overlay if timeLeft <= 13
+  if (timeLeft > 13) {
+    overlay.style.display = "none";
+    return;
+  } else {
+    overlay.style.display = "block";
+  }
+
   // Get maze bounding box relative to container
   const width = mazeElem.offsetWidth;
   const height = mazeElem.offsetHeight;
 
   // Set overlay size and position to match maze
+  const extraOverlayTop = 10; // or 40, adjust as needed for your maze's border radius
   overlay.width = width;
-  overlay.height = height;
+  overlay.height = height + extraOverlayTop;
   overlay.style.width = width + "px";
-  overlay.style.height = height + "px";
+  overlay.style.height = height + extraOverlayTop + "px";
   overlay.style.position = "absolute";
   const overlayOffsetX = 0; // No horizontal shift
   const overlayOffsetY = 8; // Increase this value to move overlay further down
   overlay.style.left = mazeElem.offsetLeft + overlayOffsetX + "px";
-  overlay.style.top = mazeElem.offsetTop + overlayOffsetY + "px";
+  overlay.style.top =
+    mazeElem.offsetTop + overlayOffsetY - extraOverlayTop + "px";
 
   const ctx = overlay.getContext("2d");
   ctx.clearRect(0, 0, overlay.width, overlay.height);
 
-  // Draw semi-transparent overlay everywhere
+  // Draw fully opaque overlay everywhere
   ctx.globalAlpha = 1.0;
   ctx.fillStyle = "rgba(0,0,0,1)";
   ctx.fillRect(0, 0, overlay.width, overlay.height);
@@ -202,7 +214,12 @@ function setupMaze(selectedSize) {
   mazeDiv.style.setProperty("--cell-size", cellSize + "px");
   renderMaze();
   startTimer();
-  setTimeout(updateOverlay, 0);
+  // Hide overlay for 2 seconds, then show if needed
+  const overlay = document.getElementById("overlay");
+  if (overlay) overlay.style.display = "none";
+  setTimeout(() => {
+    updateOverlay();
+  }, 2000);
 }
 
 function renderMaze() {
@@ -227,6 +244,8 @@ function renderMaze() {
 }
 
 function playSound(filename) {
+  const muteToggle = document.getElementById("mute-sound-toggle");
+  if (muteToggle && muteToggle.checked) return;
   const audio = new Audio(filename);
   audio.currentTime = 0;
   audio.play();
@@ -358,3 +377,13 @@ if (up && down && left && right) {
 
 // Ensure overlay resizes with window and maze
 window.addEventListener("resize", updateOverlay);
+
+window.addEventListener("DOMContentLoaded", () => {
+  const muteToggle = document.getElementById("mute-sound-toggle");
+  if (muteToggle) {
+    isMuted = muteToggle.checked;
+    muteToggle.addEventListener("change", () => {
+      isMuted = muteToggle.checked;
+    });
+  }
+});
