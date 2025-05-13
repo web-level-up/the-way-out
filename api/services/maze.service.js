@@ -8,3 +8,5 @@ export const completeMaze = (mazeId, playerGoogleId, timeTaken, stepsTaken) =>
   repo.postCompletion(mazeId, playerGoogleId, timeTaken, stepsTaken);
 
 export const getMazeLeaderboard = (mazeId) => repo.getLeaderboard(mazeId);
+
+export const getUserMazeCompletions = (mazeId, userId) => repo.getUserMazeCompletions(mazeId, userId);

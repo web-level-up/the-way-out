@@ -25,6 +25,7 @@ export async function handleOAuthCallback() {
         clearQueryParams();
         if (data.existing_user) {
           localStorage.setItem("username", data.username);
+          localStorage.setItem("userId", data.id);
           return "existing";
         } else {
           return "new";
