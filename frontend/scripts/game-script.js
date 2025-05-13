@@ -226,7 +226,7 @@ function setupMaze(selectedSize) {
 function renderMaze() {
   console.log("renderMaze called");
   const mazeDiv = document.getElementById("maze");
-  mazeDiv.innerHTML = "";
+  mazeDiv.replaceChildren();
   for (let y = 0; y < size; y++) {
     for (let x = 0; x < size; x++) {
       const cell = document.createElement("div");
