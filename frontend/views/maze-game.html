@@ -1,52 +1,49 @@
-<body>
-  <main id="page">
-    <section id="Message-Container">
-      <article id="message">
-        <h1>Congratulations!</h1>
-        <p>You are done.</p>
-        <p id="moves"></p>
-        <input
-          id="okBtn"
-          type="button"
-          onclick="toggleVisablity('Message-Container')"
-          value="Cool!"
-        />
-      </article>
+<section>
+  <header>
+    <label for="maze-size">Maze Size:</label>
+    <select id="maze-size">
+      <option value="16" selected>16 x 16</option>
+      <option value="20">20 x 20</option>
+      <option value="24">24 x 24</option>
+      <option value="28">28 x 28</option>
+      <option value="32">32 x 32</option>
+    </select>
+    <button id="generate-maze">Generate Maze</button>
+    <button id="startMazeBtn">Start</button>
+    <button id="giveUpBtn">Give Up</button>
+    <section>
+      <label for="mute-sound-toggle">
+        <input type="checkbox" id="mute-sound-toggle" />Mute sound
+      </label>
     </section>
-
-    <br />
-
-    <nav id="menu">
-      <div class="custom-select">
-        <select id="diffSelect">
-          <option value="10">Easy</option>
-          <option value="15">Medium</option>
-          <option value="25">Hard</option>
-          <option value="38">Extreme</option>
-        </select>
-      </div>
-      <input
-        id="startMazeBtn"
-        type="button"
-        onclick="makeMaze()"
-        value="Start"
-      />
-      <input id="giveUpBtn" type="button" value="Give Up" />
-    </nav>
-
-    <section id="view">
-      <figure id="mazeContainer">
-        <canvas
-          id="mazeCanvas"
-          class="border"
-          height="1100"
-          width="1100"
-        ></canvas>
-      </figure>
+  </header>
+  <section>
+    <h2
+      id="counter"
+      aria-live="polite"
+      style="font-size: 2rem; text-align: center"
+    ></h2>
+  </section>
+  <section>
+    <label for="timer">Time left: </label>
+    <time id="timer" datetime="PT15S">15</time> seconds
+    <progress id="timer-bar" value="15" max="15"></progress>
+  </section>
+  <section id="maze-container">
+    <canvas id="overlay"></canvas>
+    <main id="maze" hidden></main>
+  </section>
+  <article id="controls-container">
+    <section id="controls" style="display: none">
+      <button class="ctrl-btn" id="up">&#8593;</button>
+      <span>
+        <button class="ctrl-btn" id="left">&#8592;</button>
+        <button class="ctrl-btn" id="right">&#8594;</button>
+      </span>
+      <button class="ctrl-btn" id="down">&#8595;</button>
     </section>
-
-    <footer>
-      <p id="instructions">Use arrow keys to move the key to the house!</p>
-    </footer>
-  </main>
-</body>
+    <section id="keyboard-hint" style="display: none">
+      <span>Use keyboard to move ball (arrow keys)</span>
+    </section>
+  </article>
+</section>

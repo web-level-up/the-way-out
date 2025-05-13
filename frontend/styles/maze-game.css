@@ -1,0 +1,225 @@
+/* body {
+  background: #f6f8fa;
+  font-family: "Segoe UI", "Roboto", Arial, sans-serif;
+} */
+
+#maze {
+  display: grid;
+  grid-template-columns: repeat(var(--maze-size, 32), var(--cell-size, 20px));
+  grid-template-rows: repeat(var(--maze-size, 32), var(--cell-size, 20px));
+  gap: 4px;
+  margin: 40px auto;
+  width: max-content;
+  background: #e0e3e7;
+  border-radius: 24px;
+  box-shadow: 0 8px 32px #0002;
+  padding: 16px;
+}
+.cell {
+  width: var(--cell-size, 20px);
+  height: var(--cell-size, 20px);
+  box-sizing: border-box;
+  border-radius: 8px;
+  transition: background 0.2s;
+  box-shadow: 0 1px 4px #0001;
+}
+.wall {
+  background: linear-gradient(135deg, #23272f 60%, #444b58 100%);
+}
+.path {
+  background: linear-gradient(135deg, #f8fafc 60%, #e3e8ee 100%);
+  position: relative;
+}
+.player {
+  width: calc(var(--cell-size, 20px) * 0.8);
+  height: calc(var(--cell-size, 20px) * 0.8);
+  background: radial-gradient(circle at 60% 40%, #ff5252 70%, #c62828 100%);
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  box-shadow: 0 2px 8px #ff525233;
+  transition: top 0.15s, left 0.15s;
+  border: 2px solid #fff;
+}
+.end {
+  background: linear-gradient(135deg, #b2f7c1 60%, #4caf50 100%) !important;
+  position: relative;
+  box-shadow: 0 0 0 2px #4caf5055;
+  overflow: visible;
+}
+#maze-size,
+#generate-maze {
+  font-size: 1rem;
+  padding: 6px 12px;
+  margin: 0 4px;
+  border-radius: 6px;
+  border: 1px solid #cfd8dc;
+  background: #fff;
+  box-shadow: 0 1px 2px #0001;
+  transition: border 0.2s;
+}
+#maze-size:focus,
+#generate-maze:focus {
+  border: 1.5px solid #4caf50;
+  outline: none;
+}
+#controls-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 24px;
+}
+#controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+#controls > div {
+  display: flex;
+  gap: 32px;
+}
+.ctrl-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  border: none;
+  background: #e0f7e9;
+  color: #4caf50;
+  font-size: 2rem;
+  box-shadow: 0 2px 8px #0001;
+  margin: 0 4px;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.ctrl-btn:active {
+  background: #b2e6b5;
+  box-shadow: 0 1px 2px #0002;
+}
+#keyboard-hint {
+  font-size: 1.1rem;
+  color: #4caf50;
+  margin-top: 12px;
+}
+
+.sparkle {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: gold;
+  opacity: 0.8;
+  pointer-events: none;
+  animation: sparkle-burst 0.7s ease-out forwards;
+}
+
+@keyframes sparkle-burst {
+  0% {
+    opacity: 1;
+    transform: scale(0.5) translate(0, 0);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.2) translate(var(--dx, 0), var(--dy, 0));
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.8) translate(var(--dx, 0), var(--dy, 0));
+  }
+}
+
+#counter {
+  font-size: 2rem;
+  text-align: center;
+  margin: 1em 0;
+}
+main[hidden] {
+  display: none;
+}
+
+/* Timer styles */
+header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1em;
+}
+
+header section {
+  font-size: 1.3em;
+  font-weight: 500;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+time#timer {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #d7263d;
+  margin: 0 0.3em;
+}
+
+progress#timer-bar {
+  width: 200px;
+  height: 1.2em;
+  margin-left: 1em;
+  vertical-align: middle;
+  background: #eee;
+  border-radius: 0.5em;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.timer-bar-green::-webkit-progress-value {
+  background-color: #4caf50;
+}
+.timer-bar-green::-moz-progress-bar {
+  background-color: #4caf50;
+}
+.timer-bar-green {
+  accent-color: #4caf50;
+}
+
+.timer-bar-red::-webkit-progress-value {
+  background-color: #d7263d;
+}
+.timer-bar-red::-moz-progress-bar {
+  background-color: #d7263d;
+}
+.timer-bar-red {
+  accent-color: #d7263d;
+}
+
+#maze-container {
+  position: relative;
+  display: inline-block;
+}
+
+#overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Mute sound toggle styles */
+#mute-sound-toggle {
+  vertical-align: middle;
+  margin-right: 0.5em;
+  accent-color: #4caf50;
+  width: 1.1em;
+  height: 1.1em;
+}
+label[for="mute-sound-toggle"] {
+  cursor: pointer;
+  user-select: none;
+  font-size: 1.1em;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+}
