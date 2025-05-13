@@ -8,7 +8,14 @@
   background-color: white;
   cursor: pointer;
 }
+#google-login-button:hover {
+  background-color: #dde3e6;
+}
 
 #google-logo {
   height: 1.5rem;
+}
+h1{
+  font-size: 2rem;
+  margin-bottom: 1rem;
 }

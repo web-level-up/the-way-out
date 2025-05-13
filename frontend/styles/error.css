@@ -9,6 +9,15 @@
   cursor: pointer;
 }
 
+#nav-button:hover {
+  background-color: #dde3e6;
+}
+
 #error-message {
     font-size: 1.5rem;
+}
+
+.main-heading{
+    font-size: 2rem;
+    margin-bottom: 1rem;
 }

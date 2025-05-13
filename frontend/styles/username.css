@@ -1,6 +1,8 @@
+
 #username-label {
-  font-size: 1.25rem;
+  font-size: 1.50rem;
   text-align: left;
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
 }
 
 #username-container {
@@ -21,7 +23,13 @@
   padding: 1.5rem 3rem;
   background-color: white;
   cursor: pointer;
+  font-size: 1.25rem;
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
+
+#set-username:hover {
+  background-color: #dde3e6;
+} 
 
 #username-input {
   height: 2rem;
@@ -31,6 +39,10 @@
   border-radius: 1rem;
   padding: 0.5rem 3rem;
   background-color: white;
+}
+
+#username-input:hover {
+  background-color: #dde3e6;
 }
 
 #message {

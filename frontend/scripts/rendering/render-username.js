@@ -6,7 +6,7 @@ import { renderLoginPage } from "./render-login.js";
 import {renderMainPage} from "./render-main-page.js";
 
 export function renderUsernamePage() {
-  loadPage("/views/username.html").then(() => {
+  loadPage("./views/username.html").then(() => {
     const button = document.getElementById("set-username");
     const input = document.getElementById("username-input");
     const message = document.getElementById("message");
