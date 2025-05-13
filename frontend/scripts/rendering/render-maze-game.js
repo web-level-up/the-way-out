@@ -1,6 +1,7 @@
 import { loadPage } from "./renderer.js";
 import { renderMainPage } from "./render-main-page.js";
-
+import { renderLoss } from "./render-loss.js";
+import { renderCongrats } from "./render-congrats.js";
 export function renderMazeGame() {
   loadPage("/views/maze-game.html").then(() => {
     console.log("Game page loaded");
@@ -8,6 +9,7 @@ export function renderMazeGame() {
 
     // Just append the script right away:
     const script = document.createElement("script");
+    //script.type = "module";
     script.src = "./scripts/game-script.js";
     document.body.appendChild(script);
 
@@ -20,3 +22,16 @@ export function renderMazeGame() {
     }
   });
 }
+
+// // In render-congrats.js
+window.renderCongrats = function () {
+  // ... your code ...
+  console.log("YOU WIN!!!");
+  renderCongrats();
+};
+
+window.renderLoss = function () {
+  // ... your code ...
+  console.log("YOU LOSE!!!");
+  renderLoss();
+};

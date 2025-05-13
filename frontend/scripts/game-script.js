@@ -96,6 +96,7 @@ function startTimer() {
         gameActive = false;
 
         playSound("../assets/loss.mp3");
+        if (window.renderLoss) window.renderLoss();
       }
     }
   }, 1000);
@@ -293,6 +294,7 @@ function movePlayer(dx, dy) {
         setTimeout(() => console.log("game over"), 10);
         playSound("../assets/win.mp3");
         stopTimer();
+        if (window.renderCongrats) window.renderCongrats();
       }
     } else {
       playSound("../assets/wall.mp3");
