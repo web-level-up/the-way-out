@@ -36,6 +36,7 @@ export function renderUsernamePage() {
           return response.json();
         })
         .then(() => {
+          localStorage.setItem("username", username);
           renderMainPage();
         })
         .catch((error) => {
