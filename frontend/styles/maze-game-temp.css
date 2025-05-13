@@ -1,0 +1,80 @@
+#game-page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  box-sizing: border-box;
+}
+
+#game-banner {
+  background: #222;
+  height: 15vh;
+  box-sizing: border-box;
+}
+
+#grid-container {
+  height: 70vh;
+  display: grid;
+  background: #d3c6c6;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  justify-content: center;
+  align-content: center;
+}
+
+.cell {
+  display: flex;
+  background-color: #ffffff;
+  justify-content: center;
+  align-items: center;
+}
+
+#game-footer {
+  height: 15vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  box-sizing: border-box;
+  background: #222;
+  justify-content: center;
+}
+
+.movement-button {
+  height: 5vh;
+  /* width: 5vh; */
+  width: 3rem;
+  font-size: 1.25rem;
+  border: none;
+  background: #444;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+  align-items: center;
+  text-align: center;
+  line-height: 1;
+}
+
+#controls button:hover {
+  background: #666;
+}
+
+#player {
+  width: 80%;
+  height: 80%;
+  border-radius: 50%;
+  background-color: red;
+}
+
+#end {
+  width: 80%;
+  height: 80%;
+  border-radius: 50%;
+  background-color: rgb(18, 130, 10);
+}
+
+.wall {
+  background-color: #535353;
+}
