@@ -1,6 +1,7 @@
 import { difficultyLevels } from "../dummy-data.js";
 import { renderMazeGame } from "./render-maze-game.js";
 import { renderMazeDetailsPage } from "./render-maze-details.js";
+import { loadComponent } from "./renderer.js";
 
 function getMazeSize(mazeLayout) {
   const layoutLength = mazeLayout.length;
@@ -14,34 +15,35 @@ function getMazeSize(mazeLayout) {
 }
 
 export function renderMazeCard(maze) {
-  return fetch(`views/maze-card.html`)
-    .then(response => response.text())
-    .then(content => {
-      const cardContainer = document.createElement("section");
+  const cardContainer = document.createElement("section");
+  cardContainer.classList.add("maze-card-container");
 
-      cardContainer.classList.add("maze-card-container");
-      cardContainer.innerHTML = content;
+  return loadComponent(cardContainer, "./views/maze-card.html").then(() => {
+    cardContainer.querySelector(
+      "#maze-card-title"
+    ).textContent = `Maze ${maze.id}`;
+    cardContainer.querySelector("#maze-size").textContent = `${getMazeSize(
+      maze.maze_layout
+    )}`;
+    cardContainer.querySelector("#maze-difficulty").textContent = "⭐".repeat(
+      maze.difficulty_id
+    );
 
-      cardContainer.querySelector("#maze-card-title").textContent = `Maze ${maze.id}`;
-      cardContainer.querySelector("#maze-size").textContent = `${getMazeSize(maze.maze_layout)}`;
-      cardContainer.querySelector("#maze-difficulty").textContent = '⭐'.repeat(maze.difficulty_id);
-    
     // Add event listener to Play button
-      const playBtn = cardContainer.querySelector("#play-btn-maze-card");
-      if (playBtn) {
-        playBtn.addEventListener("click", () => {
-          renderMazeGame();
-        });
-      }
+    const playBtn = cardContainer.querySelector("#play-btn-maze-card");
+    if (playBtn) {
+      playBtn.addEventListener("click", () => {
+        renderMazeGame();
+      });
+    }
 
-      // Add event listener to Leaderboard button
-      const leaderboardBtn = cardContainer.querySelector("#leaderboard-btn");
-      if (leaderboardBtn) {
-        leaderboardBtn.addEventListener("click", () => {
-          renderMazeDetailsPage(maze.id);
-        });
-      }
-
-      return cardContainer;
-    })
+    // Add event listener to Leaderboard button
+    const leaderboardBtn = cardContainer.querySelector("#leaderboard-btn");
+    if (leaderboardBtn) {
+      leaderboardBtn.addEventListener("click", () => {
+        renderMazeDetailsPage(maze.id);
+      });
+    }
+    return cardContainer
+  });
 }

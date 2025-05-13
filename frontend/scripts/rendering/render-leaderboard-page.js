@@ -75,7 +75,7 @@ function filterLeaderboard(mazeId, data) {
 
 function populateUserStats(data) {
   const tableBody = document.getElementById('user-stats').getElementsByTagName('tbody')[0];
-  tableBody.innerHTML = '';
+  tableBody.replaceChildren();
 
   data.forEach((entry, index) => {
     const row = tableBody.insertRow();
@@ -91,7 +91,7 @@ function populateUserStats(data) {
 
 function populateLeaderboard(mazeId, tableId, data, isStepsTaken = false) {
   const tableBody = document.getElementById(tableId).getElementsByTagName('tbody')[0];
-  tableBody.innerHTML = '';
+  tableBody.replaceChildren();
 
   const sortedData = !isStepsTaken
     ? data
