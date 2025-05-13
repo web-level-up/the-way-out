@@ -10,8 +10,12 @@ router.get("/", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
   const maze = await service.getMaze(req.params.id);
+  const layoutResponse = await fetch(maze.maze_layout_url);
+  const layout = await layoutResponse.text();
   if (!maze) return res.status(404).json({ error: "Maze not found" });
-  res.json(maze);
+  res.json({...maze,
+    maze_layout: layout
+  });
 });
 
 router.post("/completions", async (req, res) => {
