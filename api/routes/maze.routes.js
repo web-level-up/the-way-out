@@ -31,4 +31,9 @@ router.get("/:id/leaderboard", async (req, res) => {
   res.json(leaderboard);
 });
 
+router.get("/:id/:userId/completions", async (req, res) => {
+  const completions = await service.getUserMazeCompletions(req.params.id, req.params.userId);
+  res.json(completions);
+});
+
 export default router;

@@ -1,4 +1,6 @@
 import { renderLoginPage } from "./rendering/render-login.js";
+import {HttpError} from "./custom-errors.js";
+import {getConfig} from "./config-loader.js";
 
 export function clearQueryParams() {
   const url = new URL(window.location.href);
@@ -11,3 +13,24 @@ export function logout() {
 
   renderLoginPage();
 }
+
+export function getDataFromUrl(url) {
+  const config = getConfig();
+
+  return fetch(config.apiBaseUrl + url, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+    },
+    signal: AbortSignal.timeout(5000),
+  })
+    .then(async (response) => {
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new HttpError(response.status, errorData.error);
+      }
+      return response.json();
+    })
+}
+
