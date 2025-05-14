@@ -39,6 +39,8 @@ export class MazeGame {
     this.escapeTimeLeft = 20;
 
     this.renderMazeGrid();
+    this.updateStepsDisplay();
+    this.updateTimerDisplay();
     this.startTimer();
 
     this.resizeHandler = () => this.renderMazeGrid();
@@ -99,7 +101,7 @@ export class MazeGame {
           const player = document.createElement("section");
           player.id = "player";
           cell.appendChild(player);
-        } else if (!this.isVisible(y, x) && this.previewTimeLeft === 0) {
+        } else if (!this.isVisible(y, x) && this.previewTimeLeft <= 0) {
           cell.classList.add("darkness");
         } else if (y === this.endY && x === this.endX) {
           const endGoal = document.createElement("section");
@@ -118,12 +120,18 @@ export class MazeGame {
     clearInterval(this.timerInterval);
 
     this.timerInterval = setInterval(() => {
-      this.previewTimeLeft > 0 ? --this.previewTimeLeft : --this.escapeTimeLeft;
+      if (this.previewTimeLeft > 0) {
+        --this.previewTimeLeft;
+        if (this.previewTimeLeft === 0) this.renderMazeGrid();
+      } else {
+        --this.escapeTimeLeft;
+      }
       this.updateTimerDisplay();
       if (this.escapeTimeLeft <= 0) {
-        clearInterval(this.timerInterval);
         if (!(this.x === this.endX && this.y === this.endY)) {
           this.gameLost();
+        } else {
+          this.gameWon();
         }
       }
     }, 1000);
