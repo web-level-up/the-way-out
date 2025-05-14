@@ -20,6 +20,7 @@ INSERT INTO "mazes" (
         "maze_layout_url",
         "difficulty_level_id",
         "maze_level",
+        "maze_size",
         "x_starting_position",
         "y_starting_position",
         "x_ending_position",
@@ -29,6 +30,7 @@ VALUES (
         'https://maze-blob.s3.af-south-1.amazonaws.com/1.txt',
         1,
         1,
+        6,
         0, 0,
         9, 9
     ),
@@ -36,6 +38,7 @@ VALUES (
         'https://maze-blob.s3.af-south-1.amazonaws.com/2.txt',
         2,
         2,
+        7,
         1, 1,
         9, 9
     ),
@@ -43,6 +46,7 @@ VALUES (
         'https://maze-blob.s3.af-south-1.amazonaws.com/3.txt',
         3,
         3,
+        8,
         2, 2,
         9, 9
     ),
@@ -50,6 +54,7 @@ VALUES (
         'https://maze-blob.s3.af-south-1.amazonaws.com/4.txt',
         1,
         4,
+        9,
         0, 1,
         9, 9
     ),
@@ -57,6 +62,7 @@ VALUES (
         'https://maze-blob.s3.af-south-1.amazonaws.com/5.txt',
         2,
         5,
+        10,
         1, 0,
         9, 9
     ),
@@ -64,6 +70,7 @@ VALUES (
         'https://maze-blob.s3.af-south-1.amazonaws.com/6.txt',
         3,
         6,
+        11,
         0, 2,
         9, 9
     ),
@@ -71,6 +78,7 @@ VALUES (
         'https://maze-blob.s3.af-south-1.amazonaws.com/7.txt',
         1,
         7,
+        12,
         2, 1,
         9, 9
     ),
@@ -78,6 +86,7 @@ VALUES (
         'https://maze-blob.s3.af-south-1.amazonaws.com/8.txt',
         2,
         8,
+        13,
         0, 3,
         9, 9
     ),
@@ -85,6 +94,7 @@ VALUES (
         'https://maze-blob.s3.af-south-1.amazonaws.com/9.txt',
         3,
         9,
+        14,
         3, 0,
         9, 9
     ),
@@ -92,6 +102,7 @@ VALUES (
         'https://maze-blob.s3.af-south-1.amazonaws.com/10.txt',
         1,
         10,
+        15,
         1, 2,
         9, 9
     ),
@@ -99,6 +110,7 @@ VALUES (
         'https://maze-blob.s3.af-south-1.amazonaws.com/11.txt',
         2,
         11,
+        16,
         2, 0,
         9, 9
     ),
@@ -106,6 +118,7 @@ VALUES (
         'https://maze-blob.s3.af-south-1.amazonaws.com/12.txt',
         3,
         12,
+        17,
         3, 1,
         9, 9
     ),
@@ -113,6 +126,7 @@ VALUES (
         'https://maze-blob.s3.af-south-1.amazonaws.com/13.txt',
         1,
         13,
+        18,
         1, 3,
         9, 9
     ),
@@ -120,6 +134,7 @@ VALUES (
         'https://maze-blob.s3.af-south-1.amazonaws.com/14.txt',
         2,
         14,
+        19,
         3, 2,
         9, 9
     ),
@@ -127,6 +142,7 @@ VALUES (
         'https://maze-blob.s3.af-south-1.amazonaws.com/15.txt',
         3,
         15,
+        20,
         0, 0,
         9, 9
     ),
@@ -134,6 +150,7 @@ VALUES (
         'https://maze-blob.s3.af-south-1.amazonaws.com/16.txt',
         1,
         16,
+        21,
         2, 3,
         9, 9
     ),
@@ -141,6 +158,7 @@ VALUES (
         'https://maze-blob.s3.af-south-1.amazonaws.com/17.txt',
         2,
         17,
+        22,
         0, 2,
         9, 9
     ),
@@ -148,6 +166,7 @@ VALUES (
         'https://maze-blob.s3.af-south-1.amazonaws.com/18.txt',
         3,
         18,
+        23,
         1, 1,
         9, 9
     ),
@@ -155,6 +174,7 @@ VALUES (
         'https://maze-blob.s3.af-south-1.amazonaws.com/19.txt',
         1,
         19,
+        24,
         3, 3,
         9, 9
     ),
@@ -162,6 +182,7 @@ VALUES (
         'https://maze-blob.s3.af-south-1.amazonaws.com/20.txt',
         2,
         20,
+        25,
         2, 2,
         9, 9
     ),
@@ -169,6 +190,7 @@ VALUES (
         'https://maze-blob.s3.af-south-1.amazonaws.com/21.txt',
         3,
         21,
+        25,
         1, 0,
         9, 9
     ),
@@ -176,6 +198,7 @@ VALUES (
         'https://maze-blob.s3.af-south-1.amazonaws.com/22.txt',
         1,
         22,
+        25,
         3, 1,
         9, 9
     ),
@@ -183,6 +206,7 @@ VALUES (
         'https://maze-blob.s3.af-south-1.amazonaws.com/23.txt',
         2,
         23,
+        25,
         1, 2,
         9, 9
     ),
@@ -190,12 +214,14 @@ VALUES (
         'https://maze-blob.s3.af-south-1.amazonaws.com/24.txt',
         3,
         24,
+        25,
         2, 1,
         9, 9
     ),
     (
         'https://maze-blob.s3.af-south-1.amazonaws.com/25.txt',
         1,
+        25,
         25,
         0, 1,
         9, 9

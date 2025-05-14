@@ -35,7 +35,7 @@ export function renderMazeSelectionPage() {
       })
       .catch((error) => {
         if (error instanceof HttpError) {
-          if ((error.status = 401)) {
+          if ((error.status === 401)) {
             renderErrorPage(
               "Your session has expired, you will need to login again",
               renderLoginPage,

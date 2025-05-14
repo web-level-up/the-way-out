@@ -22,10 +22,8 @@ export function renderMazeCard(maze) {
   return loadComponent(cardContainer, "./views/maze-card.html").then(() => {
     cardContainer.querySelector(
       "#maze-card-title"
-    ).textContent = `Maze ${maze.id}`;
-    cardContainer.querySelector("#maze-size").textContent = `${getMazeSize(
-      maze.maze_layout
-    )}`;
+    ).textContent = `Maze ${maze.maze_level}`;
+    cardContainer.querySelector("#maze-size").textContent = `${maze.maze_size} x ${maze.maze_size}`;
     cardContainer.querySelector("#maze-difficulty").textContent = "⭐".repeat(
       maze.difficulty_id
     );
