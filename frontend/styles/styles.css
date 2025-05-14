@@ -43,3 +43,15 @@ body {
   align-items: center;
   gap: 1rem;
 }
+
+.navigation-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    width: 5rem;
+}
+
+.navigation-button img {
+  width: 100%;
+}
+

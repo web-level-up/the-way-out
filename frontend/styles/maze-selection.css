@@ -4,7 +4,7 @@
 
 #mazes {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(25rem, 1fr));
   align-items: center;
   justify-items: center;
   padding: 1rem;
@@ -64,7 +64,7 @@ figcaption #maze-info {
 }
 
 figcaption #maze-info p {
-  font-size: 0.75rem;
+  font-size: 1.25rem;
   background-color: white;
   padding: 0.5rem;
   border-radius: 1rem;

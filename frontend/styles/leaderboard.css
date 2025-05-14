@@ -50,7 +50,7 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
     grid-template-rows: auto;
-    gap: 1rem;
+    gap: 5rem;
 }
 
 #leaderboard-sections h2 {
@@ -75,5 +75,16 @@ td {
     color: black;
     text-align: center;
     font-size: 1.1rem;
+}
+
+#play-maze-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    width: 5rem;
+}
+
+#play-maze-button img {
+    width: 100%;
 }
 

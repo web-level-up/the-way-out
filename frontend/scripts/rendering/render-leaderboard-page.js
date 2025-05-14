@@ -1,43 +1,47 @@
 import {loadPage} from "./renderer.js";
 import {getDataFromUrl} from "../util.js";
-import {renderMazeSelectionPage} from "./render-maze-selection-page.js";
 import {renderMainPage} from "./render-main-page.js";
 import {renderMazeGame} from "./render-maze-game.js";
+import {renderNavigationButtons} from "./render-navigation-buttons.js";
+import {HttpError} from "../custom-errors.js";
+import {renderErrorPage} from "./render-error.js";
+import {renderLoginPage} from "./render-login.js";
+import {renderMazeSelectionPage} from "./render-maze-selection-page.js";
 
-export function renderLeaderboardPage(mazeId = null, isFromHome = true) {
-  return loadPage("views/leaderboard.html").then(() => {
+export function renderLeaderboardPage({mazeId = null, backPage = renderMainPage}) {
+  return loadPage("views/leaderboard.html")
+    .then(() => {
+      populateMazeSelect(mazeId);
 
-    populateMazeSelect();
-    const mazeSelect = document.getElementById('maze-select');
-    mazeSelect.addEventListener('change', function() {
-      filterLeaderboard(this.value);
+      addLeaderboardListeners(backPage)
+    })
+    .catch((error) => {
+      if (error instanceof HttpError) {
+        if ((error.status === 401)) {
+          renderErrorPage(
+            "Your session has expired, you will need to login again",
+            renderLoginPage,
+            "return to login"
+          );
+        } else {
+          renderErrorPage(
+            error.message ?? "An unexpected error has occurred",
+            mazeId ? renderMazeSelectionPage : renderMainPage,
+            mazeId ? "return to maze selection page" : "return to main page"
+          );
+        }
+      } else {
+        renderErrorPage(
+          error ?? "An unexpected error has occurred",
+          mazeId ? renderMazeSelectionPage : renderMainPage,
+          mazeId ? "return to maze selection page" : "return to main page"
+        );
+      }
     });
-
-    if (mazeId) {
-      filterLeaderboard(mazeId);
-      document.getElementById('maze-select').value = mazeId;
-    }
-
-    if (isFromHome) {
-      document
-        .getElementById("back-button")
-        .addEventListener("click", renderMainPage);
-    } else {
-      document
-        .getElementById("back-button")
-        .addEventListener("click", renderMazeSelectionPage);
-    }
-
-    document
-      .getElementById("home-button")
-      .addEventListener("click", renderMainPage);
-    document
-      .getElementById("play-maze-button")
-      .addEventListener("click", renderMazeGame);
-  });
 }
 
-function populateMazeSelect() {
+function populateMazeSelect(mazeId = null) {
+  console.log('mazeId', mazeId);
   getDataFromUrl("/api/mazes")
     .then((mazes) => {
       const mazeSelectElement = document.getElementById('maze-select');
@@ -49,7 +53,9 @@ function populateMazeSelect() {
       placeholderOption.value = "";
       placeholderOption.textContent = "Select a maze...";
       placeholderOption.disabled = true;
-      placeholderOption.selected = true;
+      if (!mazeId) {
+        placeholderOption.selected = true;
+      }
 
       mazeSelectElement.appendChild(placeholderOption);
 
@@ -58,6 +64,11 @@ function populateMazeSelect() {
 
         optionElement.value = mazeOption.id;
         optionElement.textContent = mazeOption.label;
+
+        if (mazeId && mazeId === mazeOption.id) {
+          optionElement.selected = true;
+          filterLeaderboard(mazeOption.id);
+        }
 
         mazeSelectElement.appendChild(optionElement);
       });
@@ -172,4 +183,17 @@ function getLeaderboardEntryRank(rankCell, rank) {
   } else {
     rankCell.textContent = rank;
   }
+}
+
+function addLeaderboardListeners(backPage) {
+  const mazeSelect = document.getElementById('maze-select');
+  mazeSelect.addEventListener('change', function() {
+    filterLeaderboard(this.value);
+  });
+
+  renderNavigationButtons(backPage);
+
+  document
+    .getElementById("play-maze-button")
+    .addEventListener("click", renderMazeGame);
 }

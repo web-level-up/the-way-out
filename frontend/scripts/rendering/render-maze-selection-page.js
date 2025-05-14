@@ -5,6 +5,8 @@ import { loadPage } from "./renderer.js";
 import {renderErrorPage} from "./render-error.js";
 import {renderLoginPage} from "./render-login.js";
 import {HttpError} from "../custom-errors.js";
+import {renderNavigationButtons} from "./render-navigation-buttons.js";
+import {renderMainPage} from "./render-main-page.js";
 
 export function renderMazeSelectionPage() {
   return loadPage("views/maze-selection.html").then(() => {
@@ -32,6 +34,8 @@ export function renderMazeSelectionPage() {
             mazeContainer.appendChild(card)
           );
         });
+
+        renderNavigationButtons(renderMainPage);
       })
       .catch((error) => {
         if (error instanceof HttpError) {
