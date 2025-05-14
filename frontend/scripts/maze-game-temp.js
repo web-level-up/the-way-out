@@ -139,21 +139,6 @@ export class MazeGame {
   }
 
   updateTimerDisplay() {
-    //   const timerElem = document.getElementById("timer");
-    //   const timerBar = document.getElementById("timer-bar");
-    //   if (timerElem) timerElem.textContent = timeLeft;
-    //   if (timerBar) {
-    //     timerBar.value = timeLeft;
-    //     if (timeLeft < 5) {
-    //       timerBar.classList.add("timer-bar-red");
-    //       timerBar.classList.remove("timer-bar-green");
-    //     } else {
-    //       timerBar.classList.add("timer-bar-green");
-    //       timerBar.classList.remove("timer-bar-red");
-    //     }
-    //   }
-    //   updateOverlay();
-
     const timerElem = document.getElementById("preview");
     const timer2Elem = document.getElementById("escape");
 
