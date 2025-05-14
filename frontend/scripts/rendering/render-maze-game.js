@@ -2,17 +2,12 @@ import { loadPage } from "./renderer.js";
 import { renderMainPage } from "./render-main-page.js";
 import { renderLoss } from "./render-loss.js";
 import { renderCongrats } from "./render-congrats.js";
+import { MazeGame } from "../game-script.js";
+
 export function renderMazeGame() {
   loadPage("/views/maze-game.html").then(() => {
     console.log("Game page loaded");
-    //add dynamic content to the game-play.html page
-
-    // Just append the script right away:
-    const script = document.createElement("script");
-    //script.type = "module";
-    script.src = "./scripts/game-script.js";
-    document.body.appendChild(script);
-
+    // Instantiate the MazeGame class after the page is loaded
     const sizeSelect = document.getElementById("maze-size");
     const initialSize = sizeSelect ? Number(sizeSelect.value) : 32;
     window.mazeGame = new MazeGame(initialSize);
