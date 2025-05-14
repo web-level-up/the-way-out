@@ -21,6 +21,7 @@
   max-width: 100%;
   justify-content: center;
   align-content: center;
+  overflow: hidden;
 }
 
 .cell {
@@ -30,6 +31,7 @@
   align-items: center;
   padding: 0;
   margin: 0;
+  border: 1px solid #ffffff;
 }
 
 #game-footer {
@@ -78,8 +80,10 @@
 
 .wall {
   background-color: #535353;
+  border: 1px solid #535353;
 }
 
 .darkness {
-    background-color: black;
+  background-color: black;
+  border: 1px solid black;
 }
