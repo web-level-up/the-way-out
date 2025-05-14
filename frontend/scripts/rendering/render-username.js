@@ -43,7 +43,7 @@ export function renderUsernamePage() {
           if (error instanceof HttpError) {
             message.textContent =
               error.message ?? "An unexpected error has occurred";
-            if ((error.status = 401))
+            if ((error.status === 401))
               renderErrorPage(
                 "Your session has expired, you will need to login again",
                 renderLoginPage,
