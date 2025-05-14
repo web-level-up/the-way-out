@@ -31,15 +31,27 @@ router.post("/completions", async (req, res) => {
   res.status(201).json(result);
 });
 
+router.post("/", async (req, res) => {
+  const maze = req.body;
+  const mazeId = await service.addMaze(maze);
+  res.status(201).json(mazeId);
+});
+
+router.put("/", async (req, res) => {
+  const maze = req.body;
+  const mazeId = service.editMaze(maze);
+  res.status(201).json(mazeId);
+});
+
 router.get("/:id/leaderboard", async (req, res) => {
   const leaderboard = await service.getMazeLeaderboard(req.params.id);
   res.json(leaderboard);
 });
 
-router.get("/:id/:userId/completions", async (req, res) => {
+router.get("/:id/completions/current-user", async (req, res) => {
   const completions = await service.getUserMazeCompletions(
     req.params.id,
-    req.params.userId
+    req.user.sub
   );
   res.json(completions);
 });
