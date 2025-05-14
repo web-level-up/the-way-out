@@ -8,6 +8,7 @@ CREATE TABLE "mazes" (
     "maze_layout_url" varchar(100) NOT NULL,
     "difficulty_level_id" integer NOT NULL,
     "maze_level" integer NOT NULL,
+    "maze_size" integer NOT NULL,
     "x_starting_position" integer NOT NULL,
     "y_starting_position" integer NOT NULL,
     "x_ending_position" integer NOT NULL,
