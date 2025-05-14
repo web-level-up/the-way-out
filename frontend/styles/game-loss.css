@@ -8,11 +8,14 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    flex-wrap: wrap;
 }
 #losers{
     font-size: 2rem;
     margin-bottom: 1rem;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    flex-wrap: wrap;
+    display: flex;
 }
 .menu-button {
   width: 15rem;
@@ -26,6 +29,7 @@
   cursor: pointer;
   margin: 0 0.5rem; 
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  flex-wrap: wrap;
 }
 
 .menu-button:hover {

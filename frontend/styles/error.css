@@ -7,6 +7,7 @@
   padding: 1.5rem 3rem;
   background-color: white;
   cursor: pointer;
+  flex-wrap: wrap;
 }
 
 #nav-button:hover {

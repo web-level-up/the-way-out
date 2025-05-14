@@ -2,7 +2,8 @@
 #username-label {
   font-size: 1.50rem;
   text-align: left;
-  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  display: flex;
 }
 
 #username-container {
@@ -12,6 +13,7 @@
   align-items: left;
   gap: 1rem;
   max-width: 20rem;
+  flex-wrap: wrap;
 }
 
 #set-username {
