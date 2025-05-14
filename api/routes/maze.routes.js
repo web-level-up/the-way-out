@@ -35,8 +35,8 @@ router.get("/:id/leaderboard", async (req, res) => {
   res.json(leaderboard);
 });
 
-router.get("/:id/:userId/completions", async (req, res) => {
-  const completions = await service.getUserMazeCompletions(req.params.id, req.params.userId);
+router.get("/:id/completions/current-user", async (req, res) => {
+  const completions = await service.getUserMazeCompletions(req.params.id, req.user.sub);
   res.json(completions);
 });
 
