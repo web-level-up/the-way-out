@@ -21,6 +21,11 @@ router.post("/", async (req, res) => {
   }
   const user = await userService.usernameTaken(username);
   if (user) return res.status(400).json({ error: "Username taken" });
+  console.log("username", username);
+  console.log("req", req);
+  console.log("req.user", req.user);
+  console.log("req.user.sub", req.user.sub);
+
   const createdUser = await userService.addUser(req.user.sub, username);
   res.json(createdUser);
 });
