@@ -1,17 +1,22 @@
 CREATE TABLE "users" (
     "id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY NOT NULL,
-    "google_id" varchar NOT NULL UNIQUE,
-    "username" varchar NOT NULL UNIQUE
+    "google_id" varchar(50) NOT NULL UNIQUE,
+    "username" varchar(50) NOT NULL UNIQUE
 );
 CREATE TABLE "mazes" (
     "id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY NOT NULL,
-    "maze_layout" varchar NOT NULL,
+    "maze_layout_url" varchar(255) NOT NULL,
     "difficulty_level_id" integer NOT NULL,
-    "starting_position" INTEGER [2] DEFAULT '{0,0}'
+    "maze_level" integer NOT NULL,
+    "maze_size" integer NOT NULL,
+    "x_starting_position" integer NOT NULL,
+    "y_starting_position" integer NOT NULL,
+    "x_ending_position" integer NOT NULL,
+    "y_ending_position" integer NOT NULL
 );
 CREATE TABLE "difficulty_levels" (
     "id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY NOT NULL,
-    "difficulty_level_name" varchar NOT NULL
+    "difficulty_level_name" varchar(50) NOT NULL
 );
 CREATE TABLE "maze_completions" (
     "id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY NOT NULL,

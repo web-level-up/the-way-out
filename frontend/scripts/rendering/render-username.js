@@ -36,13 +36,14 @@ export function renderUsernamePage() {
           return response.json();
         })
         .then(() => {
+          localStorage.setItem("username", username);
           renderMainPage();
         })
         .catch((error) => {
           if (error instanceof HttpError) {
             message.textContent =
               error.message ?? "An unexpected error has occurred";
-            if ((error.status = 401))
+            if ((error.status === 401))
               renderErrorPage(
                 "Your session has expired, you will need to login again",
                 renderLoginPage,
