@@ -1,7 +1,10 @@
 import {loadPage} from "./renderer.js";
 import {getDataFromUrl} from "../util.js";
+import {renderMazeSelectionPage} from "./render-maze-selection-page.js";
+import {renderMainPage} from "./render-main-page.js";
+import {renderMazeGame} from "./render-maze-game.js";
 
-export function renderLeaderboardPage() {
+export function renderLeaderboardPage(mazeId = null, isFromHome = true) {
   return loadPage("views/leaderboard.html").then(() => {
 
     populateMazeSelect();
@@ -9,38 +12,60 @@ export function renderLeaderboardPage() {
     mazeSelect.addEventListener('change', function() {
       filterLeaderboard(this.value);
     });
+
+    if (mazeId) {
+      filterLeaderboard(mazeId);
+      document.getElementById('maze-select').value = mazeId;
+    }
+
+    if (isFromHome) {
+      document
+        .getElementById("back-button")
+        .addEventListener("click", renderMainPage);
+    } else {
+      document
+        .getElementById("back-button")
+        .addEventListener("click", renderMazeSelectionPage);
+    }
+
+    document
+      .getElementById("home-button")
+      .addEventListener("click", renderMainPage);
+    document
+      .getElementById("play-maze-button")
+      .addEventListener("click", renderMazeGame);
   });
 }
 
 function populateMazeSelect() {
-  const mazeSelectElement = document.getElementById('maze-select');
+  getDataFromUrl("/api/mazes")
+    .then((mazes) => {
+      const mazeSelectElement = document.getElementById('maze-select');
 
-  const mazeOptions = getAllMazeOptions();
+      const mazeOptions = getAllMazeOptions(mazes);
 
-  const placeholderOption = document.createElement('option');
+      const placeholderOption = document.createElement('option');
 
-  placeholderOption.value = "";
-  placeholderOption.textContent = "Select a maze...";
-  placeholderOption.disabled = true;
-  placeholderOption.selected = true;
+      placeholderOption.value = "";
+      placeholderOption.textContent = "Select a maze...";
+      placeholderOption.disabled = true;
+      placeholderOption.selected = true;
 
-  mazeSelectElement.appendChild(placeholderOption);
+      mazeSelectElement.appendChild(placeholderOption);
 
-  mazeOptions.forEach(mazeOption => {
-    const optionElement = document.createElement('option');
+      mazeOptions.forEach(mazeOption => {
+        const optionElement = document.createElement('option');
 
-    optionElement.value = mazeOption.id;
-    optionElement.textContent = mazeOption.label;
+        optionElement.value = mazeOption.id;
+        optionElement.textContent = mazeOption.label;
 
-    mazeSelectElement.appendChild(optionElement);
-  });
+        mazeSelectElement.appendChild(optionElement);
+      });
+    });
 }
 
-function getAllMazeOptions() {
-  const storedMazesString = localStorage.getItem('mazes');
-  const storedMazes = JSON.parse(storedMazesString);
-
-  return storedMazes.map(maze => {
+function getAllMazeOptions(mazes) {
+   return mazes.map(maze => {
     return {
       id: maze.id,
       label: `Maze ${maze.id}`
@@ -49,7 +74,7 @@ function getAllMazeOptions() {
 }
 
 function getUserCompletionsData(mazeId) {
-  return getDataFromUrl(`/api/mazes/${mazeId}/${localStorage.userId}/completions`)
+  return getDataFromUrl(`/api/mazes/${mazeId}/completions/current-user`)
     .then((data) => {
       return data;
     });

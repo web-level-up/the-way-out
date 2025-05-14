@@ -1,4 +1,5 @@
 import * as repo from "../repositories/maze.repository.js";
+import * as userService from "../services/user.service.js";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { v4 as uuidv4 } from "uuid";
 
@@ -68,4 +69,7 @@ export const completeMaze = (mazeId, playerGoogleId, timeTaken, stepsTaken) =>
 
 export const getMazeLeaderboard = (mazeId) => repo.getLeaderboard(mazeId);
 
-export const getUserMazeCompletions = (mazeId, userId) => repo.getUserMazeCompletions(mazeId, userId);
+export const getUserMazeCompletions = async (mazeId, userGoogleId) => {
+  const user = await userService.getUserByGoogleId(userGoogleId);
+  return repo.getUserMazeCompletions(mazeId, user?.id);
+}
