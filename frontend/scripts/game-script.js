@@ -99,7 +99,7 @@ function startTimer() {
         if (window.renderLoss) window.renderLoss();
       }
     }
-  }, 1000);
+  }, 100000);
 }
 
 function stopTimer() {
@@ -125,10 +125,10 @@ function updateTimerDisplay() {
 }
 
 function updateOverlay() {
-  const mazeElem = document.getElementById("maze");
+  const mazeSection = document.getElementById("maze");
   const overlay = document.getElementById("overlay");
   const container = document.getElementById("maze-container");
-  if (!mazeElem || !overlay || !container) return;
+  if (!mazeSection || !overlay || !container) return;
 
   // Only show overlay if timeLeft <= 13
   if (timeLeft > 13) {
@@ -139,8 +139,8 @@ function updateOverlay() {
   }
 
   // Get maze bounding box relative to container
-  const width = mazeElem.offsetWidth;
-  const height = mazeElem.offsetHeight;
+  const width = mazeSection.offsetWidth;
+  const height = mazeSection.offsetHeight;
 
   // Set overlay size and position to match maze
   const extraOverlayTop = 10; // or 40, adjust as needed for your maze's border radius
@@ -151,16 +151,16 @@ function updateOverlay() {
   overlay.style.position = "absolute";
   const overlayOffsetX = 0; // No horizontal shift
   const overlayOffsetY = 8; // Increase this value to move overlay further down
-  overlay.style.left = mazeElem.offsetLeft + overlayOffsetX + "px";
+  overlay.style.left = mazeSection.offsetLeft + overlayOffsetX + "px";
   overlay.style.top =
-    mazeElem.offsetTop + overlayOffsetY - extraOverlayTop + "px";
+    mazeSection.offsetTop + overlayOffsetY - extraOverlayTop + "px";
 
   const ctx = overlay.getContext("2d");
   ctx.clearRect(0, 0, overlay.width, overlay.height);
 
   // Draw fully opaque overlay everywhere
   ctx.globalAlpha = 1.0;
-  ctx.fillStyle = "rgba(0,0,0,1)";
+  ctx.fillStyle = "rgb(190, 41, 41)";
   ctx.fillRect(0, 0, overlay.width, overlay.height);
 
   // Calculate cell size
@@ -204,15 +204,15 @@ function setupMaze(selectedSize) {
     }
   }
   // Set CSS variables for grid and cell size
-  const mazeDiv = document.getElementById("maze");
-  mazeDiv.style.setProperty("--maze-size", size);
+  const mazeSection = document.getElementById("maze");
+  mazeSection.style.setProperty("--maze-size", size);
   let cellSize = 20;
   if (size === 16) cellSize = 32;
   else if (size === 20) cellSize = 28;
   else if (size === 24) cellSize = 24;
   else if (size === 28) cellSize = 22;
   else if (size === 32) cellSize = 20;
-  mazeDiv.style.setProperty("--cell-size", cellSize + "px");
+  mazeSection.style.setProperty("--cell-size", cellSize + "px");
   renderMaze();
   startTimer();
   // Hide overlay for 2 seconds, then show if needed
@@ -225,20 +225,20 @@ function setupMaze(selectedSize) {
 
 function renderMaze() {
   console.log("renderMaze called");
-  const mazeDiv = document.getElementById("maze");
-  mazeDiv.innerHTML = "";
+  const mazeSection = document.getElementById("maze");
+  mazeSection.innerHTML = "";
   for (let y = 0; y < size; y++) {
     for (let x = 0; x < size; x++) {
-      const cell = document.createElement("div");
+      const cell = document.createElement("section");
       let cellClass = "cell " + maze[y][x];
       if (x === end.x && y === end.y) cellClass += " end";
       cell.className = cellClass;
       if (playerPos.x === x && playerPos.y === y) {
-        const player = document.createElement("div");
+        const player = document.createElement("mark");
         player.className = "player";
         cell.appendChild(player);
       }
-      mazeDiv.appendChild(cell);
+      mazeSection.appendChild(cell);
     }
   }
   setTimeout(updateOverlay, 0);
@@ -253,9 +253,9 @@ function playSound(filename) {
 }
 
 function showSparkles() {
-  const mazeDiv = document.getElementById("maze");
+  const mazeSection = document.getElementById("maze");
   const endIndex = end.y * size + end.x;
-  const endCell = mazeDiv.children[endIndex];
+  const endCell = mazeSection.children[endIndex];
   if (!endCell) return;
   const directions = [
     [0, -30],
@@ -268,7 +268,7 @@ function showSparkles() {
     [-21, -21],
   ];
   for (const [dx, dy] of directions) {
-    const sparkle = document.createElement("div");
+    const sparkle = document.createElement("mark");
     sparkle.className = "sparkle";
     sparkle.style.setProperty("--dx", dx + "px");
     sparkle.style.setProperty("--dy", dy + "px");

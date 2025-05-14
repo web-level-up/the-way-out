@@ -13,6 +13,10 @@ export function renderMazeGame() {
     script.src = "./scripts/game-script.js";
     document.body.appendChild(script);
 
+    const sizeSelect = document.getElementById("maze-size");
+    const initialSize = sizeSelect ? Number(sizeSelect.value) : 32;
+    window.mazeGame = new MazeGame(initialSize);
+
     // Add event listener for Give Up button
     const giveUpBtn = document.getElementById("giveUpBtn");
     if (giveUpBtn) {

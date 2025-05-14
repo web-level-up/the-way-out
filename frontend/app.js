@@ -8,17 +8,18 @@ import { renderMazeGame } from "./scripts/rendering/render-maze-game.js";
 import { renderMazeDetailsPage } from "./scripts/rendering/render-maze-details.js";
 await loadConfig();
 const loginState = await handleOAuthCallback();
-switch (loginState) {
-  case "existing":
-    renderMainPage();
-    break;
-  case "new":
-    renderUsernamePage();
-    break;
-  case "failed":
-    renderErrorPage("Login failed", renderLoginPage, "return to login");
-    break;
-  default:
-    renderLoginPage();
-}
+// switch (loginState) {
+//   case "existing":
+//     renderMainPage();
+//     break;
+//   case "new":
+//     renderUsernamePage();
+//     break;
+//   case "failed":
+//     renderErrorPage("Login failed", renderLoginPage, "return to login");
+//     break;
+//   default:
+//     renderLoginPage();
+// }
 // renderMainPage();
+renderMazeGame();
