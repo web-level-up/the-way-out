@@ -1,11 +1,21 @@
 import sql from "../config/db.js";
 
 export const getAllMazes = () =>
-  sql`SELECT m.id, m.difficulty_level_id as difficulty_id, d.difficulty_level_name as difficulty_name, d.preview_time_seconds, d.escape_time_seconds, m.starting_position, m.ending_position FROM mazes m INNER JOIN difficulty_levels d ON m.difficulty_level_id = d.id ORDER BY m.id ASC`;
+  sql`SELECT m.id, m.maze_level, m.maze_size, m.difficulty_level_id as difficulty_id, d.difficulty_level_name as difficulty_name, d.preview_time_seconds, d.escape_time_seconds, m.x_starting_position, m.y_starting_position, m.x_ending_position, m.y_ending_position FROM mazes m INNER JOIN difficulty_levels d ON m.difficulty_level_id = d.id ORDER BY m.id ASC`;
 
 export const getMazeById = (id) =>
-  sql`SELECT m.id, m.maze_layout_url, m.difficulty_level_id as difficulty_id, d.difficulty_level_name as difficulty_name, d.preview_time_seconds, d.escape_time_seconds, m.starting_position, m.ending_position FROM mazes m INNER JOIN difficulty_levels d ON m.difficulty_level_id = d.id WHERE m.id = ${id}`.then(
+  sql`SELECT m.id, m.maze_level, m.maze_size, m.maze_layout_url, m.difficulty_level_id as difficulty_id, d.difficulty_level_name as difficulty_name, d.preview_time_seconds, d.escape_time_seconds, m.x_starting_position, m.y_starting_position, m.x_ending_position, m.y_ending_position FROM mazes m INNER JOIN difficulty_levels d ON m.difficulty_level_id = d.id WHERE m.id = ${id}`.then(
     (rows) => rows[0]
+  );
+
+export const addMaze = (maze) =>
+  sql`INSERT INTO mazes (maze_level, maze_layout_url, difficulty_level_id, x_starting_position, y_starting_position, x_ending_position, y_ending_position) VALUES (${maze.maze_level}, ${maze.maze_layout_url}, ${maze.difficulty_level_id}, ${maze.x_starting_position}, ${maze.y_starting_position}, ${maze.x_ending_position}, ${maze.y_ending_position}) RETURNING id`.then(
+    (rows) => rows[0].id
+  );
+
+export const editMaze = (maze) =>
+  sql`UPDATE mazes SET maze_level = ${maze.maze_level}, maze_layout_url = ${maze.maze_layout_url}, difficulty_level_id = ${maze.difficulty_level_id}, x_starting_position = ${maze.x_starting_position}, y_starting_position = ${maze.y_starting_position}, x_ending_position = ${maze.x_ending_position}, y_ending_position = ${maze.y_ending_position} WHERE id = ${maze.id} RETURNING id`.then(
+    (rows) => rows[0].id
   );
 
 export const postCompletion = (mazeId, playerGoogleId, timeTaken, stepsTaken) =>

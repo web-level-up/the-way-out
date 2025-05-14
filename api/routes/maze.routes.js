@@ -13,9 +13,7 @@ router.get("/:id", async (req, res) => {
   const layoutResponse = await fetch(maze.maze_layout_url);
   const layout = await layoutResponse.text();
   if (!maze) return res.status(404).json({ error: "Maze not found" });
-  res.json({...maze,
-    maze_layout: layout
-  });
+  res.json({ ...maze, maze_layout: layout });
 });
 
 router.post("/completions", async (req, res) => {
@@ -30,13 +28,26 @@ router.post("/completions", async (req, res) => {
   res.status(201).json(result);
 });
 
+router.post("/", async (req, res) => {
+  const maze = req.body;
+  const mazeId = await service.addMaze(maze);
+  res.status(201).json(mazeId);
+});
+
+router.put("/", async (req, res) => {
+  const maze = req.body;
+  const mazeId = service.editMaze(maze);
+  res.status(201).json(mazeId);
+});
+
 router.get("/:id/leaderboard", async (req, res) => {
   const leaderboard = await service.getMazeLeaderboard(req.params.id);
   res.json(leaderboard);
 });
 
-router.get("/:id/:userId/completions", async (req, res) => {
-  const completions = await service.getUserMazeCompletions(req.params.id, req.params.userId);
+
+router.get("/:id/completions/current-user", async (req, res) => {
+  const completions = await service.getUserMazeCompletions(req.params.id, req.user.sub);
   res.json(completions);
 });
 
