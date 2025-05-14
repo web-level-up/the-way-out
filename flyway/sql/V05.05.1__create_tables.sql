@@ -5,7 +5,7 @@ CREATE TABLE "users" (
 );
 CREATE TABLE "mazes" (
     "id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY NOT NULL,
-    "maze_layout_url" varchar(100) NOT NULL,
+    "maze_layout_url" varchar(255) NOT NULL,
     "difficulty_level_id" integer NOT NULL,
     "maze_level" integer NOT NULL,
     "maze_size" integer NOT NULL,

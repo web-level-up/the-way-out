@@ -1,9 +1,15 @@
 import { loadPage } from "./renderer.js";
 import { renderMainPage } from "./render-main-page.js";
-import { renderMazeGame } from "./render-maze-game.js";
+import { Congrats } from "../congrats.js";
+import { renderLeaderboardPage } from "./render-leaderboard-page.js";
+import { renderMazeGameTemp } from "./render-maze-game-temp.js";
 
 export function renderCongrats({ steps, time, mazeId }) {
-  loadPage("/views/game-congrats.html").then(() => {});
+  loadPage("/views/game-congrats.html").then(() => {
+    const congrats = new Congrats(mazeId, steps, time);
+    congrats.show();
+    congrats.addButtonListeners(renderMazeGameTemp, renderLeaderboardPage);
+  });
   console.log("Steps :", steps);
   console.log("Time :", time);
 
