@@ -1,13 +1,15 @@
-import { dummyMazes } from "../dummy-data.js";
 import { getConfig } from "../config-loader.js";
 import { renderMazeCard } from "./render-maze-card.js";
 import { loadPage } from "./renderer.js";
-import {renderErrorPage} from "./render-error.js";
-import {renderLoginPage} from "./render-login.js";
-import {HttpError} from "../custom-errors.js";
+import { renderErrorPage } from "./render-error.js";
+import { renderLoginPage } from "./render-login.js";
+import { HttpError } from "../custom-errors.js";
+import { toggleTheme } from "../util.js";
 
 export function renderMazeSelectionPage() {
   return loadPage("views/maze-selection.html").then(() => {
+    const themeBtn = document.getElementById("theme-toggle-btn");
+    if (themeBtn) themeBtn.onclick = toggleTheme;
     const mazeContainer = document.getElementById("mazes");
 
     const config = getConfig();
@@ -28,14 +30,12 @@ export function renderMazeSelectionPage() {
       })
       .then((data) => {
         data.forEach((maze) => {
-          renderMazeCard(maze).then((card) =>
-            mazeContainer.appendChild(card)
-          );
+          renderMazeCard(maze).then((card) => mazeContainer.appendChild(card));
         });
       })
       .catch((error) => {
         if (error instanceof HttpError) {
-          if ((error.status === 401)) {
+          if (error.status === 401) {
             renderErrorPage(
               "Your session has expired, you will need to login again",
               renderLoginPage,

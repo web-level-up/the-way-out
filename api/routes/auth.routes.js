@@ -38,7 +38,14 @@ router.post("/login", async (req, res) => {
     const decoded = decodeJwt(id_token);
     const existingUser = await userService.getUserByGoogleId(decoded.sub);
 
-    res.status(200).json({ id_token, existing_user: existingUser ? true : false, username: existingUser?.username ?? "", id: existingUser?.id ?? 0 });
+    // Safely respond with user info. If existingUser is undefined (user not found),
+    // avoid accessing properties on undefined to prevent TypeError.
+    // Use a conditional to provide an empty string for username if no user exists.
+    res.status(200).json({
+      id_token,
+      existing_user: !!existingUser, // true if user exists, false otherwise
+      username: existingUser ? existingUser.username : "", // safely access username or provide empty string
+    });
   } catch (err) {
     console.error("Login handler error:", err);
   }
