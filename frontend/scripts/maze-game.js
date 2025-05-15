@@ -25,7 +25,7 @@ export class MazeGame {
   initialPreviewTime = 0;
 
   constructor(maze) {
-    this.mazeLayout = maze.maze_layout;
+    this.mazeLayout = maze.maze_layout.replaceAll('\r\n','');
     this.mazeId = maze.id;
     this.size = maze.maze_size;
 
