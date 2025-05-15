@@ -4,62 +4,96 @@ import * as service from "../services/maze.service.js";
 const router = express.Router();
 
 router.get("/", async (req, res) => {
-  const mazes = await service.listMazes();
-  res.json(mazes);
+  try {
+    const mazes = await service.listMazes();
+    res.json(mazes);
+  } catch (error) {
+    return res.status(500).json({ error: "Unable to fetch mazes. Try again later." });
+  }
 });
 
 router.post("/completions", async (req, res) => {
-  console.log("[POST] /api/mazes/completions called");
-  console.log("Request body:", req.body);
   const { mazeId, timeTaken, stepsTaken } = req.body;
-  const googleId = "oauth_001";
-  const result = await service.completeMaze(
-    mazeId,
-    googleId,
-    timeTaken,
-    stepsTaken
-  );
-  console.log("Maze completion processed, result:", result);
-  res.status(201).json(result);
+  const googleId = req.user.sub;
+  try {
+    const result = await service.completeMaze(
+      mazeId,
+      googleId,
+      timeTaken,
+      stepsTaken
+    );
+
+    res.status(201).json(result);
+  }
+  catch (error) {
+    return res.status(500).json({ error: "Unable to save maze completion." });
+  }
+
 });
 
 router.get("/:id", async (req, res) => {
-  const maze = await service.getMaze(req.params.id);
-  const layoutResponse = await fetch(maze.maze_layout_url);
-  const layout = await layoutResponse.text();
-  if (!maze) return res.status(404).json({ error: "Maze not found" });
-  res.json({ ...maze, maze_layout: layout });
+  try {
+    const maze = await service.getMaze(req.params.id);
+    if (!maze)
+      return res.status(404).json({error: `Maze with ID ${req.params.id} not found.`});
+
+    const layoutResponse = await fetch(maze.maze_layout_url);
+    const layout = await layoutResponse.text();
+    res.json({...maze, maze_layout: layout});
+  } catch (error) {
+    return res.status(500).json({ error: "Unable to fetch maze. Try again later." });
+  }
 });
 
 router.post("/", async (req, res) => {
-  const maze = req.body;
-  const mazeId = await service.addMaze(maze);
-  res.status(201).json(mazeId);
+  try {
+    const maze = req.body;
+    const mazeId = await service.addMaze(maze);
+    res.status(201).json(mazeId);
+  } catch (error) {
+    return res.status(500).json({ error: "Unable to save maze." });
+  }
 });
 
 router.delete("/:id", async (req, res) => {
-  const mazeId = req.params.id;
-  await service.deleteMaze(mazeId);
-  res.status(204).send();
+  try {
+    const mazeId = req.params.id;
+    await service.deleteMaze(mazeId);
+    res.status(204).send();
+  } catch (error) {
+    return res.status(500).json({ error: "Unable to delete maze." });
+  }
 });
 
 router.put("/", async (req, res) => {
-  const maze = req.body;
-  const mazeId = service.editMaze(maze);
-  res.status(201).json(mazeId);
+  try {
+    const maze = req.body;
+    const mazeId = service.editMaze(maze);
+    res.status(201).json(mazeId);
+  } catch (error) {
+    return res.status(500).json({ error: "Unable to edit maze." });
+  }
 });
 
 router.get("/:id/leaderboard", async (req, res) => {
-  const leaderboard = await service.getMazeLeaderboard(req.params.id);
-  res.json(leaderboard);
+  try {
+    const leaderboard = await service.getMazeLeaderboard(req.params.id);
+    res.json(leaderboard);
+  } catch (error) {
+    return res.status(500).json({ error: "Unable to fetch leaderboard. Try again later." });
+  }
 });
 
 router.get("/:id/completions/current-user", async (req, res) => {
-  const completions = await service.getUserMazeCompletions(
-    req.params.id,
-    req.user.sub
-  );
-  res.json(completions);
+  try {
+    const completions = await service.getUserMazeCompletions(
+      req.params.id,
+      req.user.sub
+    );
+    res.json(completions);
+  } catch (error) {
+    return res.status(500).json({ error: "Unable to fetch maze completions. Try again later." });
+  }
 });
 
 export default router;

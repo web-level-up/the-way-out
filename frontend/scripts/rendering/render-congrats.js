@@ -1,60 +1,52 @@
 import { loadPage } from "./renderer.js";
-import { renderMainPage } from "./render-main-page.js";
-import { renderLeaderboardPage } from "./render-leaderboard-page.js";
-import { renderMazeGameTemp } from "./render-maze-game-temp.js";
+import { renderMazeGame } from "./render-maze-game.js";
+import { authError, postDataToUrl } from "../util.js";
+import { navigate } from "../router.js";
+import { HttpError } from "../custom-errors.js";
+import { renderErrorPage } from "./render-error.js";
 
-export function renderCongrats({ steps, time, mazeId }) {
+export function renderCongrats(steps, timeTaken, mazeId) {
   loadPage("/views/game-congrats.html").then(() => {
     const stepsElem = document.getElementById("congrats-steps");
     const timeElem = document.getElementById("congrats-time");
     if (stepsElem) stepsElem.textContent = `Steps taken: ${steps}`;
-    if (timeElem) timeElem.textContent = `Time left: ${time}`;
+    if (timeElem) timeElem.textContent = `Time taken: ${timeTaken}s`;
 
     const playAgainBtn = document.getElementById("play-again-btn");
     const leaderboardBtn = document.getElementById("view-leaderboard-btn");
 
     playAgainBtn.addEventListener("click", () => {
-      renderMazeGameTemp(mazeId);
+      renderMazeGame(mazeId);
     });
     leaderboardBtn.addEventListener("click", () => {
-      renderLeaderboardPage();
+      navigate("maze/leaderboard", {mazeId: mazeId})
     });
   });
-  console.log("Steps :", steps);
-  console.log("Time :", time);
 
-  // Log before sending the request
-  console.log("Sending maze completion to backend:", { mazeId, time, steps });
-
-  // Assume you have a function or variable that provides the JWT
-  const jwt = "115570824103694498468"; //localStorage.getItem("jwt"); // or however you store/retrieve it
-  console.log("JWT:", jwt);
-  // Call the backend to record the completion
-  fetch("http://localhost:3000/api/mazes/completions", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${jwt}`,
-    },
-    body: JSON.stringify({
-      mazeId: mazeId, // Make sure to pass mazeId to this function!
-      timeTaken: time, // Adjust if your time is in seconds or another format
-      stepsTaken: steps,
-      googleId: "oauth_001",
-    }),
+  postDataToUrl("/api/mazes/completions", {
+    mazeId: mazeId,
+    timeTaken: timeTaken,
+    stepsTaken: steps,
   })
-    .then((response) => {
-      console.log("Received response from backend:", response);
-      return response.json();
-    })
-    .then((data) => {
-      console.log("Completion recorded:", data);
-      // Optionally, show a message or update the UI
-    })
+    .then(() => {})
     .catch((error) => {
-      console.error("Error recording completion:", error);
-    })
-    .finally(() => {
-      console.log("Completion request finished");
+      console.log(error)
+      if (error instanceof HttpError) {
+        if (error.status === 401) {
+          authError();          
+        } else {
+          renderErrorPage(
+            error.message ?? "An unexpected error has occurred",
+            () => navigate("menu"),
+            "Return to menu"
+          );
+        }
+      } else {
+        renderErrorPage(
+          "An unexpected error has occurred",
+          () => navigate("menu"),
+          "Return to menu"
+        );
+      }
     });
 }
