@@ -1,5 +1,6 @@
 :root {
   --color-bg: #181a20;
+
   --color-card-bg: rgba(34, 34, 34, 0.85);
   --color-card-border: #4f8cff33;
   --color-text: #fff;
@@ -13,7 +14,7 @@
 }
 
 body {
-  background: linear-gradient(120deg, #ece9f7 0%, #d3c6c6 100%);
+  /* background: linear-gradient(120deg, #ece9f7 0%, #d3c6c6 100%); */
   background: var(--color-bg)
     url("https://www.transparenttextures.com/patterns/maze.png");
   margin: 0;
