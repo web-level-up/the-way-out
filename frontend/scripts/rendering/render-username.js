@@ -17,6 +17,9 @@ export function renderUsernamePage() {
       if (!username) {
         message.textContent = "Username cannot be empty.";
         return;
+      } else if (username.length > 50){
+        message.textContent = "Username cannot be longer than 50 characters"
+        return;
       }
 
       return postDataToUrl("/api/user", { username })

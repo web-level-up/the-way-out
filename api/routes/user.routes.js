@@ -31,6 +31,10 @@ router.post("/", async (req, res) => {
     const { username } = req.body;
     if (!username) {
       return res.status(400).json({ error: "Username is required." });
+    } else if (username.length > 50) {
+      return res
+        .status(400)
+        .json({ error: "Username cant be longer than 50 characters" });
     }
     const user = await userService.usernameTaken(username);
     if (user) return res.status(400).json({ error: "Username taken" });
