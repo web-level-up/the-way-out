@@ -25,7 +25,7 @@ export function renderLeaderboardPage(mazeId = null) {
     } else {
       playMaze.style.display = "none";
     }
-      filterLeaderboard(this.value);
+    navigate("maze/leaderboard", {mazeId: selectedMaze})
     });
 
     document
