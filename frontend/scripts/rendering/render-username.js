@@ -1,9 +1,9 @@
 import { loadPage } from "./renderer.js";
-import { getConfig } from "../config-loader.js";
 import { HttpError } from "../custom-errors.js";
 import { renderErrorPage } from "./render-error.js";
 import { renderLoginPage } from "./render-login.js";
-import {renderMainPage} from "./render-main-page.js";
+import { renderMainPage } from "./render-main-page.js";
+import { postDataToUrl } from "../util.js";
 
 export function renderUsernamePage() {
   loadPage("/views/username.html").then(() => {
@@ -18,23 +18,7 @@ export function renderUsernamePage() {
         return;
       }
 
-      const config = getConfig();
-      return fetch(config.apiBaseUrl + "/api/user", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("jwt")}`,
-        },
-        body: JSON.stringify({ username }),
-        signal: AbortSignal.timeout(5000),
-      })
-        .then(async (response) => {
-          if (!response.ok) {
-            const errorData = await response.json();
-            throw new HttpError(response.status, errorData.error);
-          }
-          return response.json();
-        })
+      return postDataToUrl("/api/user", { username })
         .then(() => {
           localStorage.setItem("username", username);
           renderMainPage();
@@ -43,7 +27,7 @@ export function renderUsernamePage() {
           if (error instanceof HttpError) {
             message.textContent =
               error.message ?? "An unexpected error has occurred";
-            if ((error.status === 401))
+            if (error.status === 401)
               renderErrorPage(
                 "Your session has expired, you will need to login again",
                 renderLoginPage,

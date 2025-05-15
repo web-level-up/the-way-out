@@ -24,13 +24,9 @@ export function renderMazeGame() {
 
 // // In render-congrats.js
 window.renderCongrats = function () {
-  // ... your code ...
-  console.log("YOU WIN!!!");
   renderCongrats();
 };
 
 window.renderLoss = function () {
-  // ... your code ...
-  console.log("YOU LOSE!!!");
   renderLoss();
 };

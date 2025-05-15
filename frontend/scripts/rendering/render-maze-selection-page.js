@@ -4,7 +4,8 @@ import { loadPage } from "./renderer.js";
 import { renderErrorPage } from "./render-error.js";
 import { renderLoginPage } from "./render-login.js";
 import { HttpError } from "../custom-errors.js";
-import { toggleTheme } from "../util.js";
+import { getDataFromUrl, toggleTheme } from "../util.js";
+import { navigate } from "../router.js";
 
 export function renderMazeSelectionPage() {
   return loadPage("views/maze-selection.html").then(() => {
@@ -12,22 +13,7 @@ export function renderMazeSelectionPage() {
     if (themeBtn) themeBtn.onclick = toggleTheme;
     const mazeContainer = document.getElementById("mazes");
 
-    const config = getConfig();
-    return fetch(config.apiBaseUrl + "/api/mazes", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("jwt")}`,
-      },
-      signal: AbortSignal.timeout(5000),
-    })
-      .then(async (response) => {
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new HttpError(response.status, errorData.error);
-        }
-        return response.json();
-      })
+    return getDataFromUrl("/api/mazes")
       .then((data) => {
         data.forEach((maze) => {
           renderMazeCard(maze).then((card) => mazeContainer.appendChild(card));
@@ -38,27 +24,23 @@ export function renderMazeSelectionPage() {
           if (error.status === 401) {
             renderErrorPage(
               "Your session has expired, you will need to login again",
-              renderLoginPage,
-              "return to login"
+              () => navigate(""),
+              "Return to login"
             );
           } else {
             renderErrorPage(
               error.message ?? "An unexpected error has occurred",
-              renderMazeSelectionPage,
-              "return to selection page"
+              () => navigate("menu"),
+              "Return to menu"
             );
           }
         } else {
           renderErrorPage(
             error ?? "An unexpected error has occurred",
-            renderMazeSelectionPage,
-            "return to selection page"
+            () => navigate("menu"),
+            "Return to menu"
           );
         }
       });
-
-    // dummyMazes.forEach((maze) => {
-    //   renderMazeCard(maze).then((card) => mazeContainer.appendChild(card));
-    // });
   });
 }

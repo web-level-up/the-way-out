@@ -24,7 +24,6 @@ export class MazeGame {
   initialEscapeTime = 0;
 
   constructor(maze) {
-    console.log("MazeGame constructor", maze);
     this.mazeLayout = maze.mazeLayout;
     this.mazeId = maze.mazeId;
     this.size = Math.sqrt(this.mazeLayout.length);
@@ -74,7 +73,6 @@ export class MazeGame {
     };
     document.addEventListener("keydown", this.keydownHandler);
 
-    // Preload audio
     this.moveAudio = new Audio("assets/move.mp3");
     this.wallAudio = new Audio("assets/wall.mp3");
     this.winAudio = new Audio("assets/win.mp3");
@@ -208,7 +206,6 @@ export class MazeGame {
   }
 
   gameWon() {
-    console.log("WON");
     if (this.winAudio) (this.winAudio.currentTime = 0), this.winAudio.play();
     this.endGame();
     renderCongrats({
@@ -219,7 +216,6 @@ export class MazeGame {
   }
 
   gameLost() {
-    console.log("LOST");
     if (this.lossAudio) (this.lossAudio.currentTime = 0), this.lossAudio.play();
     this.endGame();
     renderLoss();

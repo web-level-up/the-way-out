@@ -1,9 +1,6 @@
-import { difficultyLevels } from "../dummy-data.js";
-import { renderMazeGame } from "./render-maze-game.js";
 import { renderMazeGameTemp } from "./render-maze-game-temp.js";
-import { renderMazeDetailsPage } from "./render-maze-details.js";
 import { loadComponent } from "./renderer.js";
-import { renderLeaderboardPage } from "./render-leaderboard-page.js";
+import { navigate } from "../router.js";
 
 function getMazeSize(mazeLayout) {
   const layoutLength = mazeLayout.length;
@@ -35,8 +32,8 @@ export function renderMazeCard(maze) {
     const playBtn = cardContainer.querySelector("#play-btn-maze-card");
     if (playBtn) {
       playBtn.addEventListener("click", () => {
-        //renderMazeGame();
-        renderMazeGameTemp(maze.id);
+        navigate("maze/game", {mazeId: maze.id})
+        // renderMazeGameTemp(maze.id);
       });
     }
 
@@ -44,7 +41,8 @@ export function renderMazeCard(maze) {
     const leaderboardBtn = cardContainer.querySelector("#leaderboard-btn");
     if (leaderboardBtn) {
       leaderboardBtn.addEventListener("click", () => {
-        renderLeaderboardPage(maze.id);
+        // renderLeaderboardPage(maze.id);
+        navigate("maze/leaderboard", {mazeId: maze.id})
       });
     }
     return cardContainer;
