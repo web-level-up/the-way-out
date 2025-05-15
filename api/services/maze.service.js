@@ -61,7 +61,6 @@ export const editMaze = async (maze) => {
     // Save the maze with the updated URL
     return await repo.editMaze(maze);
   } catch (error) {
-    console.error("Error uploading maze layout to S3:", error);
     throw new Error("Failed to upload maze layout to S3");
   }
 };
