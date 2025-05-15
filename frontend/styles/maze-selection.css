@@ -1,17 +1,3 @@
-:root {
-  --maze-card-bg: rgba(255, 255, 255, 0.18);
-  --maze-card-border: rgba(255, 255, 255, 0.25);
-  --maze-card-text: #fff;
-  --maze-card-btn-bg: rgba(255, 255, 255, 0.1);
-  --maze-card-btn-text: #fff;
-  --maze-card-btn-border: #fff;
-  --maze-card-btn-hover-bg: #fff;
-  --maze-card-btn-hover-text: #222;
-  --maze-card-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-  --maze-info-bg: rgba(255, 255, 255, 0.22);
-  --maze-info-text: #fff;
-}
-
 body {
   transition: background 0.3s, color 0.3s;
 }

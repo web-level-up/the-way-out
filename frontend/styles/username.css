@@ -10,17 +10,7 @@
   align-items: left;
   gap: 1rem;
   max-width: 20rem;
-}
-
-#set-username {
-  height: 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 1rem;
-  padding: 1.5rem 3rem;
-  background-color: white;
-  cursor: pointer;
+  box-sizing: border-box;
 }
 
 #username-input {
@@ -29,8 +19,10 @@
   align-items: center;
   justify-content: center;
   border-radius: 1rem;
-  padding: 0.5rem 3rem;
+  padding: 1rem 3rem;
   background-color: white;
+  box-sizing: border-box;
+  width: 100%;
 }
 
 #message {
