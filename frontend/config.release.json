@@ -2,5 +2,5 @@
   "frontendBaseUrl": "https://way-out.thups.co.za/",
   "apiBaseUrl": "https://way-out.thups.co.za",
   "googleClientId": "259114541157-i5dptisbvb40pfav9sgto7p6ug5vit96.apps.googleusercontent.com",
-  "googleCallbackUrl": "http://way-out.thups.co.za"
+  "googleCallbackUrl": "https://way-out.thups.co.za"
 }
