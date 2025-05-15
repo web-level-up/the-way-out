@@ -22,13 +22,29 @@
     color: white;
 }
 
-#navigation-buttons {
-    grid-area: navigation-buttons;
+.navigation-button {
     display: flex;
+    gap: 3rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
     justify-content: center;
-    gap: 1rem;
+    border-radius: 1rem;
+    padding: 1.5rem 3rem;
+    background-color: white;
+    cursor: pointer;
+    font-size: 1.25rem;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
+#navigation-buttons{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
 #maze-select-section {
     grid-area: maze-select-section;
     font-size: 1.5rem;
