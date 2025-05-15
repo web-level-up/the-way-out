@@ -177,7 +177,7 @@ function populateUserStats(data) {
     const stepsTakenCell = row.insertCell();
 
     attemptCell.textContent = `${index + 1}`;
-    timeTakenCell.textContent = entry.time_taken;
+    timeTakenCell.textContent = `${entry.time_taken_seconds}s`;
     stepsTakenCell.textContent = entry.steps_taken;
   });
 }
@@ -208,7 +208,7 @@ function populateLeaderboard(mazeId, tableId, data, isStepsTaken = false) {
     if (isStepsTaken) {
       valueCell.textContent = `${entry.steps_taken}`;
     } else {
-      valueCell.textContent = `${entry.time_taken}`;
+      valueCell.textContent = `${entry.time_taken_seconds}s`;
     }
   });
 }
