@@ -1,4 +1,4 @@
-name: Deploy Node API
+name: Deploy Frontend API
 
 on:
   push:
