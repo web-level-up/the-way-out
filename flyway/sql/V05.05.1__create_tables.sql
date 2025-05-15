@@ -12,7 +12,11 @@ CREATE TABLE "mazes" (
     "x_starting_position" integer NOT NULL CHECK (x_starting_position >= 0),
     "y_starting_position" integer NOT NULL CHECK (y_starting_position >= 0),
     "x_ending_position" integer NOT NULL CHECK (x_ending_position >= 0),
-    "y_ending_position" integer NOT NULL CHECK (y_ending_position >= 0)
+    "y_ending_position" integer NOT NULL CHECK (y_ending_position >= 0),
+    CONSTRAINT check_x_starting_within_bounds CHECK (x_starting_position < maze_size),
+    CONSTRAINT check_y_starting_within_bounds CHECK (y_starting_position < maze_size),
+    CONSTRAINT check_x_ending_within_bounds CHECK (x_ending_position < maze_size),
+    CONSTRAINT check_y_ending_within_bounds CHECK (y_ending_position < maze_size)
 );
 CREATE TABLE "difficulty_levels" (
     "id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY NOT NULL,

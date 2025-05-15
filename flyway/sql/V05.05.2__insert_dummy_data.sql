@@ -34,8 +34,8 @@ VALUES (
         6,
         0,
         0,
-        9,
-        9
+        5,
+        5
     ),
     (
         'https://maze-blob.s3.af-south-1.amazonaws.com/2.txt',
@@ -44,8 +44,8 @@ VALUES (
         7,
         1,
         1,
-        9,
-        9
+        5,
+        5
     ),
     (
         'https://maze-blob.s3.af-south-1.amazonaws.com/3.txt',
@@ -54,8 +54,8 @@ VALUES (
         8,
         2,
         2,
-        9,
-        9
+        6,
+        6
     ),
     (
         'https://maze-blob.s3.af-south-1.amazonaws.com/4.txt',
@@ -64,58 +64,18 @@ VALUES (
         9,
         0,
         1,
-        9,
-        9
+        8,
+        7
     ),
     (
         'https://maze-blob.s3.af-south-1.amazonaws.com/1.txt',
         1,
-        1,
+        5,
         5,
         1,
         1,
         1,
         3
-    ),
-(
-        'https://maze-blob.s3.af-south-1.amazonaws.com/2.txt',
-        1,
-        2,
-        8,
-        6,
-        1,
-        1,
-        6
-    ),
-(
-        'https://maze-blob.s3.af-south-1.amazonaws.com/3.txt',
-        1,
-        3,
-        10,
-        0,
-        1,
-        8,
-        8
-    ),
-(
-        'https://maze-blob.s3.af-south-1.amazonaws.com/4.txt',
-        1,
-        4,
-        12,
-        1,
-        10,
-        10,
-        1
-    ),
-(
-        'https://maze-blob.s3.af-south-1.amazonaws.com/5.txt',
-        2,
-        5,
-        10,
-        1,
-        0,
-        9,
-        9
     );
 -- Insert completions
 INSERT INTO "maze_completions" (
