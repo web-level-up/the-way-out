@@ -1,5 +1,6 @@
 :root {
   --color-bg: #181a20;
+
   --color-card-bg: rgba(34, 34, 34, 0.85);
   --color-card-border: #4f8cff33;
   --color-text: #fff;
@@ -23,7 +24,7 @@ body {
 }
 
 .light-mode {
-  --color-bg: #f7f7fa;
+  /* --color-bg: #f7f7fa; */
   --color-card-bg: rgba(255, 255, 255, 0.95);
   --color-card-border: #4f8cff33;
   --color-text: #181a20;
@@ -395,4 +396,20 @@ label[for="escape-bar"] {
   background: linear-gradient(90deg, #3b82f6 0%, #34d399 100%);
   box-shadow: 0 0.0625rem 0.125rem #0002;
   transform: scale(0.97);
+}
+
+@media (max-width: 600px) {
+  #game-banner {
+    min-width: 90vw;
+    max-width: 98vw;
+    padding: 0.7rem 0.5rem 0.7rem 0.5rem;
+    font-size: 1rem;
+    border-radius: 1rem;
+  }
+  .congrats-container {
+    min-width: 90vw;
+    max-width: 98vw;
+    padding: 1.2rem 0.5rem 1.2rem 0.5rem;
+    border-radius: 1rem;
+  }
 }
