@@ -1,6 +1,8 @@
 import { loadPage } from "./renderer.js";
 import { authError, getDataFromUrl } from "../util.js";
 import { navigate } from "../router.js";
+import {HttpError} from "../custom-errors.js";
+import {renderErrorPage} from "./render-error.js";
 
 export function renderLeaderboardPage(mazeId = null) {
   return loadPage("views/leaderboard.html").then(() => {
@@ -45,7 +47,7 @@ function populateMazeSelect(mazeId) {
         optionElement.value = mazeOption.id;
         optionElement.textContent = mazeOption.label;
 
-        if (mazeId && mazeId === mazeOption.id) {
+        if (mazeId && Number(mazeId) === mazeOption.id) {
           optionElement.selected = true;
           filterLeaderboard(mazeOption.id);
         }
