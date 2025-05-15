@@ -25,7 +25,7 @@ export class MazeGame {
   initialPreviewTime = 0;
 
   constructor(maze) {
-    this.mazeLayout = maze.maze_layout;
+    this.mazeLayout = maze.maze_layout.replaceAll('\r\n','');
     this.mazeId = maze.id;
     this.size = maze.maze_size;
 
@@ -50,7 +50,11 @@ export class MazeGame {
 
     this.renderMazeGrid();
     this.updateStepsDisplay();
-    this.updateTimerDisplay();
+    this.updateTimerDisplay(
+      this.initialPreviewTime,
+      this.previewTimeLeft,
+      true
+    );
     this.startTimer();
 
     this.resizeHandler = () => this.renderMazeGrid();
@@ -137,11 +141,27 @@ export class MazeGame {
     this.timerInterval = setInterval(() => {
       if (this.previewTimeLeft > 0) {
         --this.previewTimeLeft;
-        if (this.previewTimeLeft === 0) this.renderMazeGrid();
+        this.updateTimerDisplay(
+          this.initialPreviewTime,
+          this.previewTimeLeft,
+          true
+        );
+        if (this.previewTimeLeft === 0) {
+          this.renderMazeGrid();
+          this.updateTimerDisplay(
+            this.initialEscapeTime,
+            this.escapeTimeLeft,
+            false
+          );
+        }
       } else {
         --this.escapeTimeLeft;
+        this.updateTimerDisplay(
+          this.initialEscapeTime,
+          this.escapeTimeLeft,
+          false
+        );
       }
-      this.updateTimerDisplay();
       if (this.escapeTimeLeft <= 0) {
         if (!(this.x === this.endX && this.y === this.endY)) {
           this.gameLost();
@@ -152,16 +172,14 @@ export class MazeGame {
     }, 1000);
   }
 
-  updateTimerDisplay() {
-    const previewBar = document.getElementById("preview-bar");
-    const escapeBar = document.getElementById("escape-bar");
-    if (previewBar) {
-      previewBar.max = this.initialPreviewTime;
-      previewBar.value = this.previewTimeLeft;
-    }
-    if (escapeBar) {
-      escapeBar.max = this.initialEscapeTime;
-      escapeBar.value = this.escapeTimeLeft;
+  updateTimerDisplay(max, value, isPreview) {
+    const timerText = document.getElementById("timer-label");
+    timerText.textContent = isPreview ? "Preview" : "Escape";
+
+    const timerBar = document.getElementById("timer-bar");
+    if (timerBar) {
+      timerBar.max = max;
+      timerBar.value = value;
     }
   }
   updateStepsDisplay() {
