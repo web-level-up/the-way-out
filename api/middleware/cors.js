@@ -4,6 +4,6 @@ export const cors = (req, res, next) => {
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
   if (req.method === "OPTIONS") return res.sendStatus(200);
-  
-  next(); 
+
+  next();
 };
