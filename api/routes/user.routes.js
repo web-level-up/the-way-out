@@ -8,7 +8,9 @@ router.get("/", async (res) => {
     const users = await userService.listUsers();
     res.json(users);
   } catch (error) {
-    return res.status(500).json({ error: "Unable to fetch users. Try again later." });
+    return res
+      .status(500)
+      .json({ error: "Unable to fetch users. Try again later." });
   }
 });
 
@@ -18,7 +20,9 @@ router.get("/:id", async (req, res) => {
     if (!user) return res.status(404).json({ error: "User not found" });
     res.json(user);
   } catch (error) {
-    return res.status(500).json({ error: "Unable to fetch user. Try again later." });
+    return res
+      .status(500)
+      .json({ error: "Unable to fetch user. Try again later." });
   }
 });
 
