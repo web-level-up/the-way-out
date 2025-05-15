@@ -1,14 +1,30 @@
 import { loadPage } from "./renderer.js";
 import { authError, getDataFromUrl } from "../util.js";
 import { navigate } from "../router.js";
-import {HttpError} from "../custom-errors.js";
-import {renderErrorPage} from "./render-error.js";
+import { HttpError } from "../custom-errors.js";
+import { renderErrorPage } from "./render-error.js";
 
 export function renderLeaderboardPage(mazeId = null) {
   return loadPage("views/leaderboard.html").then(() => {
+    let selectedMaze = mazeId;
     populateMazeSelect(mazeId);
+    const playMaze = document.getElementById("play-maze-button");
+    if (mazeId) {
+      playMaze.style.display = "block";
+      playMaze.textContent = "Play Maze " + mazeId ?? ""
+    } else {
+      playMaze.style.display = "none";
+    }
+
     const mazeSelect = document.getElementById("maze-select");
     mazeSelect.addEventListener("change", function () {
+    selectedMaze = this.value
+    if (this.value) {
+      playMaze.style.display = "block";
+      playMaze.textContent = "Play Maze " + this.value ?? ""
+    } else {
+      playMaze.style.display = "none";
+    }
       filterLeaderboard(this.value);
     });
 
@@ -18,7 +34,7 @@ export function renderLeaderboardPage(mazeId = null) {
     document
       .getElementById("play-maze-button")
       .addEventListener("click", () =>
-        navigate("maze/game", { mazeId: mazeId })
+        navigate("maze/game", { mazeId: selectedMaze })
       );
   });
 }

@@ -60,7 +60,3 @@ export function authError() {
     "Return to login"
   );
 }
-
-export function toggleTheme() {
-  document.body.classList.toggle("light-mode");
-}
