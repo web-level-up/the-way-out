@@ -1,6 +1,10 @@
-<button
-  id="theme-toggle-btn"
-  style="
+<section id="maze-selection-container">
+  <h1 id="maze-selection-heading">Choose a maze</h1>
+  <section id="mazes"></section>
+</section>
+
+<style>
+  #theme-toggle-btn {
     position: absolute;
     top: 1.5rem;
     right: 2rem;
@@ -14,11 +18,17 @@
     box-shadow: 0 0.125rem 0.5rem #4f8cff44;
     cursor: pointer;
     font-weight: 600;
-  "
->
-  Toggle Theme
-</button>
-<section id="maze-selection-container">
-  <h1 id="maze-selection-heading">Choose a maze</h1>
-  <section id="mazes"></section>
-</section>
+    transition: all 0.2s;
+  }
+
+  /* Responsive adjustments for mobile screens */
+  @media (max-width: 500px) {
+    #theme-toggle-btn {
+      top: 0.75rem;
+      right: 1rem;
+      font-size: 0.95rem;
+      padding: 0.4rem 0.9rem;
+      border-radius: 0.6rem;
+    }
+  }
+</style>

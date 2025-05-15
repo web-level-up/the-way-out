@@ -171,6 +171,11 @@ export class MazeGame {
   }
 
   movePlayer(dx, dy) {
+    // End preview as soon as player moves
+    if (this.previewTimeLeft > 0) {
+      this.previewTimeLeft = 0;
+      this.renderMazeGrid();
+    }
     const nx = this.x + dx;
     const ny = this.y + dy;
     if (nx >= 0 && nx < this.size && ny >= 0 && ny < this.size) {
@@ -222,6 +227,6 @@ export class MazeGame {
     console.log("LOST");
     if (this.lossAudio) (this.lossAudio.currentTime = 0), this.lossAudio.play();
     this.endGame();
-    renderLoss();
+    renderLoss(this.mazeId);
   }
 }
