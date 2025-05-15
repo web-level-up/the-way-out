@@ -1,0 +1,44 @@
+name: Deploy Node API
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "frontend/**"
+      - ".github/workflows/deploy-frontend-ec2.yml"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup SSH key
+        run: |
+          echo "$EC2_KEY" > key.pem
+          chmod 400 key.pem
+        env:
+          EC2_KEY: ${{ secrets.EC2_KEY }}
+
+      - name: Deploy API to EC2
+        run: |
+          ssh -o StrictHostKeyChecking=no -i key.pem ${{ vars.EC2_HOST }} << 'EOF'
+            sudo apt-get update
+            curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            nvm install 20.18.2
+            nvm use 20.18.2
+            sudo ln -sf "$NVM_DIR/versions/node/v20.18.2/bin/npm" /usr/local/bin/npm
+            npm install -g pm2
+            mkdir -p frontend
+            rm -rf frontend/*
+          EOF
+
+          scp -i key.pem -r ./frontend/* ${{ vars.EC2_HOST }}:/home/ubuntu/frontend/
+
+          ssh -o StrictHostKeyChecking=no -i key.pem ${{ vars.EC2_HOST }} << 'EOF'
+            cd frontend
+          EOF
