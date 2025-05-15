@@ -31,7 +31,7 @@ function renderMazeList() {
   state.mazes.forEach((maze) => {
     const button = document.createElement("button");
     button.className = "maze-btn";
-    button.textContent = `Maze #${maze.id}`;
+    button.textContent = `Level #${maze.maze_level}`;
     button.addEventListener("click", () => showMazeDetails(maze));
     sidebar.appendChild(button);
   });
@@ -42,93 +42,138 @@ async function showMazeDetails(maze) {
 
   const response = await fetch(`http://localhost:3000/api/mazes/${maze.id}`);
   maze = await response.json();
-  
+
   // Clear previous content
   while (mazeDetails.firstChild) {
     mazeDetails.removeChild(mazeDetails.firstChild);
   }
-  
+
   // Create maze details container
-  const detailsContainer = document.createElement("div");
+  const detailsContainer = document.createElement("section");
   detailsContainer.className = "maze-details";
-  
+
   // Create heading
   const heading = document.createElement("h2");
   heading.textContent = `Maze #${maze.id}`;
   detailsContainer.appendChild(heading);
-  
-  // Create ID paragraph
-  const idParagraph = document.createElement("p");
-  const idStrong = document.createElement("strong");
-  idStrong.textContent = "ID: ";
-  idParagraph.appendChild(idStrong);
-  idParagraph.appendChild(document.createTextNode(maze.id));
-  detailsContainer.appendChild(idParagraph);
-  
-  // Create input fields
-  const createTextField = (id, value) => {
-    const textarea = document.createElement("textarea");
-    textarea.id = id;
-    textarea.rows = 1;
-    textarea.cols = 50;
-    textarea.value = value;
-    return textarea;
+
+  // Create p for field names
+  const createLabel = (text) => {
+    const paragraph = document.createElement("p");
+    const strong = document.createElement("strong");
+    strong.textContent = text;
+    paragraph.appendChild(strong);
+    return paragraph;
   };
-  
-  detailsContainer.appendChild(createTextField("mazeStartingX", maze.x_starting_position));
-  detailsContainer.appendChild(createTextField("mazeStartingY", maze.y_starting_position));
-  detailsContainer.appendChild(createTextField("mazeEndingX", maze.x_ending_position));
-  detailsContainer.appendChild(createTextField("mazeEndingY", maze.y_ending_position));
-  detailsContainer.appendChild(createTextField("mazeLevel", maze.maze_level));
-  detailsContainer.appendChild(createTextField("mazeDifficulty", maze.difficulty_name));
-  
-  // Create encoding section
-  const encodingDiv = document.createElement("div");
-  
-  const encodingLabel = document.createElement("label");
-  encodingLabel.htmlFor = "mazeEncoding";
-  const encodingStrong = document.createElement("strong");
-  encodingStrong.textContent = "Encoding:";
-  encodingLabel.appendChild(encodingStrong);
-  encodingDiv.appendChild(encodingLabel);
-  
+
+  // Create input fields - updated to use appropriate input elements
+  const createTextField = (id, value, type = "text") => {
+    if (id === "mazeEncoding") {
+      const textarea = document.createElement("textarea");
+      textarea.id = id;
+      textarea.rows = 4;
+      textarea.value = value;
+      return textarea;
+    } else {
+      const input = document.createElement("input");
+      input.id = id;
+      input.type = type;
+      input.value = value;
+      return input;
+    }
+  };
+
+  const startingPositionLabels = document.createElement("section");
+  startingPositionLabels.className = "details-double-input";
+  startingPositionLabels.appendChild(createLabel("Start X"));
+  startingPositionLabels.appendChild(createLabel("Start Y"));
+  detailsContainer.appendChild(startingPositionLabels);
+
+  const startingPositionInputs = document.createElement("section");
+  startingPositionInputs.className = "details-double-input";
+  startingPositionInputs.appendChild(
+    createTextField("mazeStartingX", maze.x_starting_position, "number")
+  );
+  startingPositionInputs.appendChild(
+    createTextField("mazeStartingY", maze.y_starting_position, "number")
+  );
+  detailsContainer.appendChild(startingPositionInputs);
+
+  const endingPositionLabels = document.createElement("section");
+  endingPositionLabels.className = "details-double-input";
+  endingPositionLabels.appendChild(createLabel("End X"));
+  endingPositionLabels.appendChild(createLabel("End Y"));
+  detailsContainer.appendChild(endingPositionLabels);
+
+  const endingPositionInputs = document.createElement("section");
+  endingPositionInputs.className = "details-double-input";
+  endingPositionInputs.appendChild(
+    createTextField("mazeEndingX", maze.x_ending_position, "number")
+  );
+  endingPositionInputs.appendChild(
+    createTextField("mazeEndingY", maze.y_ending_position, "number")
+  );
+  detailsContainer.appendChild(endingPositionInputs);
+
+  const levelLabels = document.createElement("section");
+  levelLabels.className = "details-double-input";
+  levelLabels.className = "details-double-input";
+  levelLabels.appendChild(createLabel("Difficulty Level"));
+  levelLabels.appendChild(createLabel("Maze Level"));
+  detailsContainer.appendChild(levelLabels);
+
+  const levelInputs = document.createElement("section");
+  levelInputs.className = "details-double-input";
+  levelInputs.appendChild(
+    createTextField("mazeLevel", maze.maze_level, "number")
+  );
+  levelInputs.appendChild(
+    createTextField("mazeDifficulty", maze.difficulty_name)
+  );
+  detailsContainer.appendChild(levelInputs);
+
+  // Create encoding section - this remains a textarea
+  detailsContainer.appendChild(createLabel("Maze Encoding:"));
   const encodingTextarea = createTextField("mazeEncoding", maze.maze_layout);
-  encodingDiv.appendChild(encodingTextarea);
-  
-  const feedbackDiv = document.createElement("div");
-  feedbackDiv.id = "encodingFeedback";
-  encodingDiv.appendChild(feedbackDiv);
-  
-  detailsContainer.appendChild(encodingDiv);
-  mazeDetails.appendChild(detailsContainer);
-  
-  // Create canvas
-  const canvas = document.createElement("canvas");
-  canvas.id = "mazeCanvas";
-  canvas.className = "maze-canvas";
-  canvas.width = 500;
-  canvas.height = 500;
-  mazeDetails.appendChild(canvas);
-  
+  detailsContainer.appendChild(encodingTextarea);
+
+  // Add encoding feedback element
+  const feedbackElement = document.createElement("p");
+  feedbackElement.id = "encodingFeedback";
+  detailsContainer.appendChild(feedbackElement);
+
   // Create action buttons
-  const actionsDiv = document.createElement("div");
-  actionsDiv.className = "maze-actions";
-  
+  const actionsSection = document.createElement("section");
+  actionsSection.className = "maze-actions details-double-input";
+
   const publishBtn = document.createElement("button");
   publishBtn.id = "publishMazeBtn";
   publishBtn.textContent = "Publish";
   publishBtn.addEventListener("click", () => {
     PublishMaze(maze);
   });
-  
+
   const deleteBtn = document.createElement("button");
   deleteBtn.id = "deleteMazeBtn";
   deleteBtn.textContent = "Delete";
-  deleteBtn.addEventListener("click", () => deleteMaze(maze.id));
-  
-  actionsDiv.appendChild(publishBtn);
-  actionsDiv.appendChild(deleteBtn);
-  mazeDetails.appendChild(actionsDiv);
+  deleteBtn.addEventListener("click", () => deleteMaze(state.currentMaze.id));
+
+  actionsSection.appendChild(publishBtn);
+  actionsSection.appendChild(deleteBtn);
+  detailsContainer.appendChild(actionsSection);
+
+  mazeDetails.appendChild(detailsContainer);
+
+  const mazeContainer = document.createElement("section");
+  mazeContainer.className = "maze-details";
+  // Create canvas
+  const canvas = document.createElement("canvas");
+  canvas.id = "mazeCanvas";
+  canvas.className = "maze-canvas";
+  canvas.width = 500;
+  canvas.height = 500;
+  mazeContainer.appendChild(canvas);
+  mazeDetails.appendChild(mazeContainer);
 
   drawMaze(maze.maze_layout);
 
@@ -267,7 +312,7 @@ async function deleteMaze(id) {
   if (!confirm("Are you sure you want to delete this maze?")) return;
 
   try {
-    const response = await fetch(`${API_URL}/${id}`, {
+    const response = await fetch(`http://localhost:3000/api/mazes/${id}`, {
       method: "DELETE",
     });
 

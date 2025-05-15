@@ -9,6 +9,8 @@ export const getMaze = (id) => repo.getMazeById(id);
 
 export const addMaze = (maze) => repo.addMaze(maze);
 
+export const deleteMaze = (id) => repo.deleteMaze(id);
+
 export const editMaze = async (maze) => {
   try {
     // Get the maze layout from the maze object (string of 1s and 0s)

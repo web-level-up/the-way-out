@@ -34,6 +34,12 @@ router.post("/", async (req, res) => {
   res.status(201).json(mazeId);
 });
 
+router.delete("/:id", async (req, res) => {
+  const mazeId = req.params.id;
+  await service.deleteMaze(mazeId);
+  res.status(204).send();
+});
+
 router.put("/", async (req, res) => {
   const maze = req.body;
   const mazeId = service.editMaze(maze);

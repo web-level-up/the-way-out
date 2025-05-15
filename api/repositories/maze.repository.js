@@ -18,6 +18,11 @@ export const editMaze = (maze) =>
     (rows) => rows[0].id
   );
 
+export const deleteMaze = (id) =>
+  sql`DELETE FROM mazes WHERE id = ${id} RETURNING id`.then(
+    (rows) => rows[0].id
+  );
+
 export const postCompletion = (mazeId, playerGoogleId, timeTaken, stepsTaken) =>
   sql`WITH user_data AS (
         SELECT id FROM users WHERE google_id = ${playerGoogleId}

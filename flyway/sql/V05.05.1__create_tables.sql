@@ -30,4 +30,4 @@ ADD FOREIGN KEY ("difficulty_level_id") REFERENCES "difficulty_levels" ("id");
 ALTER TABLE "maze_completions"
 ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
 ALTER TABLE "maze_completions"
-ADD FOREIGN KEY ("maze_id") REFERENCES "mazes" ("id");
+ADD FOREIGN KEY ("maze_id") REFERENCES "mazes" ("id") ON DELETE CASCADE;
