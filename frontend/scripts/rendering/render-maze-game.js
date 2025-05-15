@@ -7,7 +7,6 @@ import { loadPage } from "./renderer.js";
 
 export function renderMazeGame(mazeId) {
   return loadPage("views/maze-game.html").then(() => {
-    document.body.classList.add("light-mode");
     const gameObject = {
       id: 17,
       maze_level: 1,
