@@ -42,5 +42,5 @@ jobs:
 
           ssh -o StrictHostKeyChecking=no -i key.pem ${{ vars.EC2_HOST }} << 'EOF'
             cd frontend
-            sudo pm2 serve --name frontend -- . --spa -l 3000
+            sudo -E "pm2 serve --name frontend . --spa -l 3000"
           EOF
