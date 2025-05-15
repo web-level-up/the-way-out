@@ -4,12 +4,10 @@ import { loadPage } from "./renderer.js";
 import { renderErrorPage } from "./render-error.js";
 import { renderLoginPage } from "./render-login.js";
 import { HttpError } from "../custom-errors.js";
-import { toggleTheme } from "../util.js";
 
 export function renderMazeSelectionPage() {
   return loadPage("views/maze-selection.html").then(() => {
-    const themeBtn = document.getElementById("theme-toggle-btn");
-    if (themeBtn) themeBtn.onclick = toggleTheme;
+    document.body.classList.remove("light-mode");
     const mazeContainer = document.getElementById("mazes");
 
     const config = getConfig();
@@ -56,9 +54,5 @@ export function renderMazeSelectionPage() {
           );
         }
       });
-
-    // dummyMazes.forEach((maze) => {
-    //   renderMazeCard(maze).then((card) => mazeContainer.appendChild(card));
-    // });
   });
 }

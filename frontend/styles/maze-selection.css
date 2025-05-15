@@ -8,28 +8,12 @@
   --maze-card-btn-hover-bg: #fff;
   --maze-card-btn-hover-text: #222;
   --maze-card-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-
   --maze-info-bg: rgba(255, 255, 255, 0.22);
   --maze-info-text: #fff;
 }
 
 body {
   transition: background 0.3s, color 0.3s;
-}
-
-.light-mode {
-  --maze-card-bg: rgba(255, 255, 255, 0.75);
-  --maze-card-border: rgba(200, 200, 200, 0.7);
-  --maze-card-text: #222;
-  --maze-card-btn-bg: rgba(255, 255, 255, 0.9);
-  --maze-card-btn-text: #222;
-  --maze-card-btn-border: #222;
-  --maze-card-btn-hover-bg: #222;
-  --maze-card-btn-hover-text: #fff;
-  --maze-card-shadow: 0 8px 32px 0 rgba(80, 120, 80, 0.1);
-
-  --maze-info-bg: rgba(255, 255, 255, 0.85);
-  --maze-info-text: #222;
 }
 
 #maze-selection-container {
@@ -51,6 +35,7 @@ body {
 #maze-selection-heading {
   font-size: 2rem;
   text-align: center;
+  margin-top: 3rem;
 }
 
 .maze-card-container {
