@@ -7,12 +7,12 @@ CREATE TABLE "mazes" (
     "id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY NOT NULL,
     "maze_layout_url" varchar(255) NOT NULL,
     "difficulty_level_id" integer NOT NULL,
-    "maze_level" integer NOT NULL,
-    "maze_size" integer NOT NULL,
-    "x_starting_position" integer NOT NULL,
-    "y_starting_position" integer NOT NULL,
-    "x_ending_position" integer NOT NULL,
-    "y_ending_position" integer NOT NULL
+    "maze_level" integer NOT NULL UNIQUE,
+    "maze_size" integer NOT NULL CHECK (maze_size > 0),
+    "x_starting_position" integer NOT NULL CHECK (x_starting_position >= 0),
+    "y_starting_position" integer NOT NULL CHECK (y_starting_position >= 0),
+    "x_ending_position" integer NOT NULL CHECK (x_ending_position >= 0),
+    "y_ending_position" integer NOT NULL CHECK (y_ending_position >= 0)
 );
 CREATE TABLE "difficulty_levels" (
     "id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY NOT NULL,
@@ -22,8 +22,8 @@ CREATE TABLE "maze_completions" (
     "id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY NOT NULL,
     "user_id" integer NOT NULL,
     "maze_id" integer NOT NULL,
-    "time_taken" interval NOT NULL,
-    "steps_taken" integer NOT NULL
+    "time_taken_ms" integer NOT NULL CHECK (time_taken_ms >= 0),
+    "steps_taken" integer NOT NULL CHECK (steps_taken >= 0)
 );
 ALTER TABLE "mazes"
 ADD FOREIGN KEY ("difficulty_level_id") REFERENCES "difficulty_levels" ("id");
