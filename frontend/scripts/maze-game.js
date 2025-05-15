@@ -22,11 +22,12 @@ export class MazeGame {
   winAudio = null;
   lossAudio = null;
   initialEscapeTime = 0;
+  initialPreviewTime = 0;
 
   constructor(maze) {
-    this.mazeLayout = maze.mazeLayout;
-    this.mazeId = maze.mazeId;
-    this.size = Math.sqrt(this.mazeLayout.length);
+    this.mazeLayout = maze.maze_layout;
+    this.mazeId = maze.id;
+    this.size = maze.maze_size;
 
     for (let y = 0; y < this.size; y++) {
       const row = [];
@@ -36,15 +37,16 @@ export class MazeGame {
       this.mazeGrid.push(row);
     }
 
-    this.x = maze.start.x;
-    this.y = maze.start.y;
+    this.x = maze.x_starting_position;
+    this.y = maze.y_starting_position;
 
-    this.endX = maze.end.x;
-    this.endY = maze.end.y;
+    this.endX = maze.x_ending_position;
+    this.endY = maze.y_ending_position;
 
-    this.previewTimeLeft = 5;
-    this.escapeTimeLeft = 15;
+    this.previewTimeLeft = maze.preview_time_seconds;
+    this.escapeTimeLeft = maze.escape_time_seconds;
     this.initialEscapeTime = this.escapeTimeLeft;
+    this.initialPreviewTime = this.previewTimeLeft;
 
     this.renderMazeGrid();
     this.updateStepsDisplay();
@@ -154,7 +156,7 @@ export class MazeGame {
     const previewBar = document.getElementById("preview-bar");
     const escapeBar = document.getElementById("escape-bar");
     if (previewBar) {
-      previewBar.max = 5;
+      previewBar.max = this.initialPreviewTime;
       previewBar.value = this.previewTimeLeft;
     }
     if (escapeBar) {
@@ -211,13 +213,14 @@ export class MazeGame {
   }
 
   gameWon() {
+    console.log(this.initialEscapeTime - this.escapeTimeLeft);
     if (this.winAudio) (this.winAudio.currentTime = 0), this.winAudio.play();
     this.endGame();
-    renderCongrats({
-      steps: this.stepsTaken,
-      time: this.escapeTimeLeft,
-      mazeId: this.mazeId,
-    });
+    renderCongrats(
+      this.stepsTaken,
+      this.initialEscapeTime - this.escapeTimeLeft,
+      this.mazeId
+    );
   }
 
   gameLost() {

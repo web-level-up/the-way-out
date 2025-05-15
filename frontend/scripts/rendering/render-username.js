@@ -4,6 +4,7 @@ import { renderErrorPage } from "./render-error.js";
 import { renderLoginPage } from "./render-login.js";
 import { renderMainPage } from "./render-main-page.js";
 import { postDataToUrl } from "../util.js";
+import { navigate } from "../router.js";
 
 export function renderUsernamePage() {
   loadPage("/views/username.html").then(() => {
@@ -21,7 +22,7 @@ export function renderUsernamePage() {
       return postDataToUrl("/api/user", { username })
         .then(() => {
           localStorage.setItem("username", username);
-          renderMainPage();
+          navigate("menu")
         })
         .catch((error) => {
           if (error instanceof HttpError) {
@@ -30,7 +31,7 @@ export function renderUsernamePage() {
             if (error.status === 401)
               renderErrorPage(
                 "Your session has expired, you will need to login again",
-                renderLoginPage,
+                () => navigate(""),
                 "return to login"
               );
           } else {

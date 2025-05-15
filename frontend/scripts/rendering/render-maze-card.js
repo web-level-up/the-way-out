@@ -1,17 +1,5 @@
-import { renderMazeGame } from "./render-maze-game.js";
 import { loadComponent } from "./renderer.js";
 import { navigate } from "../router.js";
-
-function getMazeSize(mazeLayout) {
-  const layoutLength = mazeLayout.length;
-  const size = Math.sqrt(layoutLength);
-
-  if (Number.isInteger(size)) {
-    return `${size} x ${size}`;
-  } else {
-    return NaN;
-  }
-}
 
 export function renderMazeCard(maze) {
   const cardContainer = document.createElement("section");

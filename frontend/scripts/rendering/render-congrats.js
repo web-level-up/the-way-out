@@ -2,13 +2,15 @@ import { loadPage } from "./renderer.js";
 import { renderMazeGame } from "./render-maze-game.js";
 import { authError, postDataToUrl } from "../util.js";
 import { navigate } from "../router.js";
+import { HttpError } from "../custom-errors.js";
+import { renderErrorPage } from "./render-error.js";
 
-export function renderCongrats({ steps, time, mazeId }) {
+export function renderCongrats(steps, timeTaken, mazeId) {
   loadPage("/views/game-congrats.html").then(() => {
     const stepsElem = document.getElementById("congrats-steps");
     const timeElem = document.getElementById("congrats-time");
     if (stepsElem) stepsElem.textContent = `Steps taken: ${steps}`;
-    if (timeElem) timeElem.textContent = `Time left: ${time}`;
+    if (timeElem) timeElem.textContent = `Time taken: ${timeTaken}s`;
 
     const playAgainBtn = document.getElementById("play-again-btn");
     const leaderboardBtn = document.getElementById("view-leaderboard-btn");
@@ -23,11 +25,12 @@ export function renderCongrats({ steps, time, mazeId }) {
 
   postDataToUrl("/api/mazes/completions", {
     mazeId: mazeId,
-    timeTaken: time,
+    timeTaken: timeTaken,
     stepsTaken: steps,
   })
     .then(() => {})
     .catch((error) => {
+      console.log(error)
       if (error instanceof HttpError) {
         if (error.status === 401) {
           authError();          

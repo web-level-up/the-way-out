@@ -127,7 +127,7 @@ function getLeaderboardData(mazeId) {
         }
       } else {
         renderErrorPage(
-          error ?? "An unexpected error has occurred",
+          "An unexpected error has occurred",
           () => navigate("menu"),
           "Return to menu"
         );
@@ -135,7 +135,7 @@ function getLeaderboardData(mazeId) {
     });
 }
 
-function filterLeaderboard(mazeId, data) {
+function filterLeaderboard(mazeId) {
   getUserCompletionsData(mazeId).then((data) => {
     populateUserStats(data);
   });

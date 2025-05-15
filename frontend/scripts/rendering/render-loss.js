@@ -1,7 +1,7 @@
 import { loadPage } from "./renderer.js";
-import { renderMainPage } from "./render-main-page.js";
 import { logout } from "../util.js";
 import { renderMazeGame } from "./render-maze-game.js";
+import { navigate } from "../router.js";
 export function renderLoss(maze_id) {
   loadPage("/views/game-loss.html").then(() => {
     const mainMenuBtn = document.getElementById("main-menu-btn");
@@ -9,7 +9,7 @@ export function renderLoss(maze_id) {
     const retryBtn = document.getElementById("retry-btn");
 
     retryBtn.onclick = () => renderMazeGame(maze_id);
-    mainMenuBtn.onclick = () => renderMainPage();
+    mainMenuBtn.onclick = () => navigate("menu");
     logoutBtn.onclick = () => logout();
   });
 }
