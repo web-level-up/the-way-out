@@ -9,3 +9,8 @@ variable "db_password" {
   type        = string
   sensitive   = true
 }
+
+variable "acm_certificate_arn" {
+  description = "The ARN of the ACM certificate for the ALB"
+  type        = string
+}

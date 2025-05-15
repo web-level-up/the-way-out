@@ -76,9 +76,21 @@ resource "aws_lb_listener" "http" {
   }
 }
 
+resource "aws_lb_listener" "https" {
+  load_balancer_arn = aws_lb.app_lb.arn
+  port              = 443
+  protocol          = "HTTPS"
+  certificate_arn   = var.acm_certificate_arn
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.frontend.arn
+  }
+}
+
 // Add path-based routing for API requests
 resource "aws_lb_listener_rule" "api_rule" {
-  listener_arn = aws_lb_listener.http.arn
+  listener_arn = aws_lb_listener.https.arn
   priority     = 100
 
   action {
