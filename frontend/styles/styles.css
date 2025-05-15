@@ -47,12 +47,15 @@ body {
 }
 
 body {
-  font-family: sans-serif;
   background-image: url("../assets/maze-background-2.jpg");
   background-size: cover;
   background-position: center;
   height: 100vh;
-  color: white;
+  background: var(--color-bg);
+  margin: 0;
+  font-family: "Segoe UI", "Roboto", Arial, sans-serif;
+  color: var(--color-text);
+  transition: background 0.3s, color 0.3s;
 }
 
 #root {
