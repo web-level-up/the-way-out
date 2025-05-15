@@ -1,49 +1,26 @@
-<section>
-  <header>
-    <label for="maze-size">Maze Size:</label>
-    <select id="maze-size">
-      <option value="16" selected>16 x 16</option>
-      <option value="20">20 x 20</option>
-      <option value="24">24 x 24</option>
-      <option value="28">28 x 28</option>
-      <option value="32">32 x 32</option>
-    </select>
-    <button id="generate-maze">Generate Maze</button>
-    <button id="startMazeBtn">Start</button>
-    <button id="giveUpBtn">Give Up</button>
-    <section>
-      <label for="mute-sound-toggle">
-        <input type="checkbox" id="mute-sound-toggle" />Mute sound
-      </label>
-    </section>
+<section id="game-page">
+  <header id="game-banner">
+    <div class="timer-row">
+      <div class="timer-left">
+        <label for="preview-bar">Preview:</label>
+        <progress id="preview-bar" value="0" max="5"></progress>
+      </div>
+      <div class="timer-center">
+        <p id="steps">Steps:</p>
+      </div>
+      <div class="timer-right">
+        <label for="escape-bar">Escape:</label>
+        <progress id="escape-bar" value="0" max="80"></progress>
+      </div>
+    </div>
   </header>
-  <section>
-    <h2
-      id="counter"
-      aria-live="polite"
-      style="font-size: 2rem; text-align: center"
-    ></h2>
-  </section>
-  <section>
-    <label for="timer">Time left: </label>
-    <time id="timer" datetime="PT15S">15</time> seconds
-    <progress id="timer-bar" value="15" max="15"></progress>
-  </section>
-  <section id="maze-container">
-    <canvas id="overlay"></canvas>
-    <main id="maze" hidden></main>
-  </section>
-  <article id="controls-container">
-    <section id="controls" style="display: none">
-      <button class="ctrl-btn" id="up">&#8593;</button>
-      <span>
-        <button class="ctrl-btn" id="left">&#8592;</button>
-        <button class="ctrl-btn" id="right">&#8594;</button>
-      </span>
-      <button class="ctrl-btn" id="down">&#8595;</button>
+  <section id="grid-container"></section>
+  <footer id="game-footer">
+    <button id="up" class="movement-button">⬆</button>
+    <section>
+      <button id="left" class="movement-button">⬅</button>
+      <button id="down" class="movement-button">⬇</button>
+      <button id="right" class="movement-button">➡</button>
     </section>
-    <section id="keyboard-hint" style="display: none">
-      <span>Use keyboard to move ball (arrow keys)</span>
-    </section>
-  </article>
+  </footer>
 </section>

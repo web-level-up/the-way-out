@@ -1,4 +1,4 @@
-import { renderMazeGameTemp } from "./render-maze-game-temp.js";
+import { renderMazeGame } from "./render-maze-game.js";
 import { loadComponent } from "./renderer.js";
 import { navigate } from "../router.js";
 
@@ -28,20 +28,16 @@ export function renderMazeCard(maze) {
       maze.difficulty_id
     );
 
-    // Add event listener to Play button
     const playBtn = cardContainer.querySelector("#play-btn-maze-card");
     if (playBtn) {
       playBtn.addEventListener("click", () => {
         navigate("maze/game", {mazeId: maze.id})
-        // renderMazeGameTemp(maze.id);
       });
     }
 
-    // Add event listener to Leaderboard button
     const leaderboardBtn = cardContainer.querySelector("#leaderboard-btn");
     if (leaderboardBtn) {
       leaderboardBtn.addEventListener("click", () => {
-        // renderLeaderboardPage(maze.id);
         navigate("maze/leaderboard", {mazeId: maze.id})
       });
     }

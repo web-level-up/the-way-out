@@ -66,7 +66,7 @@ function populateMazeSelect(mazeId) {
         }
       } else {
         renderErrorPage(
-          error ?? "An unexpected error has occurred",
+          "An unexpected error has occurred",
           () => navigate("menu"),
           "Return to menu"
         );
@@ -101,7 +101,7 @@ function getUserCompletionsData(mazeId) {
         }
       } else {
         renderErrorPage(
-          error ?? "An unexpected error has occurred",
+          "An unexpected error has occurred",
           () => navigate("menu"),
           "Return to menu"
         );

@@ -3,7 +3,7 @@ import { renderMazeSelectionPage } from "./rendering/render-maze-selection-page.
 import { renderMainPage } from "./rendering/render-main-page.js";
 import { renderErrorPage } from "./rendering/render-error.js";
 import { renderLeaderboardPage } from "./rendering/render-leaderboard-page.js";
-import { renderMazeGameTemp } from "./rendering/render-maze-game-temp.js";
+import { renderMazeGame } from "./rendering/render-maze-game.js";
 import { handleOAuthCallback } from "./auth.js";
 import { renderUsernamePage } from "./rendering/render-username.js";
 
@@ -36,7 +36,7 @@ const routes = {
   },
   "maze/game": (params) => {
     const mazeId = params.get("mazeId");
-    renderMazeGameTemp(mazeId);
+    renderMazeGame(mazeId);
   },
 };
 

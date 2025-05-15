@@ -1,4 +1,3 @@
-import { renderLoginPage } from "./rendering/render-login.js";
 import { HttpError } from "./custom-errors.js";
 import { getConfig } from "./config-loader.js";
 import { navigate } from "./router.js";

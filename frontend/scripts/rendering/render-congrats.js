@@ -1,7 +1,7 @@
 import { loadPage } from "./renderer.js";
-import { renderLeaderboardPage } from "./render-leaderboard-page.js";
-import { renderMazeGameTemp } from "./render-maze-game-temp.js";
+import { renderMazeGame } from "./render-maze-game.js";
 import { authError, postDataToUrl } from "../util.js";
+import { navigate } from "../router.js";
 
 export function renderCongrats({ steps, time, mazeId }) {
   loadPage("/views/game-congrats.html").then(() => {
@@ -14,10 +14,10 @@ export function renderCongrats({ steps, time, mazeId }) {
     const leaderboardBtn = document.getElementById("view-leaderboard-btn");
 
     playAgainBtn.addEventListener("click", () => {
-      renderMazeGameTemp(mazeId);
+      renderMazeGame(mazeId);
     });
     leaderboardBtn.addEventListener("click", () => {
-      renderLeaderboardPage();
+      navigate("maze/leaderboard", {mazeId: mazeId})
     });
   });
 
@@ -40,7 +40,7 @@ export function renderCongrats({ steps, time, mazeId }) {
         }
       } else {
         renderErrorPage(
-          error ?? "An unexpected error has occurred",
+          "An unexpected error has occurred",
           () => navigate("menu"),
           "Return to menu"
         );
