@@ -8,14 +8,28 @@ router.get("/", async (req, res) => {
     const mazes = await service.listMazes();
     res.json(mazes);
   } catch (error) {
-    return res.status(500).json({ error: "Unable to fetch mazes. Try again later." });
+    return res
+      .status(500)
+      .json({ error: "Unable to fetch mazes. Try again later." });
   }
 });
 
 router.post("/completions", async (req, res) => {
-  const { mazeId, timeTaken, stepsTaken } = req.body;
-  const googleId = req.user.sub;
   try {
+    const { mazeId, timeTaken, stepsTaken } = req.body;
+    const googleId = req.user.sub;
+
+    // Validation
+    if (!mazeId) {
+      return res.status(400).json({ error: "Maze ID is required" });
+    }
+    if (timeTaken === undefined || timeTaken === null) {
+      return res.status(400).json({ error: "Time taken is required" });
+    }
+    if (stepsTaken === undefined || stepsTaken === null) {
+      return res.status(400).json({ error: "Steps taken is required" });
+    }
+
     const result = await service.completeMaze(
       mazeId,
       googleId,
@@ -24,30 +38,40 @@ router.post("/completions", async (req, res) => {
     );
 
     res.status(201).json(result);
-  }
-  catch (error) {
+  } catch (error) {
     return res.status(500).json({ error: "Unable to save maze completion." });
   }
-
 });
 
 router.get("/:id", async (req, res) => {
   try {
     const maze = await service.getMaze(req.params.id);
     if (!maze)
-      return res.status(404).json({error: `Maze with ID ${req.params.id} not found.`});
+      return res
+        .status(404)
+        .json({ error: `Maze with ID ${req.params.id} not found.` });
 
     const layoutResponse = await fetch(maze.maze_layout_url);
     const layout = await layoutResponse.text();
-    res.json({...maze, maze_layout: layout});
+    res.json({ ...maze, maze_layout: layout });
   } catch (error) {
-    return res.status(500).json({ error: "Unable to fetch maze. Try again later." });
+    return res
+      .status(500)
+      .json({ error: "Unable to fetch maze. Try again later." });
   }
 });
 
 router.post("/", async (req, res) => {
   try {
     const maze = req.body;
+
+    // Validate maze object has required properties
+    if (!maze || !maze.maze_level || !maze.maze_layout) {
+      return res.status(400).json({
+        error: "Invalid maze data. Required fields: maze_level, maze_layout",
+      });
+    }
+
     const mazeId = await service.addMaze(maze);
     res.status(201).json(mazeId);
   } catch (error) {
@@ -68,8 +92,16 @@ router.delete("/:id", async (req, res) => {
 router.put("/", async (req, res) => {
   try {
     const maze = req.body;
-    const mazeId = service.editMaze(maze);
-    res.status(201).json(mazeId);
+
+    // Basic validation
+    if (!maze || !maze.id) {
+      return res
+        .status(400)
+        .json({ error: "Invalid maze data. Maze ID is required." });
+    }
+
+    const mazeId = await service.editMaze(maze);
+    res.status(200).json(mazeId);
   } catch (error) {
     return res.status(500).json({ error: "Unable to edit maze." });
   }
@@ -80,7 +112,9 @@ router.get("/:id/leaderboard", async (req, res) => {
     const leaderboard = await service.getMazeLeaderboard(req.params.id);
     res.json(leaderboard);
   } catch (error) {
-    return res.status(500).json({ error: "Unable to fetch leaderboard. Try again later." });
+    return res
+      .status(500)
+      .json({ error: "Unable to fetch leaderboard. Try again later." });
   }
 });
 
@@ -92,7 +126,9 @@ router.get("/:id/completions/current-user", async (req, res) => {
     );
     res.json(completions);
   } catch (error) {
-    return res.status(500).json({ error: "Unable to fetch maze completions. Try again later." });
+    return res
+      .status(500)
+      .json({ error: "Unable to fetch maze completions. Try again later." });
   }
 });
 
