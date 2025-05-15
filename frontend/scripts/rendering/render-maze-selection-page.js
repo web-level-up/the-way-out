@@ -7,7 +7,6 @@ import { navigate } from "../router.js";
 
 export function renderMazeSelectionPage() {
   return loadPage("views/maze-selection.html").then(() => {
-    document.body.classList.remove("light-mode");
     const mazeContainer = document.getElementById("mazes");
 
     return getDataFromUrl("/api/mazes")
