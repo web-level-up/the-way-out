@@ -32,3 +32,7 @@ export function getDataFromUrl(url) {
     return response.json();
   });
 }
+
+export function toggleTheme() {
+  document.body.classList.toggle("light-mode");
+}

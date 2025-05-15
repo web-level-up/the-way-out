@@ -17,6 +17,11 @@ export class MazeGame {
   keydownHandler = null;
   resizeHandler = null;
   mazeId = 0;
+  moveAudio = null;
+  wallAudio = null;
+  winAudio = null;
+  lossAudio = null;
+  initialEscapeTime = 0;
 
   constructor(maze) {
     console.log("MazeGame constructor", maze);
@@ -39,7 +44,8 @@ export class MazeGame {
     this.endY = maze.end.y;
 
     this.previewTimeLeft = 5;
-    this.escapeTimeLeft = 5;
+    this.escapeTimeLeft = 15;
+    this.initialEscapeTime = this.escapeTimeLeft;
 
     this.renderMazeGrid();
     this.updateStepsDisplay();
@@ -67,6 +73,12 @@ export class MazeGame {
       if (e.key === "ArrowRight") this.movePlayer(1, 0);
     };
     document.addEventListener("keydown", this.keydownHandler);
+
+    // Preload audio
+    this.moveAudio = new Audio("assets/move.mp3");
+    this.wallAudio = new Audio("assets/wall.mp3");
+    this.winAudio = new Audio("assets/win.mp3");
+    this.lossAudio = new Audio("assets/loss.mp3");
   }
 
   isVisible(y, x) {
@@ -141,11 +153,16 @@ export class MazeGame {
   }
 
   updateTimerDisplay() {
-    const timerElem = document.getElementById("preview");
-    const timer2Elem = document.getElementById("escape");
-
-    timerElem.textContent = `Preview: ${this.previewTimeLeft}`;
-    timer2Elem.textContent = `Escape: ${this.escapeTimeLeft}`;
+    const previewBar = document.getElementById("preview-bar");
+    const escapeBar = document.getElementById("escape-bar");
+    if (previewBar) {
+      previewBar.max = 5;
+      previewBar.value = this.previewTimeLeft;
+    }
+    if (escapeBar) {
+      escapeBar.max = this.initialEscapeTime;
+      escapeBar.value = this.escapeTimeLeft;
+    }
   }
   updateStepsDisplay() {
     const stepsElem = document.getElementById("steps");
@@ -163,12 +180,18 @@ export class MazeGame {
         this.stepsTaken += 1;
         this.renderMazeGrid();
         this.updateStepsDisplay();
+        if (this.moveAudio)
+          (this.moveAudio.currentTime = 0), this.moveAudio.play();
         if (this.x === this.endX && this.y === this.endY) {
           this.gameWon();
         }
       } else {
+        if (this.wallAudio)
+          (this.wallAudio.currentTime = 0), this.wallAudio.play();
       }
     } else {
+      if (this.wallAudio)
+        (this.wallAudio.currentTime = 0), this.wallAudio.play();
     }
   }
 
@@ -186,6 +209,7 @@ export class MazeGame {
 
   gameWon() {
     console.log("WON");
+    if (this.winAudio) (this.winAudio.currentTime = 0), this.winAudio.play();
     this.endGame();
     renderCongrats({
       steps: this.stepsTaken,
@@ -196,6 +220,7 @@ export class MazeGame {
 
   gameLost() {
     console.log("LOST");
+    if (this.lossAudio) (this.lossAudio.currentTime = 0), this.lossAudio.play();
     this.endGame();
     renderLoss();
   }

@@ -21,5 +21,5 @@ switch (loginState) {
   default:
     renderLoginPage();
 }
-renderMainPage();
-// renderMazeGame();
+//renderMazeGameTemp(1);
+//renderMazeGame();

@@ -16,8 +16,8 @@ export class Congrats {
   }
 
   addButtonListeners() {
-    const playAgainBtn = document.getElementById("congrats-play-again");
-    const leaderboardBtn = document.getElementById("congrats-view-leaderboard");
+    const playAgainBtn = document.getElementById("play-again-btn");
+    const leaderboardBtn = document.getElementById("view-leaderboard-btn");
 
     playAgainBtn.addEventListener("click", () => {
       renderMazeGameTemp(this.mazeId);
