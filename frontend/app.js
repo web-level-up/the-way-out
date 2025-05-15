@@ -6,6 +6,7 @@ import { renderErrorPage } from "./scripts/rendering/render-error.js";
 import { renderMainPage } from "./scripts/rendering/render-main-page.js";
 import { renderMazeGameTemp } from "./scripts/rendering/render-maze-game-temp.js";
 import { renderMazeDetailsPage } from "./scripts/rendering/render-maze-details.js";
+//import { renderMazeSelectionPage } from "./scripts/rendering/render-maze-selection.js";
 await loadConfig();
 const loginState = await handleOAuthCallback();
 switch (loginState) {
@@ -21,5 +22,7 @@ switch (loginState) {
   default:
     renderLoginPage();
 }
+
+//renderMazeSelectionPage();
 //renderMazeGameTemp(1);
 //renderMazeGame();

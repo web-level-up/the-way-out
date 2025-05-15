@@ -11,14 +11,6 @@
   --leaderboard-table-td-text-dark: #000;
 }
 
-.light-mode {
-  --leaderboard-bg: var(--leaderboard-bg-light);
-  --leaderboard-header-text: var(--leaderboard-header-text-light);
-  --leaderboard-table-th-bg: var(--leaderboard-table-th-bg-light);
-  --leaderboard-table-td-bg: var(--leaderboard-table-td-bg-light);
-  --leaderboard-table-td-text: #222;
-}
-
 #leaderboard-container {
   display: grid;
   gap: 1rem;
