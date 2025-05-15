@@ -5,16 +5,9 @@ const JWKS = createRemoteJWKSet(
 );
 
 export const auth = async (req, res, next) => {
-  // JWT authentication temporarily disabled for local testing
-  // Uncomment the code below to re-enable authentication
-  return next();
-
-  /*
   if (
     req.path === "/api/auth/login" ||
-    req.path === "/api/health" ||
-    req.path === "/api/mazes"
-  )
+    req.path === "/api/health" )
     return next();
 
   const authHeader = req.headers["authorization"];
@@ -34,5 +27,4 @@ export const auth = async (req, res, next) => {
     console.error("Invalid Google token:", err);
     res.status(401).json({ error: "Invalid or expired token" });
   }
-  */
 };
