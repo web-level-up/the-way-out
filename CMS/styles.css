@@ -17,33 +17,33 @@ header {
 }
 
 input {
-    font-size: 0.875rem;
-    line-height: 1.25rem;
-    padding: 0.5rem 0.75rem;
-    border: 1px solid #ddd;
-    width: 100%;
-    border-radius: 0.4rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #ddd;
+  width: 100%;
+  border-radius: 0.4rem;
 }
 
 textarea {
-    font-size: 0.875rem;
-    padding: 0.5rem 0.75rem;
-    width: 100%;
-    border: 1px solid #ddd;
-    border-radius: 0.4rem;
-    resize: vertical;
+  font-size: 0.875rem;
+  padding: 0.5rem 0.75rem;
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 0.4rem;
+  resize: vertical;
 }
 
 button {
-    font-weight: 500;
-    font-size: 0.875rem;
-    line-height: 1.25rem;
-    padding: 0.5rem 1rem;
-    border-radius: 0.4rem;
-    border-width: 0;
-    height: 2.5rem;
-    justify-content: center;
-    align-items: center;
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.4rem;
+  border-width: 0;
+  height: 2.5rem;
+  justify-content: center;
+  align-items: center;
 }
 
 .container {
@@ -81,7 +81,7 @@ button {
 }
 
 .add-btn {
-  background: #4caf50;
+  background: #4c4eaf;
   color: white;
 }
 
@@ -99,7 +99,7 @@ button {
   display: grid;
   gap: 1rem;
   justify-content: center;
-    align-items: center;
+  align-items: center;
 }
 
 #mazeDetails {
@@ -118,4 +118,10 @@ button {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
+}
+
+.maze-btn.active {
+  background-color: #4caf50;
+  color: white;
+  font-weight: bold;
 }

@@ -1,16 +1,13 @@
-import { getConfig } from "../config-loader.js";
 import { renderMazeCard } from "./render-maze-card.js";
 import { loadPage } from "./renderer.js";
 import { renderErrorPage } from "./render-error.js";
-import { renderLoginPage } from "./render-login.js";
 import { HttpError } from "../custom-errors.js";
-import { getDataFromUrl, toggleTheme } from "../util.js";
+import { getDataFromUrl } from "../util.js";
 import { navigate } from "../router.js";
 
 export function renderMazeSelectionPage() {
   return loadPage("views/maze-selection.html").then(() => {
-    const themeBtn = document.getElementById("theme-toggle-btn");
-    if (themeBtn) themeBtn.onclick = toggleTheme;
+    document.body.classList.remove("light-mode");
     const mazeContainer = document.getElementById("mazes");
 
     return getDataFromUrl("/api/mazes")

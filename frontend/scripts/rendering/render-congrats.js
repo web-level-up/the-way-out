@@ -1,14 +1,24 @@
 import { loadPage } from "./renderer.js";
-import { Congrats } from "../congrats.js";
 import { renderLeaderboardPage } from "./render-leaderboard-page.js";
 import { renderMazeGameTemp } from "./render-maze-game-temp.js";
 import { authError, postDataToUrl } from "../util.js";
 
 export function renderCongrats({ steps, time, mazeId }) {
   loadPage("/views/game-congrats.html").then(() => {
-    const congrats = new Congrats(mazeId, steps, time);
-    congrats.show();
-    congrats.addButtonListeners(renderMazeGameTemp, renderLeaderboardPage);
+    const stepsElem = document.getElementById("congrats-steps");
+    const timeElem = document.getElementById("congrats-time");
+    if (stepsElem) stepsElem.textContent = `Steps taken: ${steps}`;
+    if (timeElem) timeElem.textContent = `Time left: ${time}`;
+
+    const playAgainBtn = document.getElementById("play-again-btn");
+    const leaderboardBtn = document.getElementById("view-leaderboard-btn");
+
+    playAgainBtn.addEventListener("click", () => {
+      renderMazeGameTemp(mazeId);
+    });
+    leaderboardBtn.addEventListener("click", () => {
+      renderLeaderboardPage();
+    });
   });
 
   postDataToUrl("/api/mazes/completions", {
