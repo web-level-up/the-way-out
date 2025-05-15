@@ -26,7 +26,7 @@ CREATE TABLE "maze_completions" (
     "id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY NOT NULL,
     "user_id" integer NOT NULL,
     "maze_id" integer NOT NULL,
-    "time_taken_ms" integer NOT NULL CHECK (time_taken_ms >= 0),
+    "time_taken_seconds" integer NOT NULL CHECK (time_taken_seconds >= 0),
     "steps_taken" integer NOT NULL CHECK (steps_taken >= 0)
 );
 ALTER TABLE "mazes"
