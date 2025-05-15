@@ -129,13 +129,13 @@ export const postCompletion = (mazeId, playerGoogleId, timeTaken, stepsTaken) =>
   sql`WITH user_data AS (
         SELECT id FROM users WHERE google_id = ${playerGoogleId}
       )
-      INSERT INTO maze_completions (maze_id, user_id, time_taken, steps_taken)
+      INSERT INTO maze_completions (maze_id, user_id, time_taken_ms, steps_taken)
       VALUES (${mazeId}, (SELECT id FROM user_data LIMIT 1), ${timeTaken}, ${stepsTaken})
       RETURNING *`.then((rows) => rows[0]);
 
 export const getLeaderboard = (mazeId) =>
   sql`
-    SELECT u.username, first_completions.time_taken, first_completions.steps_taken
+    SELECT u.username, first_completions.time_taken_ms, first_completions.steps_taken
     FROM (
       SELECT mc_inner.*
       FROM maze_completions mc_inner
@@ -149,12 +149,12 @@ export const getLeaderboard = (mazeId) =>
         )
     ) AS first_completions
       INNER JOIN users u ON first_completions.user_id = u.id
-    ORDER BY first_completions.time_taken ASC
+    ORDER BY first_completions.time_taken_ms ASC
         LIMIT 10;
   `;
 export const getUserMazeCompletions = (mazeId, userId) =>
   sql`
-    SELECT u.username, mc.time_taken, mc.steps_taken
+    SELECT u.username, mc.time_taken_ms, mc.steps_taken
     FROM maze_completions mc
       INNER JOIN users u ON mc.user_id = u.id
     WHERE mc.maze_id = ${mazeId}
