@@ -2,7 +2,8 @@
 INSERT INTO "difficulty_levels" ("difficulty_level_name")
 VALUES ('Easy'),
     ('Medium'),
-    ('Hard');
+    ('Hard'),
+    ('Extreme');
 -- Insert users
 INSERT INTO "users" ("google_id", "username")
 VALUES ('oauth_001', 'alice'),
@@ -15,7 +16,7 @@ VALUES ('oauth_001', 'alice'),
     ('oauth_008', 'heidi'),
     ('oauth_009', 'ivan'),
     ('oauth_010', 'judy');
--- Insert mazes (25 layouts)
+-- Insert mazes (20 layouts)
 INSERT INTO "mazes" (
         "maze_layout_url",
         "difficulty_level_id",
@@ -67,6 +68,46 @@ VALUES (
         9
     ),
     (
+        'https://maze-blob.s3.af-south-1.amazonaws.com/1.txt',
+        1,
+        1,
+        5,
+        1,
+        1,
+        1,
+        3
+    ),
+(
+        'https://maze-blob.s3.af-south-1.amazonaws.com/2.txt',
+        1,
+        2,
+        8,
+        6,
+        1,
+        1,
+        6
+    ),
+(
+        'https://maze-blob.s3.af-south-1.amazonaws.com/3.txt',
+        1,
+        3,
+        10,
+        0,
+        1,
+        8,
+        8
+    ),
+(
+        'https://maze-blob.s3.af-south-1.amazonaws.com/4.txt',
+        1,
+        4,
+        12,
+        1,
+        10,
+        10,
+        1
+    ),
+(
         'https://maze-blob.s3.af-south-1.amazonaws.com/5.txt',
         2,
         5,
