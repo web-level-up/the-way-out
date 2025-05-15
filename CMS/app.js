@@ -31,7 +31,7 @@ function renderMazeList() {
   state.mazes.forEach((maze) => {
     const button = document.createElement("button");
     button.className = "maze-btn";
-    button.textContent = `Level #${maze.maze_level}`;
+    button.textContent = `Maze #${maze.id}`;
     button.addEventListener("click", () => showMazeDetails(maze));
     sidebar.appendChild(button);
   });
@@ -40,8 +40,28 @@ function renderMazeList() {
 async function showMazeDetails(maze) {
   state.currentMaze = maze;
 
-  const response = await fetch(`http://localhost:3000/api/mazes/${maze.id}`);
-  maze = await response.json();
+  // Remove active class from all maze buttons
+  const allMazeButtons = sidebar.querySelectorAll(".maze-btn:not(#addMazeBtn)");
+  allMazeButtons.forEach((btn) => btn.classList.remove("active"));
+
+  // Add active class to the selected maze button
+  if (maze.id) {
+    const selectedButton = sidebar.querySelector(
+      `.maze-btn:not(#addMazeBtn):nth-child(${
+        state.mazes.findIndex((m) => m.id === maze.id) + 2
+      })`
+    );
+    if (selectedButton) {
+      selectedButton.classList.add("active");
+    }
+  }
+
+  if (maze.id) {
+    const response = await fetch(`http://localhost:3000/api/mazes/${maze.id}`);
+    maze = await response.json();
+  } else {
+    maze.id = "new";
+  }
 
   // Clear previous content
   while (mazeDetails.firstChild) {
@@ -128,7 +148,7 @@ async function showMazeDetails(maze) {
     createTextField("mazeLevel", maze.maze_level, "number")
   );
   levelInputs.appendChild(
-    createTextField("mazeDifficulty", maze.difficulty_name)
+    createTextField("mazeDifficulty", maze.difficulty_id, "number")
   );
   detailsContainer.appendChild(levelInputs);
 
@@ -235,28 +255,32 @@ function drawMaze(encoding) {
 async function addMaze() {
   // Create a blank maze template
   const blankMaze = {
-    id: "new",
     maze_layout: "",
     x_starting_position: 0,
     y_starting_position: 0,
     x_ending_position: 0,
     y_ending_position: 0,
     maze_level: state.mazes.length + 1,
-    difficulty_name: "Easy",
+    difficulty_id: 1,
   };
 
   // Show the edit screen for the new maze
   showMazeDetails(blankMaze);
 
-//   // Update publish button behavior for new mazes
-//   const publishBtn = document.getElementById("publishMazeBtn");
-//   if (publishBtn) {
-//     publishBtn.textContent = "Create";
-//     publishBtn.removeEventListener("click", null);
-//     publishBtn.addEventListener("click", () => {
-//       createNewMaze();
-//     });
-//   }
+  // Update publish button behavior for new mazes
+  const publishBtn = document.getElementById("publishMazeBtn");
+  if (publishBtn) {
+    publishBtn.textContent = "Create";
+
+    // Remove all existing click listeners using cloneNode
+    const newButton = publishBtn.cloneNode(true);
+    publishBtn.parentNode.replaceChild(newButton, publishBtn);
+
+    // Add the new event listener to the fresh button
+    newButton.addEventListener("click", () => {
+      createNewMaze();
+    });
+  }
 }
 
 // Create a new maze from the form data
@@ -269,6 +293,7 @@ async function createNewMaze() {
       y_starting_position: document.getElementById("mazeStartingY").value,
       x_ending_position: document.getElementById("mazeEndingX").value,
       y_ending_position: document.getElementById("mazeEndingY").value,
+      difficulty_id: document.getElementById("mazeDifficulty").value,
       maze_level: document.getElementById("mazeLevel").value,
     };
 
@@ -278,7 +303,7 @@ async function createNewMaze() {
       return;
     }
 
-    const response = await fetch(API_URL, {
+    const response = await fetch("http://localhost:3000/api/mazes", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -292,8 +317,8 @@ async function createNewMaze() {
 
     const createdMaze = await response.json();
     state.mazes.push(createdMaze);
+    await fetchMazes(); // Refresh the maze list
     renderMazeList();
-    showMazeDetails(createdMaze);
     alert("Maze created successfully!");
   } catch (error) {
     console.error("Error creating maze:", error);
@@ -312,18 +337,9 @@ async function PublishMaze(maze) {
       y_starting_position: document.getElementById("mazeStartingY").value,
       x_ending_position: document.getElementById("mazeEndingX").value,
       y_ending_position: document.getElementById("mazeEndingY").value,
+      difficulty_id: document.getElementById("mazeDifficulty").value,
       maze_level: document.getElementById("mazeLevel").value,
     };
-
-    // Check if anything has changed
-    const hasChanges = Object.keys(updatedMaze).some(
-      (key) => updatedMaze[key] !== maze[key]
-    );
-
-    if (!hasChanges) {
-      console.log("No changes detected");
-      return;
-    }
 
     const response = await fetch(`http://localhost:3000/api/mazes`, {
       method: "PUT",
@@ -342,7 +358,6 @@ async function PublishMaze(maze) {
     state.mazes[index] = result;
 
     alert("Maze published successfully!");
-    showMazeDetails(result);
   } catch (error) {
     console.error("Error updating maze:", error);
     alert("Failed to update maze. Please try again.");
