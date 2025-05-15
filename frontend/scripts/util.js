@@ -1,6 +1,7 @@
 import { HttpError } from "./custom-errors.js";
 import { getConfig } from "./config-loader.js";
 import { navigate } from "./router.js";
+import { renderErrorPage } from "./rendering/render-error.js";
 
 export function clearQueryParams() {
   const url = new URL(window.location.href);

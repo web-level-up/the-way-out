@@ -1,7 +1,7 @@
 import { HttpError } from "../custom-errors.js";
 import { MazeGame } from "../maze-game.js";
 import { navigate } from "../router.js";
-import { getDataFromUrl } from "../util.js";
+import { authError, getDataFromUrl } from "../util.js";
 import { renderErrorPage } from "./render-error.js";
 import { loadPage } from "./renderer.js";
 
