@@ -233,29 +233,71 @@ function drawMaze(encoding) {
 
 // Add a new maze
 async function addMaze() {
-  const encoding = prompt("Enter maze encoding:");
-  if (!encoding) return;
+  // Create a blank maze template
+  const blankMaze = {
+    id: "new",
+    maze_layout: "",
+    x_starting_position: 0,
+    y_starting_position: 0,
+    x_ending_position: 0,
+    y_ending_position: 0,
+    maze_level: state.mazes.length + 1,
+    difficulty_name: "Easy",
+  };
 
+  // Show the edit screen for the new maze
+  showMazeDetails(blankMaze);
+
+//   // Update publish button behavior for new mazes
+//   const publishBtn = document.getElementById("publishMazeBtn");
+//   if (publishBtn) {
+//     publishBtn.textContent = "Create";
+//     publishBtn.removeEventListener("click", null);
+//     publishBtn.addEventListener("click", () => {
+//       createNewMaze();
+//     });
+//   }
+}
+
+// Create a new maze from the form data
+async function createNewMaze() {
   try {
+    // Collect all field values from inputs
+    const newMaze = {
+      maze_layout: document.getElementById("mazeEncoding").value,
+      x_starting_position: document.getElementById("mazeStartingX").value,
+      y_starting_position: document.getElementById("mazeStartingY").value,
+      x_ending_position: document.getElementById("mazeEndingX").value,
+      y_ending_position: document.getElementById("mazeEndingY").value,
+      maze_level: document.getElementById("mazeLevel").value,
+    };
+
+    // Validate required fields
+    if (!newMaze.maze_layout) {
+      alert("Maze encoding is required");
+      return;
+    }
+
     const response = await fetch(API_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ encoding }),
+      body: JSON.stringify(newMaze),
     });
 
     if (!response.ok) {
-      throw new Error("Failed to add maze");
+      throw new Error("Failed to create maze");
     }
 
-    const newMaze = await response.json();
-    state.mazes.push(newMaze);
+    const createdMaze = await response.json();
+    state.mazes.push(createdMaze);
     renderMazeList();
-    showMazeDetails(newMaze);
+    showMazeDetails(createdMaze);
+    alert("Maze created successfully!");
   } catch (error) {
-    console.error("Error adding maze:", error);
-    alert("Failed to add maze. Please try again.");
+    console.error("Error creating maze:", error);
+    alert("Failed to create maze. Please try again.");
   }
 }
 
