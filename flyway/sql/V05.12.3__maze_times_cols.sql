@@ -13,3 +13,8 @@ WHERE "difficulty_level_name" = 'Medium';
 UPDATE "difficulty_levels"
 SET "preview_time_seconds" = 30, "escape_time_seconds" = 60
 WHERE "difficulty_level_name" = 'Hard';
+
+
+UPDATE "difficulty_levels"
+SET "preview_time_seconds" = 15, "escape_time_seconds" = 60
+WHERE "difficulty_level_name" = 'Extreme';
