@@ -1,13 +1,18 @@
 #leaderboard-container {
+  width: 100%;
+  min-height: 100%;
+}
+
+#leaderboard-grid {
   display: grid;
   gap: 1rem;
   grid-template-areas:
     "leaderboard-header"
-    "navigation-buttons"
     "maze-select-section"
+    "navigation-buttons"
     "leaderboard-sections";
   padding: 0;
-  margin: 0;
+  margin: auto;
   align-self: start;
   margin-top: 2rem;
   width: 95%;

@@ -1,5 +1,6 @@
 import { renderCongrats } from "./rendering/render-congrats.js";
 import { renderLoss } from "./rendering/render-loss.js";
+import { navigate } from "./router.js";
 
 export class MazeGame {
   mazeLayout = "";
@@ -16,7 +17,6 @@ export class MazeGame {
   timerInterval = null;
   keydownHandler = null;
   resizeHandler = null;
-  popstateHandler = null;
   mazeId = 0;
   moveAudio = null;
   wallAudio = null;
@@ -24,8 +24,9 @@ export class MazeGame {
   lossAudio = null;
   initialEscapeTime = 0;
   initialPreviewTime = 0;
+  popstateHandler = null;
 
-  constructor(maze) {
+  constructor(maze, popstateHandler) {
     this.mazeLayout = maze.maze_layout.replaceAll("\r\n", "");
     this.mazeId = maze.id;
     this.size = maze.maze_size;
@@ -49,6 +50,8 @@ export class MazeGame {
     this.initialEscapeTime = this.escapeTimeLeft;
     this.initialPreviewTime = this.previewTimeLeft;
 
+    this.popstateHandler = popstateHandler;
+
     this.renderMazeGrid();
     this.updateStepsDisplay();
     this.updateTimerDisplay(
@@ -60,26 +63,6 @@ export class MazeGame {
 
     this.resizeHandler = () => this.renderMazeGrid();
     window.addEventListener("resize", this.resizeHandler);
-
-    history.pushState({ page: 1 }, "", "");
-    this.popstateHandler = (() => {
-      const dialog = document.getElementById("close-dialog");
-      const closeBtn = document.getElementById("close-btn");
-      const stayBtn = document.getElementById("cancel-btn");
-      dialog.showModal();
-
-      stayBtn.onclick = () => {
-        history.pushState({ page: 1 }, "", "");
-        dialog.close();
-      };
-
-      closeBtn.onclick = () => {
-        this.endGame();
-        dialog.close();
-        history.back();
-      };
-    });
-    window.addEventListener("popstate", this.popstateHandler )
 
     const up = document.getElementById("up");
     const down = document.getElementById("down");
@@ -249,10 +232,8 @@ export class MazeGame {
       window.removeEventListener("resize", this.resizeHandler);
       this.resizeHandler = null;
     }
-
     if (this.popstateHandler) {
       window.removeEventListener("popstate", this.popstateHandler);
-      this.popstateHandler = null;
     }
   }
 

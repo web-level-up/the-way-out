@@ -6,26 +6,30 @@ import { renderErrorPage } from "./render-error.js";
 
 export function renderLeaderboardPage(mazeId = null) {
   return loadPage("views/leaderboard.html").then(() => {
+    document
+      .getElementById("home-button")
+      .addEventListener("click", () => navigate("menu"));
+
     let selectedMaze = mazeId;
     populateMazeSelect(mazeId);
     const playMaze = document.getElementById("play-maze-button");
     if (mazeId) {
       playMaze.style.display = "block";
-      playMaze.textContent = "Play Maze " + mazeId ?? ""
+      playMaze.textContent = "Play Maze " + mazeId ?? "";
     } else {
       playMaze.style.display = "none";
     }
 
     const mazeSelect = document.getElementById("maze-select");
     mazeSelect.addEventListener("change", function () {
-    selectedMaze = this.value
-    if (this.value) {
-      playMaze.style.display = "block";
-      playMaze.textContent = "Play Maze " + this.value ?? ""
-    } else {
-      playMaze.style.display = "none";
-    }
-    navigate("maze/leaderboard", {mazeId: selectedMaze})
+      selectedMaze = this.value;
+      if (this.value) {
+        playMaze.style.display = "block";
+        playMaze.textContent = "Play Maze " + this.value ?? "";
+      } else {
+        playMaze.style.display = "none";
+      }
+      navigate("maze/leaderboard", { mazeId: selectedMaze });
     });
 
     document

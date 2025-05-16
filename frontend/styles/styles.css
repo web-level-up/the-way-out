@@ -83,7 +83,14 @@ body {
   gap: 1rem;
 }
 
+#error-message {
+  font-size: 1.5rem;
+  color: white;
+}
+
 .menu-button {
+  display: flex;
+  align-items: center;
   border-radius: 1rem;
   border: 1.5px solid var(--maze-card-btn-border);
   padding: 0.75rem;
@@ -100,4 +107,22 @@ body {
   color: var(--maze-card-btn-hover-text);
   border-color: #4f8cff;
   cursor: pointer;
+}
+
+#navbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 0.5rem;
+  justify-content: flex-end;
+  flex: 0 0 auto;
+}
+
+.icon {
+  height: 1.75rem;
+  filter: invert(1);
+}
+
+.menu-button:hover .icon {
+ filter: invert(0);
 }

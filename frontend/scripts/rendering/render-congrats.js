@@ -7,6 +7,14 @@ import { renderErrorPage } from "./render-error.js";
 
 export function renderCongrats(steps, timeTaken, mazeId) {
   loadPage("/views/game-congrats.html").then(() => {
+    document
+      .getElementById("home-button")
+      .addEventListener("click", () => navigate("menu"));
+
+    document
+      .getElementById("maze-selection-btn")
+      .addEventListener("click", () => navigate("maze/selection"));
+
     const stepsElem = document.getElementById("congrats-steps");
     const timeElem = document.getElementById("congrats-time");
     if (stepsElem) stepsElem.textContent = `Steps taken: ${steps}`;
@@ -19,7 +27,7 @@ export function renderCongrats(steps, timeTaken, mazeId) {
       renderMazeGame(mazeId);
     });
     leaderboardBtn.addEventListener("click", () => {
-      navigate("maze/leaderboard", {mazeId: mazeId})
+      navigate("maze/leaderboard", { mazeId: mazeId });
     });
   });
 
@@ -32,7 +40,7 @@ export function renderCongrats(steps, timeTaken, mazeId) {
     .catch((error) => {
       if (error instanceof HttpError) {
         if (error.status === 401) {
-          authError();          
+          authError();
         } else {
           renderErrorPage(
             error.message ?? "An unexpected error has occurred",

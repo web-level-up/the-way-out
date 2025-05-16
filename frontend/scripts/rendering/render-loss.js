@@ -4,12 +4,16 @@ import { renderMazeGame } from "./render-maze-game.js";
 import { navigate } from "../router.js";
 export function renderLoss(maze_id) {
   loadPage("/views/game-loss.html").then(() => {
+    document
+      .getElementById("home-button")
+      .addEventListener("click", () => navigate("menu"));
+
     const mainMenuBtn = document.getElementById("main-menu-btn");
-    const logoutBtn = document.getElementById("logout-btn");
+    const mazeSelectionBtn = document.getElementById("maze-selection-btn");
     const retryBtn = document.getElementById("retry-btn");
 
     retryBtn.onclick = () => renderMazeGame(maze_id);
     mainMenuBtn.onclick = () => navigate("menu");
-    logoutBtn.onclick = () => logout();
+    mazeSelectionBtn.onclick = () => navigate("maze/selection");
   });
 }
