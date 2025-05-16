@@ -25,7 +25,7 @@ export class MazeGame {
   initialPreviewTime = 0;
 
   constructor(maze) {
-    this.mazeLayout = maze.maze_layout.replaceAll('\r\n','');
+    this.mazeLayout = maze.maze_layout.replaceAll("\r\n", "");
     this.mazeId = maze.id;
     this.size = maze.maze_size;
 
@@ -59,6 +59,7 @@ export class MazeGame {
 
     this.resizeHandler = () => this.renderMazeGrid();
     window.addEventListener("resize", this.resizeHandler);
+    window.addEventListener('popstate', () => this.endGame());
 
     const up = document.getElementById("up");
     const down = document.getElementById("down");
@@ -231,7 +232,6 @@ export class MazeGame {
   }
 
   gameWon() {
-    console.log(this.initialEscapeTime - this.escapeTimeLeft);
     if (this.winAudio) (this.winAudio.currentTime = 0), this.winAudio.play();
     this.endGame();
     renderCongrats(

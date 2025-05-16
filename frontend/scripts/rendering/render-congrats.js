@@ -30,7 +30,6 @@ export function renderCongrats(steps, timeTaken, mazeId) {
   })
     .then(() => {})
     .catch((error) => {
-      console.log(error)
       if (error instanceof HttpError) {
         if (error.status === 401) {
           authError();          
