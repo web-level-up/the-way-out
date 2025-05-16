@@ -376,11 +376,19 @@ async function deleteMaze(id) {
     if (!response.ok) {
       throw new Error("Failed to delete maze");
     }
-
     state.mazes = state.mazes.filter((maze) => maze.id !== id);
     renderMazeList();
-    mazeDetails.innerHTML =
-      "<p>Select a maze from the sidebar to view details</p>";
+
+    // Clear the maze details container
+    while (mazeDetails.firstChild) {
+      mazeDetails.removeChild(mazeDetails.firstChild);
+    }
+
+    // Create and append the message element
+    const messageElement = document.createElement("p");
+    messageElement.textContent =
+      "Select a maze from the sidebar to view details";
+    mazeDetails.appendChild(messageElement);
   } catch (error) {
     console.error("Error deleting maze:", error);
     alert("Failed to delete maze. Please try again.");
