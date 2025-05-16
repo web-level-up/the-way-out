@@ -16,6 +16,7 @@ export class MazeGame {
   timerInterval = null;
   keydownHandler = null;
   resizeHandler = null;
+  popstateHandler = null;
   mazeId = 0;
   moveAudio = null;
   wallAudio = null;
@@ -59,7 +60,26 @@ export class MazeGame {
 
     this.resizeHandler = () => this.renderMazeGrid();
     window.addEventListener("resize", this.resizeHandler);
-    window.addEventListener('popstate', () => this.endGame());
+
+    history.pushState({ page: 1 }, "", "");
+    this.popstateHandler = (() => {
+      const dialog = document.getElementById("close-dialog");
+      const closeBtn = document.getElementById("close-btn");
+      const stayBtn = document.getElementById("cancel-btn");
+      dialog.showModal();
+
+      stayBtn.onclick = () => {
+        history.pushState({ page: 1 }, "", "");
+        dialog.close();
+      };
+
+      closeBtn.onclick = () => {
+        this.endGame();
+        dialog.close();
+        history.back();
+      };
+    });
+    window.addEventListener("popstate", this.popstateHandler )
 
     const up = document.getElementById("up");
     const down = document.getElementById("down");
@@ -228,6 +248,11 @@ export class MazeGame {
     if (this.resizeHandler) {
       window.removeEventListener("resize", this.resizeHandler);
       this.resizeHandler = null;
+    }
+
+    if (this.popstateHandler) {
+      window.removeEventListener("popstate", this.popstateHandler);
+      this.popstateHandler = null;
     }
   }
 
