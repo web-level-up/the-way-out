@@ -19,15 +19,18 @@ router.post("/completions", async (req, res) => {
     const { mazeId, timeTaken, stepsTaken } = req.body;
     const googleId = req.user.sub;
 
-    // Validation
     if (!mazeId) {
       return res.status(400).json({ error: "Maze ID is required" });
-    }
-    if (timeTaken === undefined || timeTaken === null) {
+    } else if (typeof mazeId !== "number" && isNaN(Number(mazeId))) {
+      return res.status(400).json({ error: "Maze ID must be a number" });
+    } else if (!timeTaken) {
       return res.status(400).json({ error: "Time taken is required" });
-    }
-    if (stepsTaken === undefined || stepsTaken === null) {
+    } else if (typeof timeTaken !== "number" && isNaN(Number(timeTaken))) {
+      return res.status(400).json({ error: "Time taken must be a number" });
+    } else if (!stepsTaken) {
       return res.status(400).json({ error: "Steps taken is required" });
+    } else if (typeof stepsTaken !== "number" && isNaN(Number(stepsTaken))) {
+      return res.status(400).json({ error: "Steps taken must be a number" });
     }
 
     const result = await service.completeMaze(
@@ -51,59 +54,13 @@ router.get("/:id", async (req, res) => {
         .status(404)
         .json({ error: `Maze with ID ${req.params.id} not found.` });
 
-    const layoutResponse = await fetch(maze.maze_layout_url);
+    const layoutResponse = await fetch(maze.mazeLayoutUrl);
     const layout = await layoutResponse.text();
     res.json({ ...maze, maze_layout: layout });
   } catch (error) {
     return res
       .status(500)
       .json({ error: "Unable to fetch maze. Try again later." });
-  }
-});
-
-router.post("/", async (req, res) => {
-  try {
-    const maze = req.body;
-
-    // Validate maze object has required properties
-    if (!maze || !maze.maze_level || !maze.maze_layout) {
-      return res.status(400).json({
-        error: "Invalid maze data. Required fields: maze_level, maze_layout",
-      });
-    }
-
-    const mazeId = await service.addMaze(maze);
-    res.status(201).json(mazeId);
-  } catch (error) {
-    return res.status(500).json({ error: "Unable to save maze." });
-  }
-});
-
-router.delete("/:id", async (req, res) => {
-  try {
-    const mazeId = req.params.id;
-    await service.deleteMaze(mazeId);
-    res.status(204).send();
-  } catch (error) {
-    return res.status(500).json({ error: "Unable to delete maze." });
-  }
-});
-
-router.put("/", async (req, res) => {
-  try {
-    const maze = req.body;
-
-    // Basic validation
-    if (!maze || !maze.id) {
-      return res
-        .status(400)
-        .json({ error: "Invalid maze data. Maze ID is required." });
-    }
-
-    const mazeId = await service.editMaze(maze);
-    res.status(200).json(mazeId);
-  } catch (error) {
-    return res.status(500).json({ error: "Unable to edit maze." });
   }
 });
 
