@@ -5,12 +5,6 @@ export const listMazes = () => repo.getAllMazes();
 
 export const getMaze = (id) => repo.getMazeById(id);
 
-export const addMaze = (maze) => repo.addMaze(maze);
-
-export const deleteMaze = (id) => repo.deleteMaze(id);
-
-export const editMaze = async (maze) => repo.editMaze(maze);
-
 export const completeMaze = (mazeId, playerGoogleId, timeTaken, stepsTaken) =>
   repo.postCompletion(mazeId, playerGoogleId, timeTaken, stepsTaken);
 

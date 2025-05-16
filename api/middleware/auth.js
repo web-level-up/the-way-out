@@ -5,9 +5,7 @@ const JWKS = createRemoteJWKSet(
 );
 
 export const auth = async (req, res, next) => {
-  if (
-    req.path === "/api/auth/login" ||
-    req.path === "/api/health" )
+  if (req.path === "/api/auth/login" || req.path === "/api/health")
     return next();
 
   const authHeader = req.headers["authorization"];

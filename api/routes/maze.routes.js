@@ -8,14 +8,31 @@ router.get("/", async (req, res) => {
     const mazes = await service.listMazes();
     res.json(mazes);
   } catch (error) {
-    return res.status(500).json({ error: "Unable to fetch mazes. Try again later." });
+    return res
+      .status(500)
+      .json({ error: "Unable to fetch mazes. Try again later." });
   }
 });
 
 router.post("/completions", async (req, res) => {
-  const { mazeId, timeTaken, stepsTaken } = req.body;
-  const googleId = req.user.sub;
   try {
+    const { mazeId, timeTaken, stepsTaken } = req.body;
+    const googleId = req.user.sub;
+
+    if (!mazeId) {
+      return res.status(400).json({ error: "Maze ID is required" });
+    } else if (typeof mazeId !== "number" && isNaN(Number(mazeId))) {
+      return res.status(400).json({ error: "Maze ID must be a number" });
+    } else if (!timeTaken) {
+      return res.status(400).json({ error: "Time taken is required" });
+    } else if (typeof timeTaken !== "number" && isNaN(Number(timeTaken))) {
+      return res.status(400).json({ error: "Time taken must be a number" });
+    } else if (!stepsTaken) {
+      return res.status(400).json({ error: "Steps taken is required" });
+    } else if (typeof stepsTaken !== "number" && isNaN(Number(stepsTaken))) {
+      return res.status(400).json({ error: "Steps taken must be a number" });
+    }
+
     const result = await service.completeMaze(
       mazeId,
       googleId,
@@ -24,54 +41,26 @@ router.post("/completions", async (req, res) => {
     );
 
     res.status(201).json(result);
-  }
-  catch (error) {
+  } catch (error) {
     return res.status(500).json({ error: "Unable to save maze completion." });
   }
-
 });
 
 router.get("/:id", async (req, res) => {
   try {
     const maze = await service.getMaze(req.params.id);
     if (!maze)
-      return res.status(404).json({error: `Maze with ID ${req.params.id} not found.`});
+      return res
+        .status(404)
+        .json({ error: `Maze with ID ${req.params.id} not found.` });
 
-    const layoutResponse = await fetch(maze.maze_layout_url);
+    const layoutResponse = await fetch(maze.mazeLayoutUrl);
     const layout = await layoutResponse.text();
-    res.json({...maze, maze_layout: layout});
+    res.json({ ...maze, maze_layout: layout });
   } catch (error) {
-    return res.status(500).json({ error: "Unable to fetch maze. Try again later." });
-  }
-});
-
-router.post("/", async (req, res) => {
-  try {
-    const maze = req.body;
-    const mazeId = await service.addMaze(maze);
-    res.status(201).json(mazeId);
-  } catch (error) {
-    return res.status(500).json({ error: "Unable to save maze." });
-  }
-});
-
-router.delete("/:id", async (req, res) => {
-  try {
-    const mazeId = req.params.id;
-    await service.deleteMaze(mazeId);
-    res.status(204).send();
-  } catch (error) {
-    return res.status(500).json({ error: "Unable to delete maze." });
-  }
-});
-
-router.put("/", async (req, res) => {
-  try {
-    const maze = req.body;
-    const mazeId = service.editMaze(maze);
-    res.status(201).json(mazeId);
-  } catch (error) {
-    return res.status(500).json({ error: "Unable to edit maze." });
+    return res
+      .status(500)
+      .json({ error: "Unable to fetch maze. Try again later." });
   }
 });
 
@@ -80,7 +69,9 @@ router.get("/:id/leaderboard", async (req, res) => {
     const leaderboard = await service.getMazeLeaderboard(req.params.id);
     res.json(leaderboard);
   } catch (error) {
-    return res.status(500).json({ error: "Unable to fetch leaderboard. Try again later." });
+    return res
+      .status(500)
+      .json({ error: "Unable to fetch leaderboard. Try again later." });
   }
 });
 
@@ -92,7 +83,9 @@ router.get("/:id/completions/current-user", async (req, res) => {
     );
     res.json(completions);
   } catch (error) {
-    return res.status(500).json({ error: "Unable to fetch maze completions. Try again later." });
+    return res
+      .status(500)
+      .json({ error: "Unable to fetch maze completions. Try again later." });
   }
 });
 
