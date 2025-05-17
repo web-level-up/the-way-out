@@ -13,7 +13,7 @@ export function renderMazeCard(maze) {
       "#maze-size"
     ).textContent = `${maze.maze_size} x ${maze.maze_size}`;
     cardContainer.querySelector("#maze-difficulty").textContent =
-      maze.difficulty_name;
+      "ⓘ " + maze.difficulty_name;
     cardContainer.querySelector(
       "#maze-difficulty"
     ).title = `Difficulty: ${maze.difficulty_name}\nPreview time: ${maze.preview_time_seconds}s\nEscape time ${maze.escape_time_seconds}s`;

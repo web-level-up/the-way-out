@@ -6,6 +6,7 @@ import { renderLeaderboardPage } from "./rendering/render-leaderboard-page.js";
 import { renderMazeGame } from "./rendering/render-maze-game.js";
 import { handleOAuthCallback } from "./auth.js";
 import { renderUsernamePage } from "./rendering/render-username.js";
+import { renderCms } from "./rendering/render-cms.js";
 
 const routes = {
   "": async () => {
@@ -26,6 +27,10 @@ const routes = {
   },
   menu: () => {
     renderMainPage();
+  },
+  cms: (params) => {
+    const mazeId = params.get("mazeId");
+    renderCms(params);
   },
   "maze/selection": () => {
     renderMazeSelectionPage();

@@ -25,6 +25,18 @@ export function renderMainPage() {
       ).textContent = `Welcome ${localStorage.getItem(
         "username"
       )}! Do You Remember the Way Out?`;
+      const isAdmin = true;
+
+      if (isAdmin) {
+        const cmsButton = document.createElement("button");
+        cmsButton.id = "cms";
+        cmsButton.className = "menu-button";
+        cmsButton.textContent = "CMS";
+        cmsButton.addEventListener("click", () => navigate("cms"));
+
+        const container = document.getElementById("menu-container");
+        container.appendChild(cmsButton);
+      }
     }
   });
 }

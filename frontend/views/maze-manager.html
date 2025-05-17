@@ -1,0 +1,38 @@
+<section class="maze-details">
+  <h2>Maze</h2>
+  <section class="double-details">
+    <p><strong>Start X</strong></p>
+    <p><strong>Start Y</strong></p>
+  </section>
+  <section class="double-details">
+    <input id="maze-starting-x" class="cms-input" type="number" />
+    <input id="maze-starting-y" class="cms-input" type="number" />
+  </section>
+  <section class="double-details">
+    <p><strong>End X</strong></p>
+    <p><strong>End Y</strong></p>
+  </section>
+  <section class="double-details">
+    <input id="maze-ending-x" class="cms-input" type="number" />
+    <input id="maze-ending-y" class="cms-input" type="number" />
+  </section>
+  <section class="double-details">
+    <p><strong>Difficulty Level</strong></p>
+    <p><strong>Maze Level</strong></p>
+  </section>
+  <section class="double-details">
+    <input id="maze-level" class="cms-input" type="number" />
+    <input id="maze-difficulty-level" class="cms-input"type="number" />
+  </section>
+  <p id="maze-encoding-text">Maze Encoding:</p>
+  <textarea id="maze-encoding" rows="4"></textarea>
+  <p id="encoding-feedback-text">Valid grid: 9x9</p>
+  <section class="double-details">
+    <button id="publishMazeBtn" class="menu-button">Publish</button>
+    <button id="deleteMazeBtn" class="menu-button">Delete</button>
+  </section>
+</section>
+
+<section class="maze-details">
+  <canvas id="mazeCanvas" class="maze-canvas" width="500" height="500"></canvas>
+</section>

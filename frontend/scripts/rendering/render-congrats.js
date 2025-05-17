@@ -29,31 +29,31 @@ export function renderCongrats(steps, timeTaken, mazeId) {
     leaderboardBtn.addEventListener("click", () => {
       navigate("maze/leaderboard", { mazeId: mazeId });
     });
-  });
 
-  postDataToUrl("/api/mazes/completions", {
-    mazeId: mazeId,
-    timeTaken: timeTaken,
-    stepsTaken: steps,
-  })
-    .then(() => {})
-    .catch((error) => {
-      if (error instanceof HttpError) {
-        if (error.status === 401) {
-          authError();
+    postDataToUrl("/api/mazes/completions", {
+      mazeId: mazeId,
+      timeTaken: timeTaken,
+      stepsTaken: steps,
+    })
+      .then(() => {})
+      .catch((error) => {
+        if (error instanceof HttpError) {
+          if (error.status === 401) {
+            authError();
+          } else {
+            renderErrorPage(
+              error.message ?? "An unexpected error has occurred",
+              () => navigate("menu"),
+              "Return to menu"
+            );
+          }
         } else {
           renderErrorPage(
-            error.message ?? "An unexpected error has occurred",
+            "An unexpected error has occurred",
             () => navigate("menu"),
             "Return to menu"
           );
         }
-      } else {
-        renderErrorPage(
-          "An unexpected error has occurred",
-          () => navigate("menu"),
-          "Return to menu"
-        );
-      }
-    });
+      });
+  });
 }

@@ -46,6 +46,14 @@ export function renderLeaderboardPage(mazeId = null) {
 function populateMazeSelect(mazeId) {
   getDataFromUrl("/api/mazes")
     .then((mazes) => {
+      if (!mazes.some((maze) => maze.id === Number(mazeId))) {
+        renderErrorPage(
+          "Maze could not be found",
+          () => navigate("menu"),
+          "Go to menu"
+        );
+        return;
+      }
       const mazeSelectElement = document.getElementById("maze-select");
 
       const mazeOptions = getAllMazeOptions(mazes);
@@ -114,6 +122,12 @@ function getUserCompletionsData(mazeId) {
       if (error instanceof HttpError) {
         if (error.status === 401) {
           authError();
+        } else if (error.status === 404) {
+          renderErrorPage(
+            "Maze could not be found",
+            () => navigate("menu"),
+            "Go to menu"
+          );
         } else {
           renderErrorPage(
             error.message ?? "An unexpected error has occurred",
@@ -140,6 +154,12 @@ function getLeaderboardData(mazeId) {
       if (error instanceof HttpError) {
         if (error.status === 401) {
           authError();
+        } else if (error.status === 404) {
+          renderErrorPage(
+            "404 Maze could not be found",
+            () => navigate("menu"),
+            "Go to menu"
+          );
         } else {
           renderErrorPage(
             error.message ?? "An unexpected error has occurred",
