@@ -1,4 +1,12 @@
 <section id="game-page" class="light-mode">
+  <nav id="navbar">
+    <button id="home-button" class="menu-button">
+      <img src="./assets/home.png" alt="Home" id="home-logo" class="icon" />
+    </button>
+    <button id="back-button" class="menu-button">
+      <img src="./assets/back.png" alt="Back" id="back-logo" class="icon" />
+    </button>
+  </nav>
   <header id="game-banner">
     <section class="timer-left">
       <label id="timer-label" for="timer-bar">Preview:</label>
@@ -18,3 +26,10 @@
     </section>
   </footer>
 </section>
+<dialog id="close-dialog">
+  <p>Are you sure you want to leave the game. You will lose your progress!</p>
+  <section id="button-wrapper">
+    <button id="close-btn" class="menu-button">Leave</button>
+    <button id="cancel-btn" class="menu-button">Cancel</button>
+  </section>
+</dialog>

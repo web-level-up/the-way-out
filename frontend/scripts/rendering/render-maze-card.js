@@ -12,21 +12,23 @@ export function renderMazeCard(maze) {
     cardContainer.querySelector(
       "#maze-size"
     ).textContent = `${maze.maze_size} x ${maze.maze_size}`;
-    cardContainer.querySelector("#maze-difficulty").textContent = "⭐".repeat(
-      maze.difficulty_id
-    );
+    cardContainer.querySelector("#maze-difficulty").textContent =
+      "ⓘ " + maze.difficulty_name;
+    cardContainer.querySelector(
+      "#maze-difficulty"
+    ).title = `Difficulty: ${maze.difficulty_name}\nPreview time: ${maze.preview_time_seconds}s\nEscape time ${maze.escape_time_seconds}s`;
 
     const playBtn = cardContainer.querySelector("#play-btn-maze-card");
     if (playBtn) {
       playBtn.addEventListener("click", () => {
-        navigate("maze/game", {mazeId: maze.id})
+        navigate("maze/game", { mazeId: maze.id });
       });
     }
 
     const leaderboardBtn = cardContainer.querySelector("#leaderboard-btn");
     if (leaderboardBtn) {
       leaderboardBtn.addEventListener("click", () => {
-        navigate("maze/leaderboard", {mazeId: maze.id})
+        navigate("maze/leaderboard", { mazeId: maze.id });
       });
     }
     return cardContainer;

@@ -9,6 +9,10 @@ export function renderMazeSelectionPage() {
   return loadPage("views/maze-selection.html").then(() => {
     const mazeContainer = document.getElementById("mazes");
 
+    document
+      .getElementById("home-button")
+      .addEventListener("click", () => navigate("menu"));
+
     return getDataFromUrl("/api/mazes")
       .then((data) => {
         data.forEach((maze) => {

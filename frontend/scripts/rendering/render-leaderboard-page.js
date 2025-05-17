@@ -6,26 +6,30 @@ import { renderErrorPage } from "./render-error.js";
 
 export function renderLeaderboardPage(mazeId = null) {
   return loadPage("views/leaderboard.html").then(() => {
+    document
+      .getElementById("home-button")
+      .addEventListener("click", () => navigate("menu"));
+
     let selectedMaze = mazeId;
     populateMazeSelect(mazeId);
     const playMaze = document.getElementById("play-maze-button");
     if (mazeId) {
       playMaze.style.display = "block";
-      playMaze.textContent = "Play Maze " + mazeId ?? ""
+      playMaze.textContent = "Play Maze " + mazeId ?? "";
     } else {
       playMaze.style.display = "none";
     }
 
     const mazeSelect = document.getElementById("maze-select");
     mazeSelect.addEventListener("change", function () {
-    selectedMaze = this.value
-    if (this.value) {
-      playMaze.style.display = "block";
-      playMaze.textContent = "Play Maze " + this.value ?? ""
-    } else {
-      playMaze.style.display = "none";
-    }
-    navigate("maze/leaderboard", {mazeId: selectedMaze})
+      selectedMaze = this.value;
+      if (this.value) {
+        playMaze.style.display = "block";
+        playMaze.textContent = "Play Maze " + this.value ?? "";
+      } else {
+        playMaze.style.display = "none";
+      }
+      navigate("maze/leaderboard", { mazeId: selectedMaze });
     });
 
     document
@@ -42,6 +46,14 @@ export function renderLeaderboardPage(mazeId = null) {
 function populateMazeSelect(mazeId) {
   getDataFromUrl("/api/mazes")
     .then((mazes) => {
+      if (!mazes.some((maze) => maze.id === Number(mazeId))) {
+        renderErrorPage(
+          "Maze could not be found",
+          () => navigate("menu"),
+          "Go to menu"
+        );
+        return;
+      }
       const mazeSelectElement = document.getElementById("maze-select");
 
       const mazeOptions = getAllMazeOptions(mazes);
@@ -110,6 +122,12 @@ function getUserCompletionsData(mazeId) {
       if (error instanceof HttpError) {
         if (error.status === 401) {
           authError();
+        } else if (error.status === 404) {
+          renderErrorPage(
+            "Maze could not be found",
+            () => navigate("menu"),
+            "Go to menu"
+          );
         } else {
           renderErrorPage(
             error.message ?? "An unexpected error has occurred",
@@ -136,6 +154,12 @@ function getLeaderboardData(mazeId) {
       if (error instanceof HttpError) {
         if (error.status === 401) {
           authError();
+        } else if (error.status === 404) {
+          renderErrorPage(
+            "404 Maze could not be found",
+            () => navigate("menu"),
+            "Go to menu"
+          );
         } else {
           renderErrorPage(
             error.message ?? "An unexpected error has occurred",

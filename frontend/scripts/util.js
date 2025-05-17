@@ -54,6 +54,46 @@ export function postDataToUrl(url, body) {
   });
 }
 
+export function putReqToUrl(url, body) {
+  const config = getConfig();
+
+  return fetch(config.apiBaseUrl + url, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+    },
+    body: JSON.stringify(body),
+    signal: AbortSignal.timeout(5000),
+  }).then(async (response) => {
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new HttpError(response.status, errorData.error);
+    }
+    return response.json();
+  });
+}
+
+export function delReqToUrl(url, body) {
+  const config = getConfig();
+
+  return fetch(config.apiBaseUrl + url, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+    },
+    body: JSON.stringify(body),
+    signal: AbortSignal.timeout(5000),
+  }).then(async (response) => {
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new HttpError(response.status, errorData.error);
+    }
+    return response.json();
+  });
+}
+
 export function authError() {
   renderErrorPage(
     "Your session has expired, you will need to login again",

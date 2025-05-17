@@ -4,6 +4,7 @@ body {
 
 #maze-selection-container {
   width: 100%;
+  min-height: 100%;
 }
 
 #mazes {
@@ -21,8 +22,8 @@ body {
 #maze-selection-heading {
   font-size: 2rem;
   text-align: center;
-  margin-top: 3rem;
   color: white;
+  margin: 0;
 }
 
 .maze-card-container {

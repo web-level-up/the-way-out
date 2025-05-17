@@ -212,3 +212,26 @@ label[for="timer-bar"] {
   letter-spacing: 0.01em;
   text-shadow: 0 0.0625rem 0.25rem #000a;
 }
+
+#close-dialog {
+  border-radius: 2rem;
+  max-width: 60vw;
+}
+
+#close-btn,
+#cancel-btn {
+  background-color: rgba(53, 53, 57);
+}
+
+#close-btn:hover,
+#cancel-btn:hover {
+  background-color: #696060;
+}
+
+#button-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  width: 100%;
+  flex-wrap: wrap;
+}
