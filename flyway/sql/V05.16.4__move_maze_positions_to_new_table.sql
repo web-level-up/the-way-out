@@ -1,10 +1,10 @@
 CREATE TABLE maze_positions (
     id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY NOT NULL,
     maze_id integer NOT NULL,
-    x_starting_position integer NOT NULL CHECK (x >= 0),
-    y_starting_position integer NOT NULL CHECK (y >= 0),
-    x_ending_position integer NOT NULL CHECK (x >= 0),
-    y_ending_position integer NOT NULL CHECK (y >= 0)
+    x_starting_position integer NOT NULL CHECK (x_starting_position >= 0),
+    y_starting_position integer NOT NULL CHECK (y_starting_position >= 0),
+    x_ending_position integer NOT NULL CHECK (x_ending_position >= 0),
+    y_ending_position integer NOT NULL CHECK (y_ending_position >= 0)
 );
 
 ALTER TABLE maze_positions
