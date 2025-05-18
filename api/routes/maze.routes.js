@@ -1,13 +1,14 @@
 import express from "express";
-import * as service from "../services/maze.service.js";
+import * as mazeService from "../services/maze.service.js";
 import { validateMazeData } from "../utils/maze.utils.js";
 import { convertSnakeToCamelCase } from "../utils/general.utils.js";
+import * as userService from "../services/user.service.js";
 
 const router = express.Router();
 
 router.get("/", async (req, res) => {
   try {
-    const mazes = await service.listMazes();
+    const mazes = await mazeService.listMazes();
     res.json(mazes);
   } catch {
     return res
@@ -35,7 +36,7 @@ router.post("/completions", async (req, res) => {
       return res.status(400).json({ error: "Steps taken must be a number" });
     }
 
-    const result = await service.completeMaze(
+    const result = await mazeService.completeMaze(
       mazeId,
       googleId,
       timeTaken,
@@ -50,7 +51,7 @@ router.post("/completions", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
   try {
-    const maze = await service.getMaze(req.params.id);
+    const maze = await mazeService.getMaze(req.params.id);
     if (!maze)
       return res
         .status(404)
@@ -68,6 +69,10 @@ router.get("/:id", async (req, res) => {
 
 router.post("/", async (req, res) => {
   try {
+    if (!(await userService.doesUserHavePermissions(req.user.sub, "Maze Manager"))) {
+      return res.status(403).json({ error: "You do not have permission to add a maze." });
+    }
+
     const convertedBody = convertSnakeToCamelCase(req.body);
     convertedBody.difficultyLevelId = convertedBody.difficultyId;
 
@@ -86,7 +91,7 @@ router.post("/", async (req, res) => {
       yEndingPosition,
     } = convertedBody;
 
-    const mazeId = await service.addMaze({
+    const mazeId = await mazeService.addMaze({
       mazeLayout,
       difficultyLevelId,
       mazeLevel,
@@ -103,8 +108,12 @@ router.post("/", async (req, res) => {
 
 router.delete("/:id", async (req, res) => {
   try {
+    if (!(await userService.doesUserHavePermissions(req.user.sub, "Maze Manager"))) {
+      return res.status(403).json({ error: "You do not have permission to delete a maze." });
+    }
+
     const id = req.params.id;
-    await service.deleteMaze(id);
+    await mazeService.deleteMaze(id);
     res.status(200).json({ message: `Maze ${id} deleted successfully` });
   } catch (error) {
     if (error.name === "MazeNotFoundError") {
@@ -116,6 +125,10 @@ router.delete("/:id", async (req, res) => {
 
 router.put("/", async (req, res) => {
   try {
+    if (!(await userService.doesUserHavePermissions(req.user.sub, "Maze Manager"))) {
+      return res.status(403).json({ error: "You do not have permission to update a maze." });
+    }
+
     const convertedBody = convertSnakeToCamelCase(req.body);
     convertedBody.difficultyLevelId = convertedBody.difficultyId;
 
@@ -135,7 +148,7 @@ router.put("/", async (req, res) => {
       yEndingPosition,
     } = convertedBody;
 
-    const result = await service.editMaze({
+    const result = await mazeService.editMaze({
       id,
       mazeLayout,
       difficultyLevelId,
@@ -155,7 +168,7 @@ router.put("/", async (req, res) => {
 
 router.get("/:id/leaderboard", async (req, res) => {
   try {
-    const leaderboard = await service.getMazeLeaderboard(req.params.id);
+    const leaderboard = await mazeService.getMazeLeaderboard(req.params.id);
     res.json(leaderboard);
   } catch {
     return res
@@ -166,7 +179,7 @@ router.get("/:id/leaderboard", async (req, res) => {
 
 router.get("/:id/completions/current-user", async (req, res) => {
   try {
-    const completions = await service.getUserMazeCompletions(
+    const completions = await mazeService.getUserMazeCompletions(
       req.params.id,
       req.user.sub
     );

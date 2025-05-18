@@ -1,5 +1,5 @@
-import * as repo from "../repositories/roles.repository.js";
+import * as rolesRepository from "../repositories/roles.repository.js";
 
-export const getAllRoles = () => repo.getAllRoles();
+export const getAllRoles = () => rolesRepository.getAllRoles();
 
-export const getRoleByRoleName = (roleName) => repo.getRoleByRoleName(roleName);
+export const getRoleByRoleName = (roleName) => rolesRepository.getRoleByRoleName(roleName);
