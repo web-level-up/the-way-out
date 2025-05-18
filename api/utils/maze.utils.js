@@ -101,5 +101,5 @@ export function validateMazeData(body, requireId = false) {
     return mazePositionsError;
   }
 
-  return null; // No validation errors
+  return null;
 }
