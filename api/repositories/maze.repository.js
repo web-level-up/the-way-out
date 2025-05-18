@@ -35,20 +35,21 @@ export const getMazeById = (id) =>
     INNER JOIN maze_positions mp ON m.id = mp.maze_id
     WHERE m.id = ${id}`.then((rows) => rows[0]);
 
-export const addMaze = async (maze) => {
+export const addMaze = async ({
+  mazeLayout,
+  difficultyLevelId,
+  mazeLevel,
+  xStartingPosition,
+  yStartingPosition,
+  xEndingPosition,
+  yEndingPosition,
+}) => {
   return sql.begin(async (sqlTransaction) => {
     try {
-      const s3Key = `${maze.maze_level}.txt`;
+      const s3Key = `${mazeLevel}.txt`;
       const s3Url = `https://maze-blob.s3.af-south-1.amazonaws.com/${s3Key}`;
 
-      //maze.maze_size = Math.sqrt(maze.maze_layout.length);
-
-      maze.maze_size = Math.floor(Math.sqrt(maze.maze_layout.length));
-      maze.difficulty_level_id = maze.difficulty_id;
-      console.log("Maze size:", maze.maze_size);
-      console.log("maze_layout_url:", s3Url);
-      console.log("maze.difficulty_level_id:", maze.difficulty_level_id);
-      console.log("S3 URL:", s3Url);
+      let mazeSize = Math.sqrt(mazeLayout.length);
 
       // 2. Only if upload succeeds, insert into database with the real URL
       const result = await sqlTransaction`
@@ -59,10 +60,10 @@ export const addMaze = async (maze) => {
           maze_size
         ) 
         VALUES (
-          ${maze.maze_level}, 
+          ${mazeLevel}, 
           ${s3Url}, 
-          ${maze.difficulty_level_id},
-          ${maze.maze_size || null}
+          ${difficultyLevelId},
+          ${mazeSize}
         ) 
         RETURNING id
       `;
@@ -77,10 +78,10 @@ export const addMaze = async (maze) => {
           y_ending_position
         ) VALUES (
           ${mazeId},
-          ${maze.x_starting_position},
-          ${maze.y_starting_position},
-          ${maze.x_ending_position},
-          ${maze.y_ending_position}
+          ${xStartingPosition},
+          ${yStartingPosition},
+          ${xEndingPosition},
+          ${yEndingPosition}
         )
       `;
 
@@ -88,64 +89,72 @@ export const addMaze = async (maze) => {
       const command = new PutObjectCommand({
         Bucket: "maze-blob",
         Key: s3Key,
-        Body: maze.maze_layout,
+        Body: mazeLayout,
         ContentType: "text/plain",
       });
+
       s3.send(command, (err, data) => {
         if (err) {
-          console.error("Error uploading to S3:", err);
           throw new Error("S3 upload failed");
         }
       });
 
       return mazeId;
     } catch (error) {
-      // Any error (S3 upload or DB insert) will roll back the transaction
       console.error("Error adding maze:", error);
       throw error;
     }
   });
 };
 
-export const editMaze = async (maze) => {
-  console.log("Editing maze:", maze);
+export const editMaze = async ({
+  id,
+  mazeLayout,
+  difficultyLevelId,
+  mazeLevel,
+  xStartingPosition,
+  yStartingPosition,
+  xEndingPosition,
+  yEndingPosition,
+}) => {
   return sql.begin(async (sqlTransaction) => {
     try {
-      const s3Key = `${maze.maze_level}.txt`;
+      const s3Key = `${mazeLevel}.txt`;
       const s3Url = `https://maze-blob.s3.af-south-1.amazonaws.com/${s3Key}`;
 
-      if (maze.maze_layout) {
-        maze.maze_size = Math.sqrt(maze.maze_layout.length);
+      let mazeSize;
+      if (mazeLayout) {
+        mazeSize = Math.sqrt(mazeLayout.length);
       }
 
-      maze.difficulty_level_id = maze.difficulty_id;
-
+      // Update the maze record
       const result = await sqlTransaction`
         UPDATE mazes 
-        SET maze_level = ${maze.maze_level}, 
+        SET maze_level = ${mazeLevel}, 
             maze_layout_url = ${s3Url}, 
-            difficulty_level_id = ${maze.difficulty_level_id}, 
-            maze_size = ${maze.maze_size}
-        WHERE id = ${maze.id} 
+            difficulty_level_id = ${difficultyLevelId}, 
+            maze_size = ${mazeSize}
+        WHERE id = ${id} 
         RETURNING id
       `;
 
+      // Update the maze positions
       await sqlTransaction`
         UPDATE maze_positions
         SET 
-          x_starting_position = ${maze.x_starting_position},
-          y_starting_position = ${maze.y_starting_position},
-          x_ending_position = ${maze.x_ending_position},
-          y_ending_position = ${maze.y_ending_position}
-        WHERE maze_id = ${maze.id}
+          x_starting_position = ${xStartingPosition},
+          y_starting_position = ${yStartingPosition},
+          x_ending_position = ${xEndingPosition},
+          y_ending_position = ${yEndingPosition}
+        WHERE maze_id = ${id}
       `;
 
       // Only upload to S3 if a new maze_layout is provided
-      if (maze.maze_layout) {
+      if (mazeLayout) {
         const command = new PutObjectCommand({
           Bucket: "maze-blob",
           Key: s3Key,
-          Body: maze.maze_layout,
+          Body: mazeLayout,
           ContentType: "text/plain",
         });
 
@@ -166,9 +175,14 @@ export const editMaze = async (maze) => {
 };
 
 export const deleteMaze = (id) =>
-  sql`DELETE FROM mazes WHERE id = ${id} RETURNING id`.then(
-    (rows) => rows[0].id
-  );
+  sql`DELETE FROM mazes WHERE id = ${id} RETURNING id`.then((rows) => {
+    if (!rows || rows.length === 0) {
+      const error = new Error(`Maze with ID ${id} not found`);
+      error.name = "MazeNotFoundError";
+      throw error;
+    }
+    return rows[0].id;
+  });
 
 export const postCompletion = (mazeId, playerGoogleId, timeTaken, stepsTaken) =>
   sql`WITH user_data AS (
