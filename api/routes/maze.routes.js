@@ -56,6 +56,7 @@ router.post("/", async (req, res) => {
     const mazeId = await service.addMaze(maze);
     res.status(201).json(mazeId);
   } catch (error) {
+    console.log("Error adding maze: ", error);
     return res.status(500).json({ error: "Unable to save maze." });
   }
 });

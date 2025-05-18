@@ -48,6 +48,16 @@ export function renderMazeManager(state, renderMazeList, maze = null) {
         "maze-heading"
       ).textContent = `Maze Level ${maze.maze_level}`;
 
+      // Set the difficulty dropdown value correctly
+      const difficultySelect = document.getElementById("maze-difficulty-level");
+      if (difficultySelect) {
+        if (maze.difficulty_id) {
+          difficultySelect.value = maze.difficulty_id;
+        } else {
+          difficultySelect.value = "1"; // Default to Easy
+        }
+      }
+
       showMazeDetails(maze);
 
       // Add event listeners for publish and delete buttons
@@ -75,12 +85,27 @@ async function createNewMaze() {
     // Collect all field values from inputs
     const newMaze = {
       maze_layout: document.getElementById("maze-encoding").value,
-      x_starting_position: document.getElementById("maze-starting-x").value,
-      y_starting_position: document.getElementById("maze-starting-y").value,
-      x_ending_position: document.getElementById("maze-ending-x").value,
-      y_ending_position: document.getElementById("maze-ending-y").value,
-      difficulty_id: document.getElementById("maze-difficulty-level").value,
-      maze_level: document.getElementById("maze-level").value,
+      x_starting_position: parseInt(
+        document.getElementById("maze-starting-x").value,
+        10
+      ),
+      y_starting_position: parseInt(
+        document.getElementById("maze-starting-y").value,
+        10
+      ),
+      x_ending_position: parseInt(
+        document.getElementById("maze-ending-x").value,
+        10
+      ),
+      y_ending_position: parseInt(
+        document.getElementById("maze-ending-y").value,
+        10
+      ),
+      difficulty_id: parseInt(
+        document.getElementById("maze-difficulty-level").value,
+        10
+      ),
+      maze_level: parseInt(document.getElementById("maze-level").value, 10),
     };
 
     // Validate required fields
@@ -122,17 +147,17 @@ async function createNewMaze() {
       },
       body: JSON.stringify(newMaze),
     });
-
+    console.log("new maze: ", newMaze);
     if (!response.ok) {
       const errorMsg = await response.text();
       console.error("Failed to create maze:", errorMsg);
       throw new Error("Failed to create maze: " + errorMsg);
     }
 
-    const createdMaze = await response.json();
-    state.mazes.push(createdMaze);
-    await fetchMazes(); // Refresh the maze list -- rather navigate back to cms page
-    renderMazeList();
+    // const createdMaze = await response.json();
+    // state.mazes.push(createdMaze);
+    // await fetchMazes(); // Refresh the maze list -- rather navigate back to cms page
+    // renderMazeList();
     alert("Maze created successfully!");
   } catch (error) {
     console.error("Error creating maze:", error);
@@ -145,12 +170,27 @@ async function PublishMaze(maze) {
     const updatedMaze = {
       id: state.currentMaze.id,
       maze_layout: document.getElementById("maze-encoding").value,
-      x_starting_position: document.getElementById("maze-starting-x").value,
-      y_starting_position: document.getElementById("maze-starting-y").value,
-      x_ending_position: document.getElementById("maze-ending-x").value,
-      y_ending_position: document.getElementById("maze-ending-y").value,
-      difficulty_id: document.getElementById("maze-difficulty-level").value,
-      maze_level: document.getElementById("maze-level").value,
+      x_starting_position: parseInt(
+        document.getElementById("maze-starting-x").value,
+        10
+      ),
+      y_starting_position: parseInt(
+        document.getElementById("maze-starting-y").value,
+        10
+      ),
+      x_ending_position: parseInt(
+        document.getElementById("maze-ending-x").value,
+        10
+      ),
+      y_ending_position: parseInt(
+        document.getElementById("maze-ending-y").value,
+        10
+      ),
+      difficulty_id: parseInt(
+        document.getElementById("maze-difficulty-level").value,
+        10
+      ),
+      maze_level: parseInt(document.getElementById("maze-level").value, 10),
     };
 
     putReqToUrl("/api/mazes", updatedMaze)
