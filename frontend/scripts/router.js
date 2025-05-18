@@ -8,6 +8,8 @@ import { handleOAuthCallback } from "./auth.js";
 import { renderUsernamePage } from "./rendering/render-username.js";
 import { renderCms } from "./rendering/render-cms.js";
 
+let pageStack = [];
+
 const routes = {
   "": async () => {
     const loginState = await handleOAuthCallback();
@@ -53,11 +55,27 @@ export function router() {
   if (routeHandler) {
     routeHandler(params);
   } else {
-    renderErrorPage("404 Page could not be found", () => navigate(""), "Go to login");
+    renderErrorPage(
+      "404 Page could not be found",
+      () => navigate(""),
+      "Go to login"
+    );
   }
 }
 
 export function navigate(path, queryParams = {}) {
+  const [prevPath, prevQueryString] = window.location.hash.slice(1).split("?");
+  const prevQueryParams = new URLSearchParams(prevQueryString || "");
+
+  pageStack.push({ path: prevPath, queryParams: prevQueryParams });
+
   const searchParams = new URLSearchParams(queryParams).toString();
   window.location.hash = searchParams ? `${path}?${searchParams}` : path;
+}
+
+export function goBack() {
+  const prevPage = pageStack.pop() ?? { path: "menu", queryParams: {} };
+
+  navigate(prevPage.path, prevPage.queryParams);
+  pageStack.pop();
 }

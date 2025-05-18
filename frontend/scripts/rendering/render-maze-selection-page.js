@@ -3,7 +3,7 @@ import { loadPage } from "./renderer.js";
 import { renderErrorPage } from "./render-error.js";
 import { HttpError } from "../custom-errors.js";
 import { getDataFromUrl } from "../util.js";
-import { navigate } from "../router.js";
+import { goBack, navigate } from "../router.js";
 
 export function renderMazeSelectionPage() {
   return loadPage("views/maze-selection.html").then(() => {
@@ -12,6 +12,10 @@ export function renderMazeSelectionPage() {
     document
       .getElementById("home-button")
       .addEventListener("click", () => navigate("menu"));
+
+    document
+      .getElementById("back-button")
+      .addEventListener("click", () => goBack());
 
     return getDataFromUrl("/api/mazes")
       .then((data) => {
