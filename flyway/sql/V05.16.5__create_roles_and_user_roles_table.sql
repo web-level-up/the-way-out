@@ -15,5 +15,6 @@ ALTER TABLE user_roles
     ADD FOREIGN KEY (role_id) REFERENCES roles (id) ON DELETE CASCADE;
 
 INSERT INTO roles (role_name)
-VALUES ('Maze Manager'),
-       ('Player');
+VALUES ('Player'),
+       ('Maze Manager'),
+       ('User Manager');
