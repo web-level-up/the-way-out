@@ -108,6 +108,7 @@ export const addMaze = async (maze) => {
 };
 
 export const editMaze = async (maze) => {
+  console.log("Editing maze:", maze);
   return sql.begin(async (sqlTransaction) => {
     try {
       const s3Key = `${maze.maze_level}.txt`;
@@ -124,7 +125,7 @@ export const editMaze = async (maze) => {
         SET maze_level = ${maze.maze_level}, 
             maze_layout_url = ${s3Url}, 
             difficulty_level_id = ${maze.difficulty_level_id}, 
-            maze_size = ${maze.maze_size},
+            maze_size = ${maze.maze_size}
         WHERE id = ${maze.id} 
         RETURNING id
       `;

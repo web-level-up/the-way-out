@@ -166,9 +166,10 @@ async function createNewMaze() {
 }
 
 async function PublishMaze(maze) {
+  console.log("Publishing maze : ", maze);
   try {
     const updatedMaze = {
-      id: state.currentMaze.id,
+      id: maze.id,
       maze_layout: document.getElementById("maze-encoding").value,
       x_starting_position: parseInt(
         document.getElementById("maze-starting-x").value,
@@ -219,8 +220,8 @@ async function PublishMaze(maze) {
         }
       });
 
-    const index = state.mazes.findIndex((m) => m.id === maze.id);
-    state.mazes[index] = result;
+    // const index = state.mazes.findIndex((m) => m.id === maze.id);
+    // state.mazes[index] = result;
 
     alert("Maze published successfully!");
   } catch (error) {
@@ -261,18 +262,16 @@ async function deleteMaze(id) {
     });
 
   try {
-    renderMazeList();
-
-    // Clear the maze details container
-    while (mazeDetails.firstChild) {
-      mazeDetails.removeChild(mazeDetails.firstChild);
-    }
-
-    // Create and append the message element
-    const messageElement = document.createElement("p");
-    messageElement.textContent =
-      "Select a maze from the sidebar to view details";
-    mazeDetails.appendChild(messageElement);
+    // renderMazeList();
+    // // Clear the maze details container
+    // while (mazeDetails.firstChild) {
+    //   mazeDetails.removeChild(mazeDetails.firstChild);
+    // }
+    // // Create and append the message element
+    // const messageElement = document.createElement("p");
+    // messageElement.textContent =
+    //   "Select a maze from the sidebar to view details";
+    // mazeDetails.appendChild(messageElement);
   } catch (error) {
     console.error("Error deleting maze:", error);
     alert("Failed to delete maze. Please try again.");

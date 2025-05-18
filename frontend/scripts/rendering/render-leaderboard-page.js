@@ -1,6 +1,6 @@
 import { loadPage } from "./renderer.js";
 import { authError, getDataFromUrl } from "../util.js";
-import { navigate } from "../router.js";
+import { goBack, navigate } from "../router.js";
 import { HttpError } from "../custom-errors.js";
 import { renderErrorPage } from "./render-error.js";
 
@@ -9,6 +9,10 @@ export function renderLeaderboardPage(mazeId = null) {
     document
       .getElementById("home-button")
       .addEventListener("click", () => navigate("menu"));
+
+    document
+      .getElementById("back-button")
+      .addEventListener("click", () => goBack());
 
     let selectedMaze = mazeId;
     populateMazeSelect(mazeId);

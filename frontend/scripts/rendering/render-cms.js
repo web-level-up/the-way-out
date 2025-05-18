@@ -1,5 +1,5 @@
 import { HttpError } from "../custom-errors.js";
-import { navigate } from "../router.js";
+import { goBack, navigate } from "../router.js";
 import { getDataFromUrl } from "../util.js";
 import { renderErrorPage } from "./render-error.js";
 import { renderMazeManager } from "./render-maze-manager.js";
@@ -22,6 +22,10 @@ export function renderCms() {
       document
         .getElementById("home-button")
         .addEventListener("click", () => navigate("menu"));
+
+      document
+        .getElementById("back-button")
+        .addEventListener("click", () => goBack());
 
       getDataFromUrl("/api/mazes").then((data) => {
         state.mazes = data;
