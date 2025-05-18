@@ -1,6 +1,7 @@
 import { HttpError } from "../custom-errors.js";
 import { navigate } from "../router.js";
 import { delReqToUrl, getDataFromUrl, putReqToUrl } from "../util.js";
+import { renderCms } from "./render-cms.js";
 import { renderErrorPage } from "./render-error.js";
 import { loadComponent, loadPage } from "./renderer.js";
 
@@ -224,6 +225,7 @@ async function PublishMaze(maze) {
     // state.mazes[index] = result;
 
     alert("Maze published successfully!");
+    renderCms();
   } catch (error) {
     console.error("Error updating maze:", error);
     alert("Failed to update maze. Please try again.");
@@ -235,9 +237,12 @@ async function deleteMaze(id) {
 
   delReqToUrl(`/api/mazes/${id}`)
     .then((data) => {
-      state.mazes = state.mazes.filter((maze) => maze.id !== id);
+      console.log("Maze deleted successfully:", data);
+      renderCms();
+      //state.mazes = state.mazes.filter((maze) => maze.id !== id);
     })
     .catch((error) => {
+      console.log("error message: ", error.message);
       if (error instanceof HttpError) {
         if (error.status === 401) {
           renderErrorPage(
