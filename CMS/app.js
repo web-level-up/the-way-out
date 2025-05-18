@@ -40,11 +40,9 @@ function renderMazeList() {
 async function showMazeDetails(maze) {
   state.currentMaze = maze;
 
-  // Remove active class from all maze buttons
   const allMazeButtons = sidebar.querySelectorAll(".maze-btn:not(#addMazeBtn)");
   allMazeButtons.forEach((btn) => btn.classList.remove("active"));
 
-  // Add active class to the selected maze button
   if (maze.id) {
     const selectedButton = sidebar.querySelector(
       `.maze-btn:not(#addMazeBtn):nth-child(${
@@ -63,21 +61,17 @@ async function showMazeDetails(maze) {
     maze.id = "new";
   }
 
-  // Clear previous content
   while (mazeDetails.firstChild) {
     mazeDetails.removeChild(mazeDetails.firstChild);
   }
 
-  // Create maze details container
   const detailsContainer = document.createElement("section");
   detailsContainer.className = "maze-details";
 
-  // Create heading
   const heading = document.createElement("h2");
   heading.textContent = `Maze #${maze.id}`;
   detailsContainer.appendChild(heading);
 
-  // Create p for field names
   const createLabel = (text) => {
     const paragraph = document.createElement("p");
     const strong = document.createElement("strong");
@@ -86,7 +80,6 @@ async function showMazeDetails(maze) {
     return paragraph;
   };
 
-  // Create input fields - updated to use appropriate input elements
   const createTextField = (id, value, type = "text") => {
     if (id === "mazeEncoding") {
       const textarea = document.createElement("textarea");
@@ -152,17 +145,14 @@ async function showMazeDetails(maze) {
   );
   detailsContainer.appendChild(levelInputs);
 
-  // Create encoding section - this remains a textarea
   detailsContainer.appendChild(createLabel("Maze Encoding:"));
   const encodingTextarea = createTextField("mazeEncoding", maze.maze_layout);
   detailsContainer.appendChild(encodingTextarea);
 
-  // Add encoding feedback element
   const feedbackElement = document.createElement("p");
   feedbackElement.id = "encodingFeedback";
   detailsContainer.appendChild(feedbackElement);
 
-  // Create action buttons
   const actionsSection = document.createElement("section");
   actionsSection.className = "maze-actions details-double-input";
 
@@ -186,7 +176,6 @@ async function showMazeDetails(maze) {
 
   const mazeContainer = document.createElement("section");
   mazeContainer.className = "maze-details";
-  // Create canvas
   const canvas = document.createElement("canvas");
   canvas.id = "mazeCanvas";
   canvas.className = "maze-canvas";
@@ -197,13 +186,11 @@ async function showMazeDetails(maze) {
 
   drawMaze(maze.maze_layout);
 
-  // Add event listener to the encoding input
   const mazeEncodingInput = document.getElementById("mazeEncoding");
   mazeEncodingInput.addEventListener("input", () => {
     const encoding = mazeEncodingInput.value;
     const feedback = document.getElementById("encodingFeedback");
 
-    // Check if length is a perfect square
     const length = encoding.length;
     const sqrt = Math.sqrt(length);
 
@@ -218,17 +205,11 @@ async function showMazeDetails(maze) {
   });
 }
 
-// Draw the maze on the canvas based on the encoding
 function drawMaze(encoding) {
   const canvas = document.getElementById("mazeCanvas");
   const ctx = canvas.getContext("2d");
 
-  // Clear the canvas
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  // Parse the encoding and draw the maze
-  // This will depend on your specific encoding format
-  // Example implementation for a simple grid-based encoding:
 
   const rows = Math.sqrt(encoding.length);
   const cellSize = canvas.width / rows;
@@ -239,7 +220,6 @@ function drawMaze(encoding) {
     const x = col * cellSize;
     const y = row * cellSize;
 
-    // Example: '1' represents a wall, '0' represents an open path
     if (encoding[i] === "1") {
       ctx.fillStyle = "#000";
       ctx.fillRect(x, y, cellSize, cellSize);
@@ -251,9 +231,7 @@ function drawMaze(encoding) {
   }
 }
 
-// Add a new maze
 async function addMaze() {
-  // Create a blank maze template
   const blankMaze = {
     maze_layout: "",
     x_starting_position: 0,
@@ -264,29 +242,23 @@ async function addMaze() {
     difficulty_id: 1,
   };
 
-  // Show the edit screen for the new maze
   showMazeDetails(blankMaze);
 
-  // Update publish button behavior for new mazes
   const publishBtn = document.getElementById("publishMazeBtn");
   if (publishBtn) {
     publishBtn.textContent = "Create";
 
-    // Remove all existing click listeners using cloneNode
     const newButton = publishBtn.cloneNode(true);
     publishBtn.parentNode.replaceChild(newButton, publishBtn);
 
-    // Add the new event listener to the fresh button
     newButton.addEventListener("click", () => {
       createNewMaze();
     });
   }
 }
 
-// Create a new maze from the form data
 async function createNewMaze() {
   try {
-    // Collect all field values from inputs
     const newMaze = {
       maze_layout: document.getElementById("mazeEncoding").value,
       x_starting_position: document.getElementById("mazeStartingX").value,
@@ -297,7 +269,6 @@ async function createNewMaze() {
       maze_level: document.getElementById("mazeLevel").value,
     };
 
-    // Validate required fields
     if (!newMaze.maze_layout) {
       alert("Maze encoding is required");
       return;
@@ -317,7 +288,7 @@ async function createNewMaze() {
 
     const createdMaze = await response.json();
     state.mazes.push(createdMaze);
-    await fetchMazes(); // Refresh the maze list
+    await fetchMazes();
     renderMazeList();
     alert("Maze created successfully!");
   } catch (error) {
@@ -326,10 +297,8 @@ async function createNewMaze() {
   }
 }
 
-// Edit an existing maze
 async function PublishMaze(maze) {
   try {
-    // Collect all field values from inputs
     const updatedMaze = {
       id: state.currentMaze.id,
       maze_layout: document.getElementById("mazeEncoding").value,
@@ -364,7 +333,6 @@ async function PublishMaze(maze) {
   }
 }
 
-// Delete a maze
 async function deleteMaze(id) {
   if (!confirm("Are you sure you want to delete this maze?")) return;
 
@@ -379,12 +347,10 @@ async function deleteMaze(id) {
     state.mazes = state.mazes.filter((maze) => maze.id !== id);
     renderMazeList();
 
-    // Clear the maze details container
     while (mazeDetails.firstChild) {
       mazeDetails.removeChild(mazeDetails.firstChild);
     }
 
-    // Create and append the message element
     const messageElement = document.createElement("p");
     messageElement.textContent =
       "Select a maze from the sidebar to view details";
@@ -395,10 +361,8 @@ async function deleteMaze(id) {
   }
 }
 
-// Event listeners
 addMazeBtn.addEventListener("click", addMaze);
 
-// Initialize the application
 document.addEventListener("DOMContentLoaded", () => {
   fetchMazes();
 });
