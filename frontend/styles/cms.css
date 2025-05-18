@@ -123,9 +123,33 @@
 }
 
 #maze-details-wrapper {
-  display:flex;
+  display: flex;
   flex-wrap: wrap;
   gap: 2rem;
   padding: 1rem;
   justify-content: center;
+}
+
+#publishMazeBtn {
+  background-color: #22c55e;
+  color: #fff;
+  border: none;
+  font-weight: bold;
+  transition: background 0.2s, color 0.2s;
+}
+#publishMazeBtn:hover {
+  background-color: #16a34a;
+  color: #fff;
+}
+
+#deleteMazeBtn {
+  background-color: #ef4444;
+  color: #fff;
+  border: none;
+  font-weight: bold;
+  transition: background 0.2s, color 0.2s;
+}
+#deleteMazeBtn:hover {
+  background-color: #b91c1c;
+  color: #fff;
 }

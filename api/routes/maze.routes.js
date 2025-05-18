@@ -8,7 +8,9 @@ router.get("/", async (req, res) => {
     const mazes = await service.listMazes();
     res.json(mazes);
   } catch (error) {
-    return res.status(500).json({ error: "Unable to fetch mazes. Try again later." });
+    return res
+      .status(500)
+      .json({ error: "Unable to fetch mazes. Try again later." });
   }
 });
 
@@ -24,24 +26,27 @@ router.post("/completions", async (req, res) => {
     );
 
     res.status(201).json(result);
-  }
-  catch (error) {
+  } catch (error) {
     return res.status(500).json({ error: "Unable to save maze completion." });
   }
-
 });
 
 router.get("/:id", async (req, res) => {
+  console.log("Getting maze with ID:", req.params.id);
   try {
     const maze = await service.getMaze(req.params.id);
     if (!maze)
-      return res.status(404).json({error: `Maze with ID ${req.params.id} not found.`});
+      return res
+        .status(404)
+        .json({ error: `Maze with ID ${req.params.id} not found.` });
 
     const layoutResponse = await fetch(maze.maze_layout_url);
     const layout = await layoutResponse.text();
-    res.json({...maze, maze_layout: layout});
+    res.json({ ...maze, maze_layout: layout });
   } catch (error) {
-    return res.status(500).json({ error: "Unable to fetch maze. Try again later." });
+    return res
+      .status(500)
+      .json({ error: "Unable to fetch maze. Try again later." });
   }
 });
 
@@ -80,7 +85,9 @@ router.get("/:id/leaderboard", async (req, res) => {
     const leaderboard = await service.getMazeLeaderboard(req.params.id);
     res.json(leaderboard);
   } catch (error) {
-    return res.status(500).json({ error: "Unable to fetch leaderboard. Try again later." });
+    return res
+      .status(500)
+      .json({ error: "Unable to fetch leaderboard. Try again later." });
   }
 });
 
@@ -92,7 +99,9 @@ router.get("/:id/completions/current-user", async (req, res) => {
     );
     res.json(completions);
   } catch (error) {
-    return res.status(500).json({ error: "Unable to fetch maze completions. Try again later." });
+    return res
+      .status(500)
+      .json({ error: "Unable to fetch maze completions. Try again later." });
   }
 });
 

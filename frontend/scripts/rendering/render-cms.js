@@ -15,7 +15,9 @@ export function renderCms() {
     .then(() => {
       document
         .getElementById("add-maze-btn")
-        .addEventListener("click", () => renderMazeManager(state, renderMazeList, null));
+        .addEventListener("click", () =>
+          renderMazeManager(state, renderMazeList, null)
+        );
 
       document
         .getElementById("home-button")
@@ -32,9 +34,11 @@ export function renderCms() {
           const button = document.createElement("button");
           button.className = "maze-btn";
           button.textContent = `Maze #${maze.id}`;
-          button.addEventListener("click", () =>
-            renderMazeManager(state, maze)
-          );
+          button.addEventListener("click", () => {
+            //console.log(maze);
+            renderMazeManager(state, renderMazeList, maze);
+            //renderMazeManager(state,, maze);
+          });
           sidebar.appendChild(button);
         });
       });
@@ -71,7 +75,9 @@ export function renderCms() {
       const button = document.createElement("button");
       button.className = "maze-btn";
       button.textContent = `Maze #${maze.id}`;
-      button.addEventListener("click", () => renderMazeManager(state, renderMazeList, maze));
+      button.addEventListener("click", () =>
+        renderMazeManager(state, renderMazeList, maze)
+      );
       sidebar.appendChild(button);
     });
   }
