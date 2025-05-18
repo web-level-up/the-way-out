@@ -1,7 +1,7 @@
 import { loadPage } from "./renderer.js";
 import { renderMazeGame } from "./render-maze-game.js";
 import { authError, postDataToUrl } from "../util.js";
-import { navigate } from "../router.js";
+import { goBack, navigate } from "../router.js";
 import { HttpError } from "../custom-errors.js";
 import { renderErrorPage } from "./render-error.js";
 
@@ -10,6 +10,10 @@ export function renderCongrats(steps, timeTaken, mazeId) {
     document
       .getElementById("home-button")
       .addEventListener("click", () => navigate("menu"));
+
+    document
+      .getElementById("back-button")
+      .addEventListener("click", () => goBack());
 
     document
       .getElementById("maze-selection-btn")

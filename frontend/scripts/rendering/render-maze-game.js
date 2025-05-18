@@ -1,6 +1,6 @@
 import { HttpError } from "../custom-errors.js";
 import { MazeGame } from "../maze-game.js";
-import { navigate } from "../router.js";
+import { goBack, navigate } from "../router.js";
 import { authError, getDataFromUrl } from "../util.js";
 import { renderErrorPage } from "./render-error.js";
 import { loadPage } from "./renderer.js";
@@ -11,7 +11,7 @@ export function renderMazeGame(mazeId) {
 
     history.pushState({ page: 1 }, "", "");
     const popstateHandler = () => {
-      leavePage(() => history.back(), game, popstateHandler);
+      leavePage(() => goBack(), game, popstateHandler);
     };
     window.addEventListener("popstate", popstateHandler);
 
@@ -24,7 +24,7 @@ export function renderMazeGame(mazeId) {
     document
       .getElementById("back-button")
       .addEventListener("click", () =>
-        leavePage(() => navigate("maze/selection"), game, popstateHandler)
+        leavePage(() => goBack(), game, popstateHandler)
       );
 
     getDataFromUrl(`/api/mazes/${mazeId}`)
