@@ -4,6 +4,7 @@ import healthRoute from "./routes/health.routes.js";
 import mazeRoutes from "./routes/maze.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 import userRoutes from "./routes/user.routes.js";
+import rolesRoutes from "./routes/roles.routes.js";
 import { auth } from "./middleware/auth.js";
 import { cors } from "./middleware/cors.js";
 
@@ -17,6 +18,7 @@ app.use("/api/health", healthRoute);
 app.use("/api/mazes", mazeRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
+app.use("/api/roles", rolesRoutes);
 
 dotenv.config();
 
