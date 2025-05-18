@@ -46,7 +46,7 @@ export function renderLeaderboardPage(mazeId = null) {
 function populateMazeSelect(mazeId) {
   getDataFromUrl("/api/mazes")
     .then((mazes) => {
-      if (!mazes.some((maze) => maze.id === Number(mazeId))) {
+      if (mazeId && !mazes.some((maze) => maze.id === Number(mazeId))) {
         renderErrorPage(
           "Maze could not be found",
           () => navigate("menu"),
