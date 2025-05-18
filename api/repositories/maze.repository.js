@@ -174,9 +174,14 @@ export const editMaze = async ({
 };
 
 export const deleteMaze = (id) =>
-  sql`DELETE FROM mazes WHERE id = ${id} RETURNING id`.then(
-    (rows) => rows[0].id
-  );
+  sql`DELETE FROM mazes WHERE id = ${id} RETURNING id`.then((rows) => {
+    if (!rows || rows.length === 0) {
+      const error = new Error(`Maze with ID ${id} not found`);
+      error.name = "MazeNotFoundError";
+      throw error;
+    }
+    return rows[0].id;
+  });
 
 export const postCompletion = (mazeId, playerGoogleId, timeTaken, stepsTaken) =>
   sql`WITH user_data AS (
