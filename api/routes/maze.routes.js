@@ -91,6 +91,10 @@ router.post("/", async (req, res) => {
       yEndingPosition,
     } = convertedBody;
 
+    if (mazeService.getMazeByMazeLevel(mazeLevel)) {
+      return res.status(500).json({ error: "Unable to save maze because a maze with that level already exists. Please try again with a different level." });
+    }
+
     const mazeId = await mazeService.addMaze({
       mazeLayout,
       difficultyLevelId,

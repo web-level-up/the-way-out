@@ -5,6 +5,8 @@ export const listMazes = () => mazeRepository.getAllMazes();
 
 export const getMaze = (id) => mazeRepository.getMazeById(id);
 
+export const getMazeByMazeLevel = (mazeLevel) => mazeRepository.getMazeByMazeLevel(mazeLevel);
+
 export const addMaze = ({
   mazeLayout,
   difficultyLevelId,
