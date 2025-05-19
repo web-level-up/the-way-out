@@ -64,6 +64,8 @@ function renderUserRolesManagementTable(userWithRoles, roles) {
     usernameCell.textContent = user.username;
 
     const rolesCell = row.insertCell();
+    rolesCell.className = "roles-cell";
+
     const formElement = document.createElement("form");
 
     roles.map((role) => {

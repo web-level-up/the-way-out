@@ -89,7 +89,7 @@ body {
 }
 
 .menu-button {
-  display: flex;
+  display: block;
   align-items: center;
   border-radius: 1rem;
   border: 1.5px solid var(--maze-card-btn-border);
