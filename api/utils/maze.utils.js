@@ -5,7 +5,11 @@ export const validateMazePositions = (
   xEndingPosition,
   yEndingPosition
 ) => {
-  const mazeDimension = Math.sqrt(mazeLayout.length);
+  const mazeLayoutWithoutNewLines = mazeLayout
+    .replaceAll("\r\n", "")
+    .replaceAll("\n", "")
+    .replaceAll(" ", "");
+  const mazeDimension = Math.sqrt(mazeLayoutWithoutNewLines.length);
 
   if (xStartingPosition < 0 || xStartingPosition >= mazeDimension) {
     return `X starting position must be between 0 and ${mazeDimension - 1}`;
@@ -30,11 +34,11 @@ export const validateMazePositions = (
   const startIndex = yStartingPosition * mazeDimension + xStartingPosition;
   const endIndex = yEndingPosition * mazeDimension + xEndingPosition;
 
-  if (mazeLayout[startIndex] === "1") {
+  if (mazeLayoutWithoutNewLines[startIndex] === "1") {
     return "Starting position cannot be on a wall";
   }
 
-  if (mazeLayout[endIndex] === "1") {
+  if (mazeLayoutWithoutNewLines[endIndex] === "1") {
     return "Ending position cannot be on a wall";
   }
 
