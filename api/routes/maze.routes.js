@@ -70,8 +70,12 @@ router.get("/:id", async (req, res) => {
 
 router.post("/", async (req, res) => {
   try {
-    if (!(await userService.doesUserHavePermissions(req.user.sub, "Maze Manager"))) {
-      return res.status(403).json({ error: "You do not have permission to add a maze." });
+    if (
+      !(await userService.doesUserHavePermissions(req.user.sub, "Maze Manager"))
+    ) {
+      return res
+        .status(403)
+        .json({ error: "You do not have permission to add a maze." });
     }
 
     const convertedBody = convertSnakeToCamelCase(req.body);
@@ -93,7 +97,10 @@ router.post("/", async (req, res) => {
     } = convertedBody;
 
     if (mazeService.getMazeByMazeLevel(mazeLevel)) {
-      return res.status(500).json({ error: "Unable to save maze because a maze with that level already exists. Please try again with a different level." });
+      return res.status(500).json({
+        error:
+          "Unable to save maze because a maze with that level already exists. Please try again with a different level.",
+      });
     }
 
     const mazeId = await mazeService.addMaze({
@@ -113,8 +120,12 @@ router.post("/", async (req, res) => {
 
 router.delete("/:id", async (req, res) => {
   try {
-    if (!(await userService.doesUserHavePermissions(req.user.sub, "Maze Manager"))) {
-      return res.status(403).json({ error: "You do not have permission to delete a maze." });
+    if (
+      !(await userService.doesUserHavePermissions(req.user.sub, "Maze Manager"))
+    ) {
+      return res
+        .status(403)
+        .json({ error: "You do not have permission to delete a maze." });
     }
 
     const id = req.params.id;
@@ -130,8 +141,12 @@ router.delete("/:id", async (req, res) => {
 
 router.put("/", async (req, res) => {
   try {
-    if (!(await userService.doesUserHavePermissions(req.user.sub, "Maze Manager"))) {
-      return res.status(403).json({ error: "You do not have permission to update a maze." });
+    if (
+      !(await userService.doesUserHavePermissions(req.user.sub, "Maze Manager"))
+    ) {
+      return res
+        .status(403)
+        .json({ error: "You do not have permission to update a maze." });
     }
 
     const convertedBody = convertSnakeToCamelCase(req.body);
@@ -152,6 +167,13 @@ router.put("/", async (req, res) => {
       xEndingPosition,
       yEndingPosition,
     } = convertedBody;
+
+    const mazeByLevel = await mazeService.getMazeByMazeLevel(mazeLevel);
+    if (mazeByLevel && mazeByLevel.id != id) {
+      return res.status(500).json({
+        error: `Maze level ${mazeLevel} already exist.`,
+      });
+    }
 
     const result = await mazeService.editMaze({
       id,
