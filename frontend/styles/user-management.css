@@ -87,3 +87,7 @@
     max-height: 70svh;
     overflow-y: auto;
 }
+
+#submission-feedback {
+    text-align: right;
+}

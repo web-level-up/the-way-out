@@ -6,6 +6,10 @@ const router = express.Router();
 
 router.get("/", async (req, res) => {
   try {
+    if (!(await userService.doesUserHavePermissions(req.user.sub, "User Manager"))) {
+      return res.status(403).json({ error: "You do not have permission to get all users." });
+    }
+
     const users = await userService.listUsers();
     res.json(users);
   } catch (error) {
@@ -17,6 +21,10 @@ router.get("/", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
   try {
+    if (!(await userService.doesUserHavePermissions(req.user.sub, "User Manager"))) {
+      return res.status(403).json({ error: "You do not have permission to get user." });
+    }
+
     const user = await userService.getUser(req.params.id);
     if (!user) return res.status(404).json({ error: "User not found" });
     res.json(user);
