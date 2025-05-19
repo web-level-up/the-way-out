@@ -50,7 +50,6 @@ export const addMaze = async ({
       const s3Url = `https://maze-blob.s3.af-south-1.amazonaws.com/${s3Key}`;
 
       let mazeSize = Math.sqrt(mazeLayout.length);
-      // 2. Only if upload succeeds, insert into database with the real URL
       const result = await sqlTransaction`
         INSERT INTO mazes (
           maze_level, 
@@ -84,7 +83,6 @@ export const addMaze = async ({
         )
       `;
 
-      // Replace with your actual S3 upload function
       const command = new PutObjectCommand({
         Bucket: "maze-blob",
         Key: s3Key,
@@ -126,7 +124,6 @@ export const editMaze = async ({
         mazeSize = Math.sqrt(mazeLayout.length);
       }
 
-      // Update the maze record
       const result = await sqlTransaction`
         UPDATE mazes 
         SET maze_level = ${mazeLevel}, 
@@ -137,7 +134,6 @@ export const editMaze = async ({
         RETURNING id
       `;
 
-      // Update the maze positions
       await sqlTransaction`
         UPDATE maze_positions
         SET 
@@ -148,7 +144,6 @@ export const editMaze = async ({
         WHERE maze_id = ${id}
       `;
 
-      // Only upload to S3 if a new maze_layout is provided
       if (mazeLayout) {
         const command = new PutObjectCommand({
           Bucket: "maze-blob",
