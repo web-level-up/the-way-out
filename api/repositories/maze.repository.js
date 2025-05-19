@@ -35,6 +35,21 @@ export const getMazeById = (id) =>
     INNER JOIN maze_positions mp ON m.id = mp.maze_id
     WHERE m.id = ${id}`.then((rows) => rows[0]);
 
+export const getMazeByMazeLevel = (mazeLevel) =>
+  sql`SELECT m.id, m.maze_level,
+    m.maze_size, 
+    m.maze_layout_url, 
+    m.difficulty_level_id as difficulty_id, 
+    d.difficulty_level_name as difficulty_name, 
+    d.preview_time_seconds, d.escape_time_seconds, 
+    mp.x_starting_position, 
+    mp.y_starting_position, 
+    mp.x_ending_position, 
+    mp.y_ending_position 
+    FROM mazes m INNER JOIN difficulty_levels d ON m.difficulty_level_id = d.id 
+    INNER JOIN maze_positions mp ON m.id = mp.maze_id
+    WHERE m.maze_level = ${mazeLevel}`.then((rows) => rows[0]);
+
 export const addMaze = async ({
   mazeLayout,
   difficultyLevelId,
@@ -49,7 +64,14 @@ export const addMaze = async ({
       const s3Key = `${mazeLevel}.txt`;
       const s3Url = `https://maze-blob.s3.af-south-1.amazonaws.com/${s3Key}`;
 
-      let mazeSize = Math.sqrt(mazeLayout.length);
+      let mazeSize = Math.sqrt(
+        mazeLayout
+          .replaceAll("\r\n", "")
+          .replaceAll("\n", "")
+          .replaceAll(" ", "").length
+      );
+
+      // 2. Only if upload succeeds, insert into database with the real URL
       const result = await sqlTransaction`
         INSERT INTO mazes (
           maze_level, 
@@ -90,11 +112,7 @@ export const addMaze = async ({
         ContentType: "text/plain",
       });
 
-      s3.send(command, (err, data) => {
-        if (err) {
-          throw new Error("S3 upload failed");
-        }
-      });
+      await s3.send(command);
 
       return mazeId;
     } catch (error) {
@@ -121,7 +139,12 @@ export const editMaze = async ({
 
       let mazeSize;
       if (mazeLayout) {
-        mazeSize = Math.sqrt(mazeLayout.length);
+        mazeSize = Math.sqrt(
+          mazeLayout
+            .replaceAll("\r\n", "")
+            .replaceAll("\n", "")
+            .replaceAll(" ", "").length
+        );
       }
 
       const result = await sqlTransaction`

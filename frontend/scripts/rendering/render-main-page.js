@@ -25,17 +25,25 @@ export function renderMainPage() {
       ).textContent = `Welcome ${localStorage.getItem(
         "username"
       )}! Do You Remember the Way Out?`;
-      const isAdmin = true;
+      document
+        .getElementById("user-management")
+        .addEventListener("click", () => navigate("user-management"));
+      document
+        .getElementById("maze-management")
+        .addEventListener("click", () => navigate("maze-management"));
 
-      if (isAdmin) {
-        const cmsButton = document.createElement("button");
-        cmsButton.id = "cms";
-        cmsButton.className = "menu-button";
-        cmsButton.textContent = "CMS";
-        cmsButton.addEventListener("click", () => navigate("cms"));
+      const userRoles = localStorage.getItem("roles");
 
-        const container = document.getElementById("menu-container");
-        container.appendChild(cmsButton);
+      if (userRoles.includes("Maze Manager")) {
+        document.getElementById("maze-management").style.display = "block";
+      } else {
+        document.getElementById("maze-management").style.display = "none";
+      }
+
+      if (userRoles.includes("User Manager")) {
+        document.getElementById("user-management").style.display = "block";
+      } else {
+        document.getElementById("user-management").style.display = "none";
       }
     }
   });

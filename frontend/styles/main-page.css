@@ -1,3 +1,7 @@
 #menu-container button {
     min-width: 12rem;
 }
+
+#user-management, #maze-management {
+    display: none;
+}

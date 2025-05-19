@@ -27,7 +27,7 @@ export class MazeGame {
   popstateHandler = null;
 
   constructor(maze, popstateHandler) {
-    this.mazeLayout = maze.maze_layout.replaceAll("\r\n", "");
+    this.mazeLayout = maze.maze_layout.replaceAll("\r\n", "").replaceAll("\n", "").replaceAll(" ", "");
     this.mazeId = maze.id;
     this.size = maze.maze_size;
 

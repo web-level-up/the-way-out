@@ -1,9 +1,11 @@
-import * as repo from "../repositories/maze.repository.js";
+import * as mazeRepository from "../repositories/maze.repository.js";
 import * as userService from "../services/user.service.js";
 
-export const listMazes = () => repo.getAllMazes();
+export const listMazes = () => mazeRepository.getAllMazes();
 
-export const getMaze = (id) => repo.getMazeById(id);
+export const getMaze = (id) => mazeRepository.getMazeById(id);
+
+export const getMazeByMazeLevel = (mazeLevel) => mazeRepository.getMazeByMazeLevel(mazeLevel);
 
 export const addMaze = ({
   mazeLayout,
@@ -14,7 +16,7 @@ export const addMaze = ({
   xEndingPosition,
   yEndingPosition,
 }) =>
-  repo.addMaze({
+  mazeRepository.addMaze({
     mazeLayout,
     difficultyLevelId,
     mazeLevel,
@@ -24,7 +26,7 @@ export const addMaze = ({
     yEndingPosition,
   });
 
-export const deleteMaze = (id) => repo.deleteMaze(id);
+export const deleteMaze = (id) => mazeRepository.deleteMaze(id);
 
 export const editMaze = async ({
   id,
@@ -36,7 +38,7 @@ export const editMaze = async ({
   xEndingPosition,
   yEndingPosition,
 }) =>
-  repo.editMaze({
+  mazeRepository.editMaze({
     id,
     mazeLayout,
     difficultyLevelId,
@@ -48,11 +50,11 @@ export const editMaze = async ({
   });
 
 export const completeMaze = (mazeId, playerGoogleId, timeTaken, stepsTaken) =>
-  repo.postCompletion(mazeId, playerGoogleId, timeTaken, stepsTaken);
+  mazeRepository.postCompletion(mazeId, playerGoogleId, timeTaken, stepsTaken);
 
-export const getMazeLeaderboard = (mazeId) => repo.getLeaderboard(mazeId);
+export const getMazeLeaderboard = (mazeId) => mazeRepository.getLeaderboard(mazeId);
 
 export const getUserMazeCompletions = async (mazeId, userGoogleId) => {
   const user = await userService.getUserByGoogleId(userGoogleId);
-  return repo.getUserMazeCompletions(mazeId, user?.id);
+  return mazeRepository.getUserMazeCompletions(mazeId, user?.id);
 };

@@ -23,8 +23,9 @@ export function renderUsernamePage() {
       }
 
       return postDataToUrl("/api/user", { username })
-        .then(() => {
+        .then((data) => {
           localStorage.setItem("username", username);
+          localStorage.setItem("roles", data.roles);
           navigate("menu")
         })
         .catch((error) => {

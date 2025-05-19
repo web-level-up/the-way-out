@@ -7,6 +7,7 @@ import { renderMazeGame } from "./rendering/render-maze-game.js";
 import { handleOAuthCallback } from "./auth.js";
 import { renderUsernamePage } from "./rendering/render-username.js";
 import { renderCms } from "./rendering/render-cms.js";
+import {renderUserManagementPage} from "./rendering/render-user-management-page.js";
 
 let pageStack = [];
 
@@ -30,9 +31,12 @@ const routes = {
   menu: () => {
     renderMainPage();
   },
-  cms: (params) => {
+  "maze-management": (params) => {
     const mazeId = params.get("mazeId");
-    renderCms(params);
+    renderCms(mazeId);
+  },
+  "user-management": (params) => {
+    renderUserManagementPage();
   },
   "maze/selection": () => {
     renderMazeSelectionPage();
