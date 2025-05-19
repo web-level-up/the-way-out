@@ -26,7 +26,7 @@ router.post("/completions", async (req, res) => {
       return res.status(400).json({ error: "Maze ID is required" });
     } else if (typeof mazeId !== "number") {
       return res.status(400).json({ error: "Maze ID must be a number" });
-    } else if (!timeTaken) {
+    } else if (timeTaken !== 0 && !timeTaken) {
       return res.status(400).json({ error: "Time taken is required" });
     } else if (typeof timeTaken !== "number") {
       return res.status(400).json({ error: "Time taken must be a number" });
@@ -50,6 +50,7 @@ router.post("/completions", async (req, res) => {
 });
 
 router.get("/:id", async (req, res) => {
+  console.log("Getting maze with ID:", req.params.id);
   try {
     const maze = await mazeService.getMaze(req.params.id);
     if (!maze)

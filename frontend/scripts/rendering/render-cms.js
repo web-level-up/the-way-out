@@ -1,82 +1,67 @@
 import { HttpError } from "../custom-errors.js";
 import { goBack, navigate } from "../router.js";
-import { getDataFromUrl } from "../util.js";
+import { authError, getDataFromUrl } from "../util.js";
 import { renderErrorPage } from "./render-error.js";
 import { renderMazeManager } from "./render-maze-manager.js";
 import { loadPage } from "./renderer.js";
 
-const state = {
-  mazes: [],
-  currentMaze: null,
-};
+export function renderCms(mazeId = null) {
+  loadPage("/views/cms.html").then(() => {
+    document.getElementById("add-maze-btn").addEventListener("click", () => {
+      renderMazeManager(null);
+      const select = document.getElementById("maze-select");
+      select.selectedIndex = 0;
+    });
 
-export function renderCms() {
-  loadPage("/views/cms.html")
-    .then(() => {
-      document
-        .getElementById("add-maze-btn")
-        .addEventListener("click", () => renderMazeManager(state, renderMazeList, null));
+    document
+      .getElementById("home-button")
+      .addEventListener("click", () => navigate("menu"));
 
-      document
-        .getElementById("home-button")
-        .addEventListener("click", () => navigate("menu"));
+    document
+      .getElementById("back-button")
+      .addEventListener("click", () => goBack());
 
-      document
-        .getElementById("back-button")
-        .addEventListener("click", () => goBack());
+    getDataFromUrl("/api/mazes")
+      .then((data) => {
+        const select = document.getElementById("maze-select");
+        const placeholderOption = document.createElement("option");
+        placeholderOption.textContent = "Choose a maze";
+        placeholderOption.disabled = true;
+        placeholderOption.selected = true;
+        select.appendChild(placeholderOption);
 
-      getDataFromUrl("/api/mazes").then((data) => {
-        state.mazes = data;
-        const buttons = document
-          .getElementById("sidebar")
-          .querySelectorAll(".maze-btn:not(#add-maze-btn)");
-        buttons.forEach((button) => button.remove());
-
-        state.mazes.forEach((maze) => {
-          const button = document.createElement("button");
-          button.className = "maze-btn";
-          button.textContent = `Maze #${maze.id}`;
-          button.addEventListener("click", () =>
-            renderMazeManager(state, maze)
-          );
-          sidebar.appendChild(button);
+        data.forEach((maze) => {
+          const option = document.createElement("option");
+          option.value = maze.id;
+          option.textContent = `Maze #${maze.maze_level}`;
+          select.appendChild(option);
         });
-      });
-    })
-    .catch((error) => {
-      if (error instanceof HttpError) {
-        if (error.status === 401) {
-          renderErrorPage(
-            "Your session has expired, you will need to login again",
-            () => navigate(""),
-            "Return to login"
-          );
+
+        select.addEventListener("change", (e) => {
+          const mazeId = e.target.value;
+          renderMazeManager(mazeId);
+        });
+
+        renderMazeManager(mazeId);
+      })
+      .catch((error) => {
+        if (error instanceof HttpError) {
+          if (error.status === 401) {
+            authError();
+          } else {
+            renderErrorPage(
+              error.message ?? "An unexpected error has occurred",
+              () => navigate("menu"),
+              "Return to menu"
+            );
+          }
         } else {
           renderErrorPage(
-            error.message ?? "An unexpected error has occurred",
+            error ?? "An unexpected error has occurred",
             () => navigate("menu"),
             "Return to menu"
           );
         }
-      } else {
-        renderErrorPage(
-          error ?? "An unexpected error has occurred",
-          () => navigate("menu"),
-          "Return to menu"
-        );
-      }
-    });
-
-  function renderMazeList() {
-    const buttons = sidebar.querySelectorAll(".maze-btn:not(#add-maze-btn)");
-    buttons.forEach((button) => button.remove());
-
-    state.mazes.forEach((maze) => {
-      const button = document.createElement("button");
-      button.className = "maze-btn";
-      button.textContent = `Maze #${maze.id}`;
-      button.addEventListener("click", () => renderMazeManager(state, renderMazeList, maze));
-      sidebar.appendChild(button);
-    });
-  }
+      });
+  });
 }

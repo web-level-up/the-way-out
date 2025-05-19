@@ -1,36 +1,41 @@
 <section id="maze-details-wrapper">
   <section class="maze-details">
-    <h2 class="main-heading" id="maze-heading">Maze</h2>
+    <h2 class="main-heading" id="maze-heading">New Maze</h2>
     <section class="double-details">
       <p><strong>Start X</strong></p>
       <p><strong>Start Y</strong></p>
     </section>
     <section class="double-details">
-      <input id="maze-starting-x" class="cms-input" type="number" />
-      <input id="maze-starting-y" class="cms-input" type="number" />
+      <input id="maze-starting-x" class="cms-input" type="number" min="0" value="0" />
+      <input id="maze-starting-y" class="cms-input" type="number" min="0" value="0"/>
     </section>
     <section class="double-details">
       <p><strong>End X</strong></p>
       <p><strong>End Y</strong></p>
     </section>
     <section class="double-details">
-      <input id="maze-ending-x" class="cms-input" type="number" />
-      <input id="maze-ending-y" class="cms-input" type="number" />
+      <input id="maze-ending-x" class="cms-input" type="number" min="0" value="1"/>
+      <input id="maze-ending-y" class="cms-input" type="number" min="0" value="1"/>
     </section>
     <section class="double-details">
       <p><strong>Difficulty Level</strong></p>
       <p><strong>Maze Level</strong></p>
     </section>
     <section class="double-details">
-      <input id="maze-level" class="cms-input" type="number" />
-      <input id="maze-difficulty-level" class="cms-input" type="number" />
+      <select id="maze-difficulty-level" class="cms-input">
+        <option value="1">Easy</option>
+        <option value="2">Medium</option>
+        <option value="3">Difficult</option>
+        <option value="4">Extreme</option>
+      </select>
+      <input id="maze-level" class="cms-input" type="number" value="0"/>
     </section>
     <p id="maze-encoding-text">Maze Encoding:</p>
     <textarea id="maze-encoding" rows="4"></textarea>
-    <p id="encoding-feedback-text">Valid grid: 9x9</p>
+    <p id="encoding-feedback-text"></p>
     <section class="double-details">
-      <button id="publishMazeBtn" class="menu-button">Publish</button>
-      <button id="deleteMazeBtn" class="menu-button">Delete</button>
+      <button id="publish-maze-btn" class="menu-button">Publish</button>
+      <button id="delete-maze-btn" class="menu-button">Delete</button>
     </section>
   </section>
 

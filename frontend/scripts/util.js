@@ -75,6 +75,14 @@ export function putReqToUrl(url, body) {
   });
 }
 
+export function authError() {
+  renderErrorPage(
+    "Your session has expired, you will need to login again",
+    () => navigate(""),
+    "Return to login"
+  );
+}
+
 export function delReqToUrl(url, body) {
   const config = getConfig();
 
@@ -93,12 +101,4 @@ export function delReqToUrl(url, body) {
     }
     return response.json();
   });
-}
-
-export function authError() {
-  renderErrorPage(
-    "Your session has expired, you will need to login again",
-    () => navigate(""),
-    "Return to login"
-  );
 }

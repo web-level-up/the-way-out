@@ -31,9 +31,9 @@ const routes = {
   menu: () => {
     renderMainPage();
   },
-  cms: (params) => {
+  "maze-management": (params) => {
     const mazeId = params.get("mazeId");
-    renderCms(params);
+    renderCms(mazeId);
   },
   "user-management": (params) => {
     renderUserManagementPage();
