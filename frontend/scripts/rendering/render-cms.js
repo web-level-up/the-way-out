@@ -7,9 +7,11 @@ import { loadPage } from "./renderer.js";
 
 export function renderCms(mazeId = null) {
   loadPage("/views/cms.html").then(() => {
-    document
-      .getElementById("add-maze-btn")
-      .addEventListener("click", () => renderMazeManager(null));
+    document.getElementById("add-maze-btn").addEventListener("click", () => {
+      renderMazeManager(null);
+      const select = document.getElementById("maze-select");
+      select.selectedIndex = 0;
+    });
 
     document
       .getElementById("home-button")
@@ -21,19 +23,23 @@ export function renderCms(mazeId = null) {
 
     getDataFromUrl("/api/mazes")
       .then((data) => {
-        const buttons = document
-          .getElementById("sidebar")
-          .querySelectorAll(".maze-btn:not(#add-maze-btn)");
-        buttons.forEach((button) => button.remove());
+        const select = document.getElementById("maze-select");
+        const placeholderOption = document.createElement("option");
+        placeholderOption.textContent = "Choose a maze";
+        placeholderOption.disabled = true;
+        placeholderOption.selected = true;
+        select.appendChild(placeholderOption);
 
         data.forEach((maze) => {
-          const button = document.createElement("button");
-          button.className = "maze-btn";
-          button.textContent = `Maze #${maze.maze_level}`;
-          button.addEventListener("click", () => {
-            renderMazeManager(maze.id);
-          });
-          sidebar.appendChild(button);
+          const option = document.createElement("option");
+          option.value = maze.id;
+          option.textContent = `Maze #${maze.maze_level}`;
+          select.appendChild(option);
+        });
+
+        select.addEventListener("change", (e) => {
+          const mazeId = e.target.value;
+          renderMazeManager(mazeId);
         });
 
         renderMazeManager(mazeId);

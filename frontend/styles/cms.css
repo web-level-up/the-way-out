@@ -1,19 +1,4 @@
-.maze-btn {
-  display: block;
-  padding: 0.5rem;
-  margin-bottom: 0.5rem;
-  background: #eee;
-  border: none;
-  cursor: pointer;
-  width: 100%;
-}
 
-.maze-btn:hover {
-  background-color: var(--maze-card-btn-hover-bg);
-  color: var(--maze-card-btn-hover-text);
-  border-color: #4f8cff;
-  cursor: pointer;
-}
 
 #cms-container {
   display: flex;
@@ -25,36 +10,13 @@
 
 .content-container {
   display: flex;
+  flex-direction: column;
   max-width: 100%;
+  flex: 1;
 }
 
 #cms-heading {
   margin: 1rem;
-}
-
-.sidebar {
-  border-right: 1px solid #ddd;
-  width: fit-content;
-  height: 100%;
-  max-height: 85svh;
-  overflow-y: auto;
-  overflow-x: hidden;
-  gap: 0.25rem;
-  padding-right: 0.25rem;
-  padding-top: 1rem;
-}
-
-.sidebar button {
-  display: flex;
-  align-items: center;
-  border: 0.5px solid var(--maze-card-btn-border);
-  padding: 0.75rem;
-  background-color: var(--maze-card-btn-bg);
-  color: var(--maze-card-btn-text);
-  font-size: 1.1rem;
-  transition: background 0.2s, color 0.2s, border 0.2s;
-  font-weight: 500;
-  box-shadow: 0 2px 8px 0 rgba(31, 38, 135, 0.07);
 }
 
 .maze-details {
@@ -155,4 +117,31 @@
 #delete-maze-btn:hover {
   background-color: #b91c1c;
   color: #fff;
+}
+
+#maze-select {
+  min-width: 12rem;
+  border-radius: 1rem;
+  border: 1.5px solid var(--maze-card-btn-border);
+  padding: 0.75rem;
+  background-color: rgba(53, 53, 57);
+  color: white;
+  font-size: 1.1rem;
+  transition: background 0.2s, color 0.2s, border 0.2s;
+  font-weight: 500;
+  box-shadow: 0 2px 8px 0 rgba(31, 38, 135, 0.07);
+}
+
+#add-maze-btn {
+  min-width: 12rem;
+  justify-content: center;
+}
+
+#action-bar {
+  display: flex;
+  flex: 0;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding: 0.5rem;
 }

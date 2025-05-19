@@ -31,7 +31,7 @@ const routes = {
   menu: () => {
     renderMainPage();
   },
-  "maze/management": (params) => {
+  "maze-management": (params) => {
     const mazeId = params.get("mazeId");
     renderCms(mazeId);
   },

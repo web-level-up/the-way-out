@@ -1,14 +1,13 @@
-import {loadPage} from "./renderer.js";
-import {getDataFromUrl, putReqToUrl} from "../util.js";
-import {navigate} from "../router.js";
-import {HttpError} from "../custom-errors.js";
-import {renderErrorPage} from "./render-error.js";
+import { loadPage } from "./renderer.js";
+import { getDataFromUrl, putReqToUrl } from "../util.js";
+import { goBack, navigate } from "../router.js";
+import { HttpError } from "../custom-errors.js";
+import { renderErrorPage } from "./render-error.js";
 
 const usersAndTheirRoles = {};
 
 export function renderUserManagementPage() {
   console.log("Here in User Management Page");
-
 
   return loadPage("views/user-management.html").then(() => {
     addNavbarEventListeners();
@@ -24,13 +23,21 @@ function addNavbarEventListeners() {
   document
     .getElementById("home-button")
     .addEventListener("click", () => navigate("menu"));
+
+  document
+    .getElementById("back-button")
+    .addEventListener("click", () => goBack());
 }
 
 function renderUserRolesManagementTable(userWithRoles, roles) {
-  const userRoleManagementTableBody = document.getElementById("user-role-management-table-body");
+  const userRoleManagementTableBody = document.getElementById(
+    "user-role-management-table-body"
+  );
 
   while (userRoleManagementTableBody.firstChild) {
-    userRoleManagementTableBody.removeChild(userRoleManagementTableBody.firstChild);
+    userRoleManagementTableBody.removeChild(
+      userRoleManagementTableBody.firstChild
+    );
   }
 
   userWithRoles.sort((a, b) => {
@@ -45,12 +52,11 @@ function renderUserRolesManagementTable(userWithRoles, roles) {
     return 0;
   });
 
-  userWithRoles.forEach(user => {
-
+  userWithRoles.forEach((user) => {
     usersAndTheirRoles[user.id] = {
       currentRoles: user.roles,
       rolesToAdd: [],
-      rolesToRemove: []
+      rolesToRemove: [],
     };
 
     const row = userRoleManagementTableBody.insertRow();
@@ -61,19 +67,21 @@ function renderUserRolesManagementTable(userWithRoles, roles) {
     const rolesCell = row.insertCell();
     const formElement = document.createElement("form");
 
-    roles.map(role => {
+    roles.map((role) => {
       const isChecked = user.roles.includes(role.role_name);
 
       const labelElement = document.createElement("label");
 
       const inputElement = document.createElement("input");
       inputElement.type = "checkbox";
-      inputElement.id = `${user.id}-${role.id}`
-      inputElement.name = 'role';
+      inputElement.id = `${user.id}-${role.id}`;
+      inputElement.name = "role";
       inputElement.value = role.role_name;
       inputElement.checked = isChecked;
       inputElement.disabled = role.role_name.toLowerCase() === "player";
-      inputElement.addEventListener('change', (event) => handleRoleChange(user.id, event.target));
+      inputElement.addEventListener("change", (event) =>
+        handleRoleChange(user.id, event.target)
+      );
 
       const roleTextNode = document.createTextNode(role.role_name);
 
@@ -85,37 +93,32 @@ function renderUserRolesManagementTable(userWithRoles, roles) {
 
     rolesCell.appendChild(formElement);
   });
-  console.log('usersAndTheirRoles', usersAndTheirRoles);
+  console.log("usersAndTheirRoles", usersAndTheirRoles);
 
-  document.getElementById("update-user-role-btn").addEventListener("click", () => {
-    submitUserRolesChange();
-  })
+  document
+    .getElementById("update-user-role-btn")
+    .addEventListener("click", () => {
+      submitUserRolesChange();
+    });
 }
 
 function handleRoleChange(userId, checkbox) {
   const role = checkbox.value;
 
   if (checkbox.checked) {
-
-    if (usersAndTheirRoles[userId].rolesToRemove.includes(role))
-    {
-      usersAndTheirRoles[userId].rolesToRemove =
-        usersAndTheirRoles[userId].rolesToRemove
-          .filter(item => item !== role);
-    }
-    else if (!usersAndTheirRoles[userId].currentRoles.includes(role))
-    {
+    if (usersAndTheirRoles[userId].rolesToRemove.includes(role)) {
+      usersAndTheirRoles[userId].rolesToRemove = usersAndTheirRoles[
+        userId
+      ].rolesToRemove.filter((item) => item !== role);
+    } else if (!usersAndTheirRoles[userId].currentRoles.includes(role)) {
       usersAndTheirRoles[userId].rolesToAdd.push(role);
     }
   } else {
-    if (usersAndTheirRoles[userId].rolesToAdd.includes(role))
-    {
-      usersAndTheirRoles[userId].rolesToAdd =
-        usersAndTheirRoles[userId].rolesToAdd
-          .filter(item => item !== role);
-    }
-    else if (usersAndTheirRoles[userId].currentRoles.includes(role))
-    {
+    if (usersAndTheirRoles[userId].rolesToAdd.includes(role)) {
+      usersAndTheirRoles[userId].rolesToAdd = usersAndTheirRoles[
+        userId
+      ].rolesToAdd.filter((item) => item !== role);
+    } else if (usersAndTheirRoles[userId].currentRoles.includes(role)) {
       usersAndTheirRoles[userId].rolesToRemove.push(role);
     }
   }
@@ -125,20 +128,24 @@ function handleRoleChange(userId, checkbox) {
 
 function checkIfSubmitButtonShouldShow() {
   const submitButton = document.getElementById("update-user-role-btn");
-  const shouldShow = Object.values(usersAndTheirRoles).some(item => item.rolesToAdd.length > 0 || item.rolesToRemove.length > 0);
+  const shouldShow = Object.values(usersAndTheirRoles).some(
+    (item) => item.rolesToAdd.length > 0 || item.rolesToRemove.length > 0
+  );
   submitButton.disabled = !shouldShow;
 }
 
 function submitUserRolesChange() {
   const usersToUpdate = Object.entries(usersAndTheirRoles)
-    .filter(([userId, roleData]) => roleData.rolesToAdd.length > 0 || roleData.rolesToRemove.length > 0)
+    .filter(
+      ([userId, roleData]) =>
+        roleData.rolesToAdd.length > 0 || roleData.rolesToRemove.length > 0
+    )
     .reduce((obj, [userId, roleData]) => {
       obj[userId] = roleData;
       return obj;
     }, {});
 
-  console.log('usersToUpdate', usersToUpdate);
-
+  console.log("usersToUpdate", usersToUpdate);
 
   putReqToUrl("/api/user/roles", usersToUpdate)
     .then((data) => {})
@@ -166,4 +173,3 @@ function submitUserRolesChange() {
       }
     });
 }
-
