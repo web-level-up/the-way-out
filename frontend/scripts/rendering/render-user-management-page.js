@@ -7,9 +7,6 @@ import {renderErrorPage} from "./render-error.js";
 const usersAndTheirRoles = {};
 
 export function renderUserManagementPage() {
-  console.log("Here in User Management Page");
-
-
   return loadPage("views/user-management.html").then(() => {
     addNavbarEventListeners();
     getDataFromUrl("/api/user").then((usersWithRoles) => {
@@ -85,8 +82,6 @@ function renderUserRolesManagementTable(userWithRoles, roles) {
 
     rolesCell.appendChild(formElement);
   });
-  console.log('usersAndTheirRoles', usersAndTheirRoles);
-
   document.getElementById("update-user-role-btn").addEventListener("click", () => {
     submitUserRolesChange();
   })
@@ -136,9 +131,6 @@ function submitUserRolesChange() {
       obj[userId] = roleData;
       return obj;
     }, {});
-
-  console.log('usersToUpdate', usersToUpdate);
-
 
   putReqToUrl("/api/user/roles", usersToUpdate)
     .then((data) => {})
