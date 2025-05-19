@@ -45,6 +45,7 @@ router.post("/login", async (req, res) => {
       id_token,
       existing_user: !!existingUser, // true if user exists, false otherwise
       username: existingUser ? existingUser.username : "", // safely access username or provide empty string
+      roles: existingUser?.roles ?? [],
     });
   } catch (err) {
     console.error("Login handler error:", err);

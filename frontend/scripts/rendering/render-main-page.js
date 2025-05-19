@@ -25,9 +25,13 @@ export function renderMainPage() {
       ).textContent = `Welcome ${localStorage.getItem(
         "username"
       )}! Do You Remember the Way Out?`;
-      const isAdmin = true;
+      document.getElementById("user-management").addEventListener("click", () => navigate("user-management"));
 
-      if (isAdmin) {
+
+
+      const userRoles = localStorage.getItem("roles");
+
+      if (userRoles.includes("Maze Manager")) {
         const cmsButton = document.createElement("button");
         cmsButton.id = "cms";
         cmsButton.className = "menu-button";
@@ -36,6 +40,12 @@ export function renderMainPage() {
 
         const container = document.getElementById("menu-container");
         container.appendChild(cmsButton);
+      }
+
+      if (userRoles.includes("User Manager")) {
+        document.getElementById("user-management").style.display = "block";
+      } else {
+        document.getElementById("user-management").style.display = "none";
       }
     }
   });

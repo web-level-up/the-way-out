@@ -11,6 +11,7 @@ export function clearQueryParams() {
 export function logout() {
   localStorage.setItem("jwt", "");
   localStorage.setItem("username", "");
+  localStorage.setItem("roles", []);
 
   navigate("");
 }
