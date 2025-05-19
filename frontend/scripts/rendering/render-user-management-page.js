@@ -151,8 +151,16 @@ function submitUserRolesChange() {
     }, {});
 
   putReqToUrl("/api/user/roles", usersToUpdate)
-    .then((data) => {})
+    .then((data) => {
+      const feedback = document.getElementById("submission-feedback");
+      feedback.textContent = "Successfully updated user roles";
+      feedback.style.color = "green";
+    })
     .catch((error) => {
+      const feedback = document.getElementById("submission-feedback");
+      feedback.textContent = "User roles were not updated:";
+      feedback.style.color = "red";
+
       if (error instanceof HttpError) {
         if (error.status === 401) {
           renderErrorPage(
