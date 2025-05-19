@@ -57,6 +57,10 @@ router.post("/", async (req, res) => {
 
 router.put("/roles", async (req, res) => {
   try {
+    if (!(await userService.doesUserHavePermissions(req.user.sub, "User Manager"))) {
+      return res.status(403).json({ error: "You do not have permission to update user roles." });
+    }
+
     const usersToUpdate = req.body;
 
     const allRoles = await rolesService.getAllRoles();
@@ -92,4 +96,5 @@ router.put("/roles", async (req, res) => {
       .json({ error: "Unable to update user roles. Try again later." });
   }
 });
+
 export default router;

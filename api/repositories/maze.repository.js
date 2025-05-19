@@ -35,6 +35,22 @@ export const getMazeById = (id) =>
     INNER JOIN maze_positions mp ON m.id = mp.maze_id
     WHERE m.id = ${id}`.then((rows) => rows[0]);
 
+export const getMazeByMazeLevel = (mazeLevel) =>
+  sql`SELECT m.id, m.maze_level,
+    m.maze_size, 
+    m.maze_layout_url, 
+    m.difficulty_level_id as difficulty_id, 
+    d.difficulty_level_name as difficulty_name, 
+    d.preview_time_seconds, d.escape_time_seconds, 
+    mp.x_starting_position, 
+    mp.y_starting_position, 
+    mp.x_ending_position, 
+    mp.y_ending_position 
+    FROM mazes m INNER JOIN difficulty_levels d ON m.difficulty_level_id = d.id 
+    INNER JOIN maze_positions mp ON m.id = mp.maze_id
+    WHERE m.maze_level = ${mazeLevel}`
+  .then((rows) => rows[0]);
+
 export const addMaze = async ({
   mazeLayout,
   difficultyLevelId,
