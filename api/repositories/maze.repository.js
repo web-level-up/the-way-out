@@ -175,12 +175,7 @@ export const editMaze = async ({
           ContentType: "text/plain",
         });
 
-        s3.send(command, (err, data) => {
-          if (err) {
-            console.error("Error uploading to S3:", err);
-            throw new Error("S3 upload failed");
-          }
-        });
+        await s3.send(command);
       }
 
       return result[0].id;
