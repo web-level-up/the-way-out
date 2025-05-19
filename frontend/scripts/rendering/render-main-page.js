@@ -31,8 +31,8 @@ export function renderMainPage() {
         const cmsButton = document.createElement("button");
         cmsButton.id = "cms";
         cmsButton.className = "menu-button";
-        cmsButton.textContent = "CMS";
-        cmsButton.addEventListener("click", () => navigate("cms"));
+        cmsButton.textContent = "Maze Management";
+        cmsButton.addEventListener("click", () => navigate("maze/management"));
 
         const container = document.getElementById("menu-container");
         container.appendChild(cmsButton);

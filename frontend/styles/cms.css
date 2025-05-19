@@ -36,15 +36,15 @@
   border-right: 1px solid #ddd;
   width: fit-content;
   height: 100%;
+  max-height: 85svh;
   overflow-y: auto;
   overflow-x: hidden;
   gap: 0.25rem;
   padding-right: 0.25rem;
+  padding-top: 1rem;
 }
 
 .sidebar button {
-  width: 8rem;
-
   display: flex;
   align-items: center;
   border: 0.5px solid var(--maze-card-btn-border);
@@ -91,7 +91,10 @@
 }
 
 #maze-manager {
+  display: flex;
   flex: 1;
+  align-items: center;
+  justify-content: center;
 }
 
 .maze-canvas {
@@ -130,26 +133,26 @@
   justify-content: center;
 }
 
-#publishMazeBtn {
+#publish-maze-btn {
   background-color: #22c55e;
   color: #fff;
   border: none;
   font-weight: bold;
   transition: background 0.2s, color 0.2s;
 }
-#publishMazeBtn:hover {
+#publish-maze-btn:hover {
   background-color: #16a34a;
   color: #fff;
 }
 
-#deleteMazeBtn {
+#delete-maze-btn {
   background-color: #ef4444;
   color: #fff;
   border: none;
   font-weight: bold;
   transition: background 0.2s, color 0.2s;
 }
-#deleteMazeBtn:hover {
+#delete-maze-btn:hover {
   background-color: #b91c1c;
   color: #fff;
 }

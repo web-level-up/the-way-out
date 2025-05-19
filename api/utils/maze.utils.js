@@ -69,7 +69,14 @@ export function validateMazeData(body, requireId = false) {
     return "Maze layout is required";
   } else if (typeof mazeLayout !== "string") {
     return "Maze layout must be a string";
-  } else if (Math.sqrt(mazeLayout.length) % 1 !== 0) {
+  } else if (
+    Math.sqrt(
+      mazeLayout.replaceAll("\r\n", "").replaceAll("\n", "").replaceAll(" ", "")
+        .length
+    ) %
+      1 !==
+    0
+  ) {
     return "Maze layout must be a perfect square";
   } else if (xStartingPosition === undefined || xStartingPosition === null) {
     return "X starting position is required";

@@ -96,11 +96,8 @@ export function delReqToUrl(url, body) {
   }).then(async (response) => {
     if (!response.ok) {
       const errorData = await response.json();
-      console.log("errorData: ", errorData);
       throw new HttpError(response.status, errorData.error);
     }
-    console.log("response: ", response);
-    //return response.json();
-    return null;
+    return response.json();
   });
 }

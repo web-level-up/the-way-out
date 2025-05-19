@@ -49,7 +49,12 @@ export const addMaze = async ({
       const s3Key = `${mazeLevel}.txt`;
       const s3Url = `https://maze-blob.s3.af-south-1.amazonaws.com/${s3Key}`;
 
-      let mazeSize = Math.sqrt(mazeLayout.length);
+      let mazeSize = Math.sqrt(
+        mazeLayout
+          .replaceAll("\r\n", "")
+          .replaceAll("\n", "")
+          .replaceAll(" ", "").length
+      );
 
       // 2. Only if upload succeeds, insert into database with the real URL
       const result = await sqlTransaction`
@@ -93,11 +98,7 @@ export const addMaze = async ({
         ContentType: "text/plain",
       });
 
-      s3.send(command, (err, data) => {
-        if (err) {
-          throw new Error("S3 upload failed");
-        }
-      });
+      await s3.send(command);
 
       return mazeId;
     } catch (error) {
@@ -124,7 +125,12 @@ export const editMaze = async ({
 
       let mazeSize;
       if (mazeLayout) {
-        mazeSize = Math.sqrt(mazeLayout.length);
+        mazeSize = Math.sqrt(
+          mazeLayout
+            .replaceAll("\r\n", "")
+            .replaceAll("\n", "")
+            .replaceAll(" ", "").length
+        );
       }
 
       // Update the maze record

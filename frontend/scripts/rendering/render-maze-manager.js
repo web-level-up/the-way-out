@@ -1,89 +1,242 @@
 import { HttpError } from "../custom-errors.js";
 import { navigate } from "../router.js";
-import { delReqToUrl, getDataFromUrl, putReqToUrl } from "../util.js";
+import {
+  delReqToUrl,
+  getDataFromUrl,
+  postDataToUrl,
+  putReqToUrl,
+} from "../util.js";
 import { renderCms } from "./render-cms.js";
 import { renderErrorPage } from "./render-error.js";
-import { loadComponent, loadPage } from "./renderer.js";
+import { loadComponent } from "./renderer.js";
 
-const state = {
-  mazes: [],
-  currentMaze: null,
-};
-
-export function renderMazeManager(state, renderMazeList, maze = null) {
+export function renderMazeManager(mazeId) {
   const mazeManager = document.getElementById("maze-manager");
   loadComponent(mazeManager, "/views/maze-manager.html").then(() => {
-    if (!maze) {
-      // Set up publish button to create a new maze
-      const publishBtn = document.getElementById("publishMazeBtn");
+    if (!mazeId) {
+      const publishBtn = document.getElementById("publish-maze-btn");
       if (publishBtn) {
         publishBtn.textContent = "Publish";
         publishBtn.onclick = () => createNewMaze();
       }
-      // Hide the delete button
-      const deleteBtn = document.getElementById("deleteMazeBtn");
+
+      const deleteBtn = document.getElementById("delete-maze-btn");
       if (deleteBtn) {
         deleteBtn.style.display = "none";
       }
-      return;
     } else {
-      console.log("hello");
-      console.log(maze);
-      document.getElementById("maze-starting-x").value =
-        maze.x_starting_position;
-      document.getElementById("maze-starting-y").value =
-        maze.y_starting_position;
-      document.getElementById("maze-ending-x").value = maze.x_ending_position;
-      document.getElementById("maze-ending-y").value = maze.y_ending_position;
-      document.getElementById("maze-level").value = maze.maze_level;
-      document.getElementById("maze-difficulty-level").value =
-        maze.difficulty_name; // maze.difficulty_id; // or maze.difficulty_name
+      getDataFromUrl(`/api/mazes/${mazeId}`)
+        .then((data) => {
+          document.getElementById("maze-starting-x").value =
+            data.x_starting_position;
+          document.getElementById("maze-starting-y").value =
+            data.y_starting_position;
+          document.getElementById("maze-ending-x").value =
+            data.x_ending_position;
+          document.getElementById("maze-ending-y").value =
+            data.y_ending_position;
+          document.getElementById("maze-level").value = data.maze_level;
+          document.getElementById("maze-difficulty-level").value =
+            data.difficulty_name;
+          if (data.encoding) {
+            document.getElementById("maze-encoding").value = maze.encoding;
+          }
+          document.getElementById(
+            "maze-heading"
+          ).textContent = `Maze Level ${data.maze_level}`;
+          const difficultySelect = document.getElementById(
+            "maze-difficulty-level"
+          );
+          if (difficultySelect) {
+            difficultySelect.value = data.difficulty_id
+              ? data.difficulty_id
+              : "1";
+          }
+          if (data.maze_layout) {
+            document.getElementById("maze-encoding").value = data.maze_layout;
+          }
+          drawMazeOnCanvas(
+            data.maze_layout,
+            data.x_starting_position,
+            data.y_starting_position,
+            data.x_ending_position,
+            data.y_ending_position
+          );
+        })
+        .catch((error) => {
+          if (error instanceof HttpError) {
+            if (error.status === 401) {
+              authError();
+            } else {
+              renderErrorPage(
+                error.message ?? "An unexpected error has occurred",
+                () => navigate("menu"),
+                "Return to menu"
+              );
+            }
+          } else {
+            renderErrorPage(
+              "An unexpected error has occurred",
+              () => navigate("menu"),
+              "Return to menu"
+            );
+          }
+        });
 
-      // If you have a maze encoding property:
-      if (maze.encoding) {
-        document.getElementById("maze-encoding").value = maze.encoding;
-      }
-
-      // Optionally set the heading:
-      document.getElementById(
-        "maze-heading"
-      ).textContent = `Maze Level ${maze.maze_level}`;
-
-      // Set the difficulty dropdown value correctly
-      const difficultySelect = document.getElementById("maze-difficulty-level");
-      if (difficultySelect) {
-        if (maze.difficulty_id) {
-          difficultySelect.value = maze.difficulty_id;
-        } else {
-          difficultySelect.value = "1"; // Default to Easy
-        }
-      }
-
-      showMazeDetails(maze);
-
-      // Add event listeners for publish and delete buttons
-      const publishBtn = document.getElementById("publishMazeBtn");
-      const deleteBtn = document.getElementById("deleteMazeBtn");
+      const publishBtn = document.getElementById("publish-maze-btn");
+      const deleteBtn = document.getElementById("delete-maze-btn");
       if (publishBtn) {
-        if (maze && maze.id) {
+        if (mazeId) {
           publishBtn.textContent = "Update";
         } else {
           publishBtn.textContent = "Publish";
         }
-        publishBtn.onclick = () => PublishMaze(maze);
+        publishBtn.onclick = () => PublishMaze(mazeId);
       }
       if (deleteBtn) {
-        deleteBtn.onclick = () => deleteMaze(maze.id);
+        deleteBtn.onclick = () => deleteMaze(mazeId);
       }
     }
+
+    const mazeEncodingInput = document.getElementById("maze-encoding");
+    const mazeStartingXInput = document.getElementById("maze-starting-x");
+    const mazeStartingYInput = document.getElementById("maze-starting-y");
+    const mazeEndingXInput = document.getElementById("maze-ending-x");
+    const mazeEndingYInput = document.getElementById("maze-ending-y");
+    const mazeLevelInput = document.getElementById("maze-level");
+
+    const inputs = [
+      mazeEncodingInput,
+      mazeStartingXInput,
+      mazeStartingYInput,
+      mazeEndingXInput,
+      mazeEndingYInput,
+      mazeLevelInput,
+    ];
+
+    inputs.forEach((input) => {
+      input.addEventListener("input", updateDisplay);
+    });
   });
-  //this.state = state
 }
 
-// Create a new maze from the form data
+function updateDisplay() {
+  const mazeEncodingInput = document.getElementById("maze-encoding");
+  const mazeStartingXInput = document.getElementById("maze-starting-x");
+  const mazeStartingYInput = document.getElementById("maze-starting-y");
+  const mazeEndingXInput = document.getElementById("maze-ending-x");
+  const mazeEndingYInput = document.getElementById("maze-ending-y");
+  const feedback = document.getElementById("encoding-feedback-text");
+
+  const mazeEncoding = mazeEncodingInput.value
+    .replaceAll("\r\n", "")
+    .replaceAll("\n", "")
+    .replaceAll(" ", "");
+  const mazeStartingX = mazeStartingXInput.value;
+  const mazeStartingY = mazeStartingYInput.value;
+  const mazeEndingX = mazeEndingXInput.value;
+  const mazeEndingY = mazeEndingYInput.value;
+  const length = mazeEncoding.length;
+  const sqrt = Math.sqrt(length);
+
+  const error = validateInput();
+
+  if (error) {
+    feedback.textContent = error;
+    feedback.style.color = "red";
+    return;
+  }
+
+  feedback.textContent = `Valid grid: ${sqrt}x${sqrt}`;
+  feedback.style.color = "green";
+  drawMazeOnCanvas(
+    mazeEncoding,
+    mazeStartingX,
+    mazeStartingY,
+    mazeEndingX,
+    mazeEndingY
+  );
+}
+
+function validateInput() {
+  const mazeEncodingInput = document.getElementById("maze-encoding");
+  const mazeStartingXInput = document.getElementById("maze-starting-x");
+  const mazeStartingYInput = document.getElementById("maze-starting-y");
+  const mazeEndingXInput = document.getElementById("maze-ending-x");
+  const mazeEndingYInput = document.getElementById("maze-ending-y");
+  const mazeLevelInput = document.getElementById("maze-level");
+
+  const mazeEncoding = mazeEncodingInput.value
+    .replaceAll("\r\n", "")
+    .replaceAll("\n", "")
+    .replaceAll(" ", "");
+  const mazeStartingX = parseInt(mazeStartingXInput.value, 10);
+  const mazeStartingY = parseInt(mazeStartingYInput.value, 10);
+  const mazeEndingX = parseInt(mazeEndingXInput.value, 10);
+  const mazeEndingY = parseInt(mazeEndingYInput.value, 10);
+  const mazeLevel = parseInt(mazeLevelInput.value, 10);
+  const mazeDimension = Math.sqrt(mazeEncoding.length);
+
+  if (
+    mazeEncoding === null ||
+    mazeEncoding === undefined ||
+    mazeEncoding.length === 0
+  ) {
+    return "Maze encoding required";
+  }
+  if (mazeStartingX === null || mazeStartingX === undefined) {
+    return "Start X required";
+  }
+  if (mazeStartingY === null || mazeStartingY === undefined) {
+    return "Start Y required";
+  }
+  if (mazeEndingX === null || mazeEndingX === undefined) {
+    return "End X required";
+  }
+  if (mazeEndingY === null || mazeEndingY === undefined) {
+    return "End Y required";
+  }
+  if (mazeLevel === null || mazeLevel === undefined) {
+    return "Maze level required";
+  }
+  if (mazeLevel <= 0) {
+    return "Maze level must be larger than 0";
+  }
+  if (Math.floor(mazeDimension) !== mazeDimension) {
+    return "Invalid grid: Length must be a perfect square (current: ${length})";
+  }
+  if (mazeStartingX < 0 || mazeStartingX >= mazeDimension) {
+    return `X starting position must be between 0 and ${mazeDimension - 1}`;
+  }
+  if (mazeStartingY < 0 || mazeStartingY >= mazeDimension) {
+    return `Y starting position must be between 0 and ${mazeDimension - 1}`;
+  }
+  if (mazeEndingX < 0 || mazeEndingX >= mazeDimension) {
+    return `X ending position must be between 0 and ${mazeDimension - 1}`;
+  }
+  if (mazeEndingY < 0 || mazeEndingY >= mazeDimension) {
+    return `Y ending position must be between 0 and ${mazeDimension - 1}`;
+  }
+  if (mazeStartingX === mazeEndingX && mazeStartingY === mazeEndingY) {
+    return "Starting and ending positions cannot be the same";
+  }
+
+  const startIndex = mazeStartingY * mazeDimension + mazeStartingX;
+  const endIndex = mazeEndingY * mazeDimension + mazeEndingX;
+
+  if (mazeEncoding[startIndex] === "1") {
+    return "Starting position cannot be on a wall";
+  }
+
+  if (mazeEncoding[endIndex] === "1") {
+    return "Ending position cannot be on a wall";
+  }
+
+  return "";
+}
+
 async function createNewMaze() {
   try {
-    // Collect all field values from inputs
     const newMaze = {
       maze_layout: document.getElementById("maze-encoding").value,
       x_starting_position: parseInt(
@@ -109,68 +262,41 @@ async function createNewMaze() {
       maze_level: parseInt(document.getElementById("maze-level").value, 10),
     };
 
-    // Validate required fields
-    if (!newMaze.maze_layout) {
-      alert("Maze encoding is required");
-      return;
-    }
-    if (!newMaze.x_starting_position) {
-      alert("x starting position is required");
-      return;
-    }
-    if (!newMaze.y_starting_position) {
-      alert("y starting position is required");
-      return;
-    }
-    if (!newMaze.x_ending_position) {
-      alert("x ending position is required");
-      return;
-    }
-    if (!newMaze.y_ending_position) {
-      alert("y ending position is required");
-      return;
-    }
-
-    if (!newMaze.difficulty_id) {
-      alert("difficulty is required");
-      return;
-    }
-
-    if (!newMaze.maze_level) {
-      alert("maze level is required");
-      return;
-    }
-
-    const response = await fetch("http://localhost:3000/api/mazes", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newMaze),
-    });
-    console.log("new maze: ", newMaze);
-    if (!response.ok) {
-      const errorMsg = await response.text();
-      console.error("Failed to create maze:", errorMsg);
-      throw new Error("Failed to create maze: " + errorMsg);
-    }
-
-    // const createdMaze = await response.json();
-    // state.mazes.push(createdMaze);
-    // await fetchMazes(); // Refresh the maze list -- rather navigate back to cms page
-    // renderMazeList();
-    alert("Maze created successfully!");
+    postDataToUrl("/api/mazes", newMaze)
+      .then((mazeId) => {
+        renderCms(mazeId);
+      })
+      .catch((error) => {
+        if (error instanceof HttpError) {
+          if (error.status === 401) {
+            authError();
+          } else {
+            const feedback = document.getElementById("encoding-feedback-text");
+            feedback.textContent =
+              error.message ?? "An unexpected error has occurred";
+            feedback.style.color = "red";
+          }
+        } else {
+          renderErrorPage(
+            "An unexpected error has occurred",
+            () => navigate("menu"),
+            "Return to menu"
+          );
+        }
+      });
   } catch (error) {
-    console.error("Error creating maze:", error);
-    alert("Failed to create maze. Please try again.");
+    renderErrorPage(
+      "An unexpected error has occurred",
+      () => navigate("menu"),
+      "Return to menu"
+    );
   }
 }
 
-async function PublishMaze(maze) {
-  console.log("Publishing maze : ", maze);
+async function PublishMaze(mazeId) {
   try {
     const updatedMaze = {
-      id: maze.id,
+      id: mazeId,
       maze_layout: document.getElementById("maze-encoding").value,
       x_starting_position: parseInt(
         document.getElementById("maze-starting-x").value,
@@ -196,39 +322,35 @@ async function PublishMaze(maze) {
     };
 
     putReqToUrl("/api/mazes", updatedMaze)
-      .then((data) => {})
+      .then((data) => {
+        const feedback = document.getElementById("encoding-feedback-text");
+        feedback.textContent = "Maze successfully edited";
+        feedback.style.color = "green";
+      })
       .catch((error) => {
         if (error instanceof HttpError) {
           if (error.status === 401) {
-            renderErrorPage(
-              "Your session has expired, you will need to login again",
-              () => navigate(""),
-              "Return to login"
-            );
+            authError();
           } else {
-            renderErrorPage(
-              error.message ?? "An unexpected error has occurred",
-              () => navigate("menu"),
-              "Return to menu"
-            );
+            const feedback = document.getElementById("encoding-feedback-text");
+            feedback.textContent =
+              error.message ?? "An unexpected error has occurred";
+            feedback.style.color = "red";
           }
         } else {
           renderErrorPage(
-            error ?? "An unexpected error has occurred",
+            "An unexpected error has occurred",
             () => navigate("menu"),
             "Return to menu"
           );
         }
       });
-
-    // const index = state.mazes.findIndex((m) => m.id === maze.id);
-    // state.mazes[index] = result;
-
-    alert("Maze published successfully!");
-    renderCms();
   } catch (error) {
-    console.error("Error updating maze:", error);
-    alert("Failed to update maze. Please try again.");
+    renderErrorPage(
+      "An unexpected error has occurred",
+      () => navigate("menu"),
+      "Return to menu"
+    );
   }
 }
 
@@ -236,179 +358,72 @@ async function deleteMaze(id) {
   if (!confirm("Are you sure you want to delete this maze?")) return;
 
   delReqToUrl(`/api/mazes/${id}`)
-    .then((data) => {
-      console.log("Maze deleted successfully:", data);
+    .then(() => {
       renderCms();
-      //state.mazes = state.mazes.filter((maze) => maze.id !== id);
     })
     .catch((error) => {
-      console.log("error message: ", error.message);
       if (error instanceof HttpError) {
         if (error.status === 401) {
-          renderErrorPage(
-            "Your session has expired, you will need to login again",
-            () => navigate(""),
-            "Return to login"
-          );
+          authError();
         } else {
-          renderErrorPage(
-            error.message ?? "An unexpected error has occurred",
-            () => navigate("menu"),
-            "Return to menu"
-          );
+          const feedback = document.getElementById("encoding-feedback-text");
+          feedback.textContent =
+            error.message ?? "An unexpected error has occurred";
+          feedback.style.color = "red";
         }
       } else {
         renderErrorPage(
-          error ?? "An unexpected error has occurred",
+          "An unexpected error has occurred",
           () => navigate("menu"),
           "Return to menu"
         );
       }
     });
-
-  try {
-    // renderMazeList();
-    // // Clear the maze details container
-    // while (mazeDetails.firstChild) {
-    //   mazeDetails.removeChild(mazeDetails.firstChild);
-    // }
-    // // Create and append the message element
-    // const messageElement = document.createElement("p");
-    // messageElement.textContent =
-    //   "Select a maze from the sidebar to view details";
-    // mazeDetails.appendChild(messageElement);
-  } catch (error) {
-    console.error("Error deleting maze:", error);
-    alert("Failed to delete maze. Please try again.");
-  }
-}
-
-function renderMaze(maze) {
-  const detailsWrapper = document.getElementById("maze-details-wrapper");
-  detailsWrapper.innerHTML = ""; // Clear previous content
-
-  // Details section (form)
-  const detailsSection = document.createElement("section");
-  detailsSection.className = "maze-details";
-
-  // Heading
-  const heading = document.createElement("h2");
-  heading.textContent = `Maze #${maze.id}`;
-  detailsSection.appendChild(heading);
-
-  // Start/End positions, Level, Difficulty, Encoding, etc.
-  // (Use the same structure as CMS's showMazeDetails)
-  // ... (repeat the createLabel/createTextField logic from CMS)
-
-  // Example for starting X:
-  const startXLabel = document.createElement("p");
-  startXLabel.innerHTML = "<strong>Start X</strong>";
-  detailsSection.appendChild(startXLabel);
-
-  const startXInput = document.createElement("input");
-  startXInput.type = "number";
-  startXInput.value = maze.x_starting_position;
-  startXInput.id = "maze-starting-x";
-  detailsSection.appendChild(startXInput);
-
-  // Repeat for other fields...
-
-  // Encoding textarea
-  const encodingLabel = document.createElement("p");
-  encodingLabel.innerHTML = "<strong>Maze Encoding:</strong>";
-  detailsSection.appendChild(encodingLabel);
-
-  const encodingTextarea = document.createElement("textarea");
-  encodingTextarea.id = "maze-encoding";
-  encodingTextarea.rows = 4;
-  encodingTextarea.value = maze.maze_layout || "";
-  detailsSection.appendChild(encodingTextarea);
-
-  // Feedback
-  const feedback = document.createElement("p");
-  feedback.id = "encoding-feedback-text";
-  detailsSection.appendChild(feedback);
-
-  // Action buttons
-  // ...
-
-  detailsWrapper.appendChild(detailsSection);
-
-  // Canvas section
-  const canvasSection = document.createElement("section");
-  canvasSection.className = "maze-details";
-  const canvas = document.createElement("canvas");
-  canvas.id = "mazeCanvas";
-  canvas.className = "maze-canvas";
-  canvas.width = 400;
-  canvas.height = 400;
-  canvasSection.appendChild(canvas);
-  detailsWrapper.appendChild(canvasSection);
-
-  // Draw maze, add event listeners, etc.
-}
-
-async function showMazeDetails(maze) {
-  if (maze.id) {
-    const response = await fetch(`http://localhost:3000/api/mazes/${maze.id}`);
-    let maze_layout = await response.json();
-    console.log(maze_layout);
-    // If you have a maze encoding property:
-    if (maze_layout.maze_layout) {
-      document.getElementById("maze-encoding").value = maze_layout.maze_layout;
-    }
-    drawMazeOnCanvas(
-      maze_layout.maze_layout,
-      maze_layout.x_starting_position,
-      maze_layout.y_starting_position,
-      maze_layout.x_ending_position,
-      maze_layout.y_ending_position
-    );
-  } else {
-    //maze.id = "new";
-  }
 }
 
 function drawMazeOnCanvas(maze_layout, x_start, y_start, x_end, y_end) {
-  // Find the canvas element
+  const cleanedMazeLayout = maze_layout
+    .replaceAll("\r\n", "")
+    .replaceAll("\n", "")
+    .replaceAll(" ", "");
   const canvas = document.getElementsByTagName("canvas")[0];
   if (!canvas) return;
   const ctx = canvas.getContext("2d");
 
-  // Parse the layout into rows
-  const rows = maze_layout.trim().split(/\r?\n/);
+  const length = cleanedMazeLayout.length;
+  const sqrt = Math.sqrt(length);
+
+  let rows = [];
+  for (let i = 0; i < length; i += sqrt) {
+    rows.push(cleanedMazeLayout.slice(i, i + sqrt));
+  }
   const numRows = rows.length;
   const numCols = rows[0].length;
 
-  // Set cell size based on canvas size
   const cellWidth = canvas.width / numCols;
   const cellHeight = canvas.height / numRows;
 
-  // Draw each cell
   for (let y = 0; y < numRows; y++) {
     for (let x = 0; x < numCols; x++) {
       if (rows[y][x] === "1") {
-        ctx.fillStyle = "#000"; // Wall
+        ctx.fillStyle = "#000";
       } else {
-        ctx.fillStyle = "#fff"; // Path
+        ctx.fillStyle = "#fff";
       }
       ctx.fillRect(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
-      ctx.strokeRect(x * cellWidth, y * cellHeight, cellWidth, cellHeight); // Optional: grid lines
+      ctx.strokeRect(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
     }
   }
 
-  // Load images for start and end
   const startImg = new Image();
   const endImg = new Image();
   startImg.src = "/assets/g.webp";
   endImg.src = "/assets/home.png";
 
-  // Draw images when both are loaded
   let imagesLoaded = 0;
   function tryDrawImages() {
     imagesLoaded++;
     if (imagesLoaded < 2) return;
-    // Draw start position (g.webp)
     ctx.drawImage(
       startImg,
       x_start * cellWidth,
@@ -416,7 +431,6 @@ function drawMazeOnCanvas(maze_layout, x_start, y_start, x_end, y_end) {
       cellWidth,
       cellHeight
     );
-    // Draw end position (home.png)
     ctx.drawImage(
       endImg,
       x_end * cellWidth,
