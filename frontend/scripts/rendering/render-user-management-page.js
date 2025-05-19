@@ -1,5 +1,5 @@
 import { loadPage } from "./renderer.js";
-import { getDataFromUrl, putReqToUrl } from "../util.js";
+import { authError, getDataFromUrl, putReqToUrl } from "../util.js";
 import { goBack, navigate } from "../router.js";
 import { HttpError } from "../custom-errors.js";
 import { renderErrorPage } from "./render-error.js";
@@ -7,14 +7,54 @@ import { renderErrorPage } from "./render-error.js";
 const usersAndTheirRoles = {};
 
 export function renderUserManagementPage() {
-  return loadPage("views/user-management.html").then(() => {
-    addNavbarEventListeners();
-    getDataFromUrl("/api/user").then((usersWithRoles) => {
-      getDataFromUrl("/api/roles").then((roles) => {
-        renderUserRolesManagementTable(usersWithRoles, roles);
+  return loadPage("views/user-management.html")
+    .then(() => {
+      addNavbarEventListeners();
+      getDataFromUrl("/api/user").then((usersWithRoles) => {
+        getDataFromUrl("/api/roles")
+          .then((roles) => {
+            renderUserRolesManagementTable(usersWithRoles, roles);
+          })
+          .catch((error) => {
+            if (error instanceof HttpError) {
+              if (error.status === 401) {
+                authError()
+              } else {
+                renderErrorPage(
+                  error.message ?? "An unexpected error has occurred",
+                  () => navigate("menu"),
+                  "Return to menu"
+                );
+              }
+            } else {
+              renderErrorPage(
+                error ?? "An unexpected error has occurred",
+                () => navigate("menu"),
+                "Return to menu"
+              );
+            }
+          });
       });
+    })
+    .catch((error) => {
+      if (error instanceof HttpError) {
+        if (error.status === 401) {
+          authError()
+        } else {
+          renderErrorPage(
+            error.message ?? "An unexpected error has occurred",
+            () => navigate("menu"),
+            "Return to menu"
+          );
+        }
+      } else {
+        renderErrorPage(
+          error ?? "An unexpected error has occurred",
+          () => navigate("menu"),
+          "Return to menu"
+        );
+      }
     });
-  });
 }
 
 function addNavbarEventListeners() {
@@ -97,9 +137,11 @@ function renderUserRolesManagementTable(userWithRoles, roles) {
 
     rolesCell.appendChild(formElement);
   });
-  document.getElementById("update-user-role-btn").addEventListener("click", () => {
-    submitUserRolesChange();
-  })
+  document
+    .getElementById("update-user-role-btn")
+    .addEventListener("click", () => {
+      submitUserRolesChange();
+    });
 }
 
 function handleRoleChange(userId, checkbox, labelElement) {
@@ -115,7 +157,6 @@ function handleRoleChange(userId, checkbox, labelElement) {
     }
 
     labelElement.style.backgroundColor = "#5e7143";
-
   } else {
     if (usersAndTheirRoles[userId].rolesToAdd.includes(role)) {
       usersAndTheirRoles[userId].rolesToAdd = usersAndTheirRoles[
