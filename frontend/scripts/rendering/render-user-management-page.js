@@ -60,6 +60,7 @@ function renderUserRolesManagementTable(userWithRoles, roles) {
     const row = userRoleManagementTableBody.insertRow();
 
     const usernameCell = row.insertCell();
+    usernameCell.className = "username-cell";
     usernameCell.textContent = user.username;
 
     const rolesCell = row.insertCell();
@@ -69,6 +70,7 @@ function renderUserRolesManagementTable(userWithRoles, roles) {
       const isChecked = user.roles.includes(role.role_name);
 
       const labelElement = document.createElement("label");
+      labelElement.className = "role-checkbox";
 
       const inputElement = document.createElement("input");
       inputElement.type = "checkbox";
@@ -78,13 +80,15 @@ function renderUserRolesManagementTable(userWithRoles, roles) {
       inputElement.checked = isChecked;
       inputElement.disabled = role.role_name.toLowerCase() === "player";
       inputElement.addEventListener("change", (event) =>
-        handleRoleChange(user.id, event.target)
+        handleRoleChange(user.id, event.target, labelElement)
       );
 
       const roleTextNode = document.createTextNode(role.role_name);
 
       labelElement.appendChild(inputElement);
       labelElement.appendChild(roleTextNode);
+
+      labelElement.style.backgroundColor = isChecked ? "#5e7143" : "#48494b";
 
       formElement.appendChild(labelElement);
     });
@@ -96,7 +100,7 @@ function renderUserRolesManagementTable(userWithRoles, roles) {
   })
 }
 
-function handleRoleChange(userId, checkbox) {
+function handleRoleChange(userId, checkbox, labelElement) {
   const role = checkbox.value;
 
   if (checkbox.checked) {
@@ -107,6 +111,9 @@ function handleRoleChange(userId, checkbox) {
     } else if (!usersAndTheirRoles[userId].currentRoles.includes(role)) {
       usersAndTheirRoles[userId].rolesToAdd.push(role);
     }
+
+    labelElement.style.backgroundColor = "#5e7143";
+
   } else {
     if (usersAndTheirRoles[userId].rolesToAdd.includes(role)) {
       usersAndTheirRoles[userId].rolesToAdd = usersAndTheirRoles[
@@ -115,6 +122,8 @@ function handleRoleChange(userId, checkbox) {
     } else if (usersAndTheirRoles[userId].currentRoles.includes(role)) {
       usersAndTheirRoles[userId].rolesToRemove.push(role);
     }
+
+    labelElement.style.backgroundColor = "#48494b";
   }
 
   checkIfSubmitButtonShouldShow();
