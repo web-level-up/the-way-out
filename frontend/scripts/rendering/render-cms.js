@@ -33,7 +33,7 @@ export function renderCms(mazeId = null) {
         data.forEach((maze) => {
           const option = document.createElement("option");
           option.value = maze.id;
-          option.textContent = `Maze #${maze.maze_level}`;
+          option.textContent = `Maze #${maze.id} - Level ${maze.maze_level}`;
           select.appendChild(option);
         });
 

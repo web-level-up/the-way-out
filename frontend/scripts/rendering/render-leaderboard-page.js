@@ -112,7 +112,7 @@ function getAllMazeOptions(mazes) {
   return mazes.map((maze) => {
     return {
       id: maze.id,
-      label: `Maze ${maze.id}`,
+      label: `Maze ${maze.maze_level}`,
     };
   });
 }
