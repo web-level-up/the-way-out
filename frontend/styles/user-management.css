@@ -19,17 +19,24 @@
     width: 100%;
 }
 
-th {
+#user-role-management-section h1 {
+    color: white;
+    font-size: 3rem;
+    text-align: center;
+    margin: 1rem;
+}
+
+#user-role-management-section th {
     text-align: center;
     justify-self: center;
     font-size: 1.5rem;
 }
 
-th, td {
+#user-role-management-section th, #user-role-management-section td {
     border: 0.25rem solid #000000;
     padding: 1rem;
 }
-thead {
+#user-role-management-section thead {
     background-color: #f2f2f2;
 }
 
@@ -46,7 +53,7 @@ thead {
     border-radius: 1rem;
     color: white;
     padding: 0.5rem;
-    margin-right: 0.5rem;
+    margin: 1rem;
     border: 0.25rem solid #ffffff;
     cursor: pointer;
     align-items: center;
@@ -60,6 +67,11 @@ thead {
     text-align: center;
 }
 
+#user-role-management-section form {
+    display: flex;
+    flex-wrap: wrap;
+}
+
 .role-checkbox {
     background-color: #48494b;
     border-radius: 1rem;
@@ -69,4 +81,9 @@ thead {
     border: 0.25rem solid #ffffff;
     cursor: pointer;
     align-items: center;
+}
+
+#user-role-management-table {
+    max-height: 70vh;
+    overflow-y: auto;
 }
